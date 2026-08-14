@@ -17,6 +17,7 @@ import { Route as GroomingRouteImport } from './routes/grooming'
 import { Route as HabitsRouteImport } from './routes/habits'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProgressRouteImport } from './routes/progress'
@@ -62,6 +63,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PresentationRoute = PresentationRouteImport.update({
+  id: '/presentation',
+  path: '/presentation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
   '/onboarding': typeof OnboardingRoute
+  '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
@@ -106,6 +113,7 @@ export interface FileRoutesByTo {
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
   '/onboarding': typeof OnboardingRoute
+  '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
@@ -121,6 +129,7 @@ export interface FileRoutesById {
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
   '/onboarding': typeof OnboardingRoute
+  '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
@@ -137,6 +146,7 @@ export interface FileRouteTypes {
     | '/habits'
     | '/home'
     | '/onboarding'
+    | '/presentation'
     | '/pricing'
     | '/profile'
     | '/progress'
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
     | '/habits'
     | '/home'
     | '/onboarding'
+    | '/presentation'
     | '/pricing'
     | '/profile'
     | '/progress'
@@ -165,6 +176,7 @@ export interface FileRouteTypes {
     | '/habits'
     | '/home'
     | '/onboarding'
+    | '/presentation'
     | '/pricing'
     | '/profile'
     | '/progress'
@@ -180,6 +192,7 @@ export interface RootRouteChildren {
   HabitsRoute: typeof HabitsRoute
   HomeRoute: typeof HomeRoute
   OnboardingRoute: typeof OnboardingRoute
+  PresentationRoute: typeof PresentationRoute
   PricingRoute: typeof PricingRoute
   ProfileRoute: typeof ProfileRoute
   ProgressRoute: typeof ProgressRoute
@@ -244,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/presentation': {
+      id: '/presentation'
+      path: '/presentation'
+      fullPath: '/presentation'
+      preLoaderRoute: typeof PresentationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pricing': {
       id: '/pricing'
       path: '/pricing'
@@ -284,6 +304,7 @@ const rootRouteChildren: RootRouteChildren = {
   HabitsRoute: HabitsRoute,
   HomeRoute: HomeRoute,
   OnboardingRoute: OnboardingRoute,
+  PresentationRoute: PresentationRoute,
   PricingRoute: PricingRoute,
   ProfileRoute: ProfileRoute,
   ProgressRoute: ProgressRoute,
