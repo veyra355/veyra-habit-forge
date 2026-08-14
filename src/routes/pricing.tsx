@@ -25,7 +25,10 @@ function PricingPage() {
   const navigate = useNavigate();
 
   const choose = (id: string) => {
-    if (!state.user) return navigate({ to: "/auth" });
+    if (!state.user) {
+      navigate({ to: "/auth" });
+      return;
+    }
     if (id === "free") {
       update({ user: { ...state.user, plan: "free" } });
       toast.success("You're on the Free plan");
