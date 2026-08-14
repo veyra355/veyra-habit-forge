@@ -43,7 +43,10 @@ function AuthPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) return toast.error("Enter your email and password");
+    if (!email || !password) {
+      toast.error("Enter your email and password");
+      return;
+    }
     go(email.split("@")[0]!.replace(/[^a-zA-Z]/g, " ").trim() || "Friend", email);
     toast.success("Welcome back");
   };
@@ -51,7 +54,8 @@ function AuthPage() {
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || password.length < 6) {
-      return toast.error("Add your name, email and a password of at least 6 characters");
+      toast.error("Add your name, email and a password of at least 6 characters");
+      return;
     }
     go(name, email);
     toast.success("Account created — let's build your plan");

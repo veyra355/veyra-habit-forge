@@ -44,7 +44,10 @@ function WorkoutPage() {
   const pct = Math.round((completed.length / todaysWorkout.exercises.length) * 100);
 
   const finish = () => {
-    if (!feedback) return toast.error("Let us know how it felt so we can adapt your plan");
+    if (!feedback) {
+      toast.error("Let us know how it felt so we can adapt your plan");
+      return;
+    }
     completeWorkout(todaysWorkout.title, feedback);
     update({ completedExercises: [] });
     setDone(true);

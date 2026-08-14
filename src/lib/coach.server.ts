@@ -11,15 +11,15 @@
  */
 
 export type CoachContext = {
-  name?: string;
-  goals?: string[];
-  level?: string;
-  place?: string;
-  duration?: string;
-  daysPerWeek?: string;
-  diet?: string;
-  recentWorkouts?: { title: string; date: string; feedback: string | null }[];
-  habitCompletionRate?: number;
+  name?: string | undefined;
+  goals?: string[] | undefined;
+  level?: string | undefined;
+  place?: string | undefined;
+  duration?: string | undefined;
+  daysPerWeek?: string | undefined;
+  diet?: string | undefined;
+  recentWorkouts?: { title: string; date: string; feedback: string | null }[] | undefined;
+  habitCompletionRate?: number | undefined;
 };
 
 export const COACH_SYSTEM_PROMPT = `You are Veyra, a supportive fitness, habit and grooming coach for young adults in India.
