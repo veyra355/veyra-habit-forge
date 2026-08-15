@@ -30,7 +30,7 @@ export type VeyraUser = {
   name: string;
   email: string;
   role: "user" | "admin";
-  plan: "free" | "plus" | "pro";
+  plan: "free" | "starter" | "pro" | "elite";
   joinedAt: string;
 };
 
