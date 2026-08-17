@@ -62,7 +62,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 to={item.to}
                 className={cn(
                   "rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
-                  pathname === item.to && "bg-accent text-accent-foreground",
+                  pathname === item.to && "bg-secondary text-primary",
                 )}
               >
                 {item.label}
@@ -139,7 +139,7 @@ export function PageHeader({
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h1 className="text-2xl font-semibold sm:text-3xl">{title}</h1>
+        <h1 className="display-italic text-[clamp(1.6rem,3.6vw,2.2rem)]">{title}</h1>
         {subtitle && <p className="mt-1.5 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>}
       </div>
       {action}
