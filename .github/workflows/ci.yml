@@ -10,13 +10,18 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -27,16 +32,25 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Auto-format source
+      - name: Format source files
         run: npx prettier --write src
 
-      - name: Lint
-        run: npx eslint . --fix --rule '@typescript-eslint/no-explicit-any: off'
+      - name: Commit formatting fixes
+        run: |
+          if git diff --quiet -- src; then
+            echo "Source formatting is already clean."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src
+            git commit -m "style: format source files"
+            git push
+          fi
 
-      - name: Verify formatting
+      - name: Check formatting
         run: npx prettier --check src
 
-      - name: Verify lint
+      - name: Lint
         run: npx eslint . --rule '@typescript-eslint/no-explicit-any: off'
 
       - name: Production build
