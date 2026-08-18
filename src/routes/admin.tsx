@@ -7,40 +7,15 @@ import { AppShell, PageHeader } from "@/components/veyra/AppShell";
 import { useVeyra } from "@/lib/veyra-store";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/admin")({ head: () => ({ meta: [
-  { title: "Admin Dashboard — Veyra" },
-  { name: "description", content: "Veyra admin overview and platform health." },
-] }), component: () => <AppShell><AdminPage /></AppShell> });
-
+export const Route = createFileRoute("/admin")({ head: () => ({ meta: [{ title: "Admin Dashboard — Veyra" }, { name: "description", content: "Veyra admin overview and platform health." }] }), component: () => <AppShell><AdminPage /></AppShell> });
+const db = supabase as any;
 type Overview = { total_users: number; active_today: number; coach_messages: number; paid_plans: number; recent_signups: { name: string; email: string; plan: string; created_at: string }[]; plan_distribution: Record<string, number> };
-
 function AdminPage() {
   const { state, hydrated } = useVeyra(); const navigate = useNavigate(); const [data, setData] = useState<Overview | null>(null); const [loading, setLoading] = useState(false);
   useEffect(() => { if (hydrated && state.user?.role !== "admin") navigate({ to: "/home", replace: true }); }, [hydrated, state.user, navigate]);
-  useEffect(() => {
-    if (!hydrated || state.user?.role !== "admin") return;
-    setLoading(true); supabase.rpc("get_admin_overview").then(({ data: result, error }) => {
-      setLoading(false); if (error) { toast.error("Could not load admin metrics"); console.error(error); return; }
-      setData(result as Overview);
-    });
-  }, [hydrated, state.user?.role]);
+  useEffect(() => { if (!hydrated || state.user?.role !== "admin") return; setLoading(true); db.rpc("get_admin_overview").then(({ data: result, error }: any) => { setLoading(false); if (error) { toast.error("Could not load admin metrics"); console.error(error); return; } setData(result as Overview); }); }, [hydrated, state.user?.role]);
   if (!hydrated || state.user?.role !== "admin") return <div className="flex min-h-[50vh] items-center justify-center text-sm text-muted-foreground">Redirecting…</div>;
-
-  const metrics = data ? [
-    { label: "Total users", value: data.total_users.toLocaleString(), icon: Users },
-    { label: "Active today", value: data.active_today.toLocaleString(), icon: BarChart3 },
-    { label: "Coach messages", value: data.coach_messages.toLocaleString(), icon: MessageSquare },
-    { label: "Paid plans", value: data.paid_plans.toLocaleString(), icon: Crown },
-  ] : [];
+  const metrics = data ? [{ label: "Total users", value: data.total_users.toLocaleString(), icon: Users }, { label: "Active today", value: data.active_today.toLocaleString(), icon: BarChart3 }, { label: "Coach messages", value: data.coach_messages.toLocaleString(), icon: MessageSquare }, { label: "Paid plans", value: data.paid_plans.toLocaleString(), icon: Crown }] : [];
   const plans = data ? Object.entries(data.plan_distribution) : [];
-  return <>
-    <PageHeader title="Admin Dashboard" subtitle="Live platform metrics from Supabase." />
-    {loading && <p className="mb-4 text-sm text-muted-foreground">Loading live metrics…</p>}
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{metrics.map(m => { const Icon=m.icon; return <div key={m.label} className="panel p-5"><div className="flex items-center gap-2 text-muted-foreground"><Icon className="size-4"/><span className="text-xs font-medium uppercase tracking-wide">{m.label}</span></div><p className="mt-3 font-display text-3xl font-semibold">{m.value}</p></div>; })}</div>
-    <div className="mt-6 grid gap-4 lg:grid-cols-2">
-      <section className="panel p-6"><h3 className="font-semibold">Recent sign-ups</h3><ul className="mt-4 space-y-3">{(data?.recent_signups ?? []).map(u => <li key={`${u.email}-${u.created_at}`} className="flex items-center justify-between rounded-xl border border-border bg-muted/30 p-3"><div><p className="text-sm font-medium">{u.name || "Unnamed user"}</p><p className="text-xs text-muted-foreground">{u.email}</p></div><span className="rounded-full border border-border bg-card px-2.5 py-1 text-xs font-medium capitalize">{u.plan}</span></li>)}{!data?.recent_signups?.length && !loading && <li className="text-sm text-muted-foreground">No sign-ups yet.</li>}</ul></section>
-      <section className="panel p-6"><h3 className="font-semibold">Plan distribution</h3><div className="mt-6 space-y-4">{plans.map(([label,value]) => { const total=data?.total_users||1; const pct=Math.round((value/total)*100); return <div key={label}><div className="mb-1 flex justify-between text-sm"><span className="capitalize">{label}</span><span className="text-muted-foreground">{value}</span></div><div className="h-2 w-full overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-primary" style={{width:`${pct}%`}}/></div></div>; })}{!plans.length && !loading && <p className="text-sm text-muted-foreground">No plan data yet.</p>}</div></section>
-    </div>
-    <div className="mt-6"><Button asChild variant="outline" className="rounded-full"><Link to="/home">Back to app</Link></Button></div>
-  </>;
+  return <><PageHeader title="Admin Dashboard" subtitle="Live platform metrics from Supabase." />{loading && <p className="mb-4 text-sm text-muted-foreground">Loading live metrics…</p>}<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{metrics.map(m => { const Icon=m.icon; return <div key={m.label} className="panel p-5"><div className="flex items-center gap-2 text-muted-foreground"><Icon className="size-4"/><span className="text-xs font-medium uppercase tracking-wide">{m.label}</span></div><p className="mt-3 font-display text-3xl font-semibold">{m.value}</p></div>; })}</div><div className="mt-6 grid gap-4 lg:grid-cols-2"><section className="panel p-6"><h3 className="font-semibold">Recent sign-ups</h3><ul className="mt-4 space-y-3">{(data?.recent_signups ?? []).map(u => <li key={`${u.email}-${u.created_at}`} className="flex items-center justify-between rounded-xl border border-border bg-muted/30 p-3"><div><p className="text-sm font-medium">{u.name || "Unnamed user"}</p><p className="text-xs text-muted-foreground">{u.email}</p></div><span className="rounded-full border border-border bg-card px-2.5 py-1 text-xs font-medium capitalize">{u.plan}</span></li>)}{!data?.recent_signups?.length && !loading && <li className="text-sm text-muted-foreground">No sign-ups yet.</li>}</ul></section><section className="panel p-6"><h3 className="font-semibold">Plan distribution</h3><div className="mt-6 space-y-4">{plans.map(([label,value]) => { const total=data?.total_users||1; const pct=Math.round((value/total)*100); return <div key={label}><div className="mb-1 flex justify-between text-sm"><span className="capitalize">{label}</span><span className="text-muted-foreground">{value}</span></div><div className="h-2 w-full overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-primary" style={{width:`${pct}%`}}/></div></div>; })}{!plans.length && !loading && <p className="text-sm text-muted-foreground">No plan data yet.</p>}</div></section></div><div className="mt-6"><Button asChild variant="outline" className="rounded-full"><Link to="/home">Back to app</Link></Button></div></>;
 }
