@@ -86,8 +86,8 @@ function CoachPage() {
     <>
       <PageHeader title="Your AI Coach" subtitle="Built on your profile, goals, history and session feedback." />
 
-      <div className="panel flex h-[62vh] min-h-[420px] flex-col overflow-hidden">
-        <div className="flex-1 space-y-4 overflow-y-auto p-5">
+      <div className="panel flex h-[calc(100dvh-16rem)] min-h-[380px] flex-col overflow-hidden lg:h-[62vh]">
+        <div className="flex-1 space-y-4 overflow-y-auto overflow-x-hidden p-4 sm:p-5">
           {!state.messages.length && (
             <div className="mx-auto max-w-md py-8 text-center">
               <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-accent text-accent-foreground">
@@ -102,7 +102,7 @@ function CoachPage() {
           {state.messages.map((m) => (
             <div key={m.id} className={m.role === "user" ? "flex justify-end" : "flex justify-start"}>
               <div
-                className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                className={`max-w-[88%] break-words whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                   m.role === "user"
                     ? "bg-primary text-primary-foreground"
                     : "border border-border bg-muted/60 text-foreground"
@@ -122,27 +122,32 @@ function CoachPage() {
           <div ref={endRef} />
         </div>
 
-        <div className="border-t border-border p-4">
-          <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+        <div className="border-t border-border p-3 sm:p-4">
+          <div className="no-scrollbar -mx-3 mb-3 flex gap-2 overflow-x-auto px-3 pb-1 sm:mx-0 sm:px-0">
             {PROMPTS.map((p) => (
               <button
                 key={p}
                 onClick={() => send(p)}
-                className="shrink-0 rounded-full border border-border bg-card px-3.5 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+                className="min-h-9 shrink-0 whitespace-nowrap rounded-full border border-border bg-card px-4 py-2 text-xs text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground active:bg-muted"
               >
                 {p}
               </button>
             ))}
           </div>
           <form
-            className="flex gap-2"
+            className="flex min-w-0 gap-2"
             onSubmit={(e) => {
               e.preventDefault();
               void send(input);
             }}
           >
-            <Input placeholder="Ask your coach…" value={input} onChange={(e) => setInput(e.target.value)} />
-            <Button type="submit" size="icon" disabled={pending} aria-label="Send">
+            <Input
+              placeholder="Ask your coach…"
+              className="h-11 min-w-0 flex-1"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+            <Button type="submit" size="icon" className="tap size-11 shrink-0" disabled={pending} aria-label="Send">
               <Send className="size-4" />
             </Button>
           </form>

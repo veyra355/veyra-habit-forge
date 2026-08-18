@@ -43,13 +43,13 @@ function HabitsPage() {
     <>
       <PageHeader title="Habits" subtitle="Small daily wins compound. Missing a day is data, not failure." />
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
         <StatCard label="Today" value={`${today.length}/${state.habits.length}`} progress={(today.length / habitCount) * 100} hint="Habits completed today" />
         <StatCard label="This week" value={`${week.habitPct}%`} progress={week.habitPct} hint="Average completion" />
         <StatCard label="This month" value={`${monthly}%`} progress={monthly} hint="28-day consistency" />
       </div>
 
-      <div className="panel mt-4 p-5">
+      <div className="panel mt-4 p-4 sm:p-5">
         <p className="text-sm font-medium">Today&apos;s habits</p>
         <div className="mt-4 space-y-2">
           {state.habits.map((habit) => {
@@ -62,16 +62,20 @@ function HabitsPage() {
                   done ? "border-primary bg-accent/60" : "bg-card"
                 }`}
               >
-                <button onClick={() => toggleHabit(habit.id)} aria-label={`Toggle ${habit.name}`}>
+                <button
+                  onClick={() => toggleHabit(habit.id)}
+                  aria-label={`Toggle ${habit.name}`}
+                  className="-ml-1.5 grid size-11 shrink-0 place-items-center rounded-full transition-colors active:bg-muted"
+                >
                   {done ? (
                     <CheckCircle2 className="size-5 text-primary" />
                   ) : (
                     <Circle className="size-5 text-muted-foreground" />
                   )}
                 </button>
-                <span className="flex-1 text-sm font-medium">{habit.name}</span>
+                <span className="min-w-0 flex-1 text-sm font-medium">{habit.name}</span>
                 {streak > 0 && (
-                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <span className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
                     <Flame className="size-3.5 text-chart-3" /> {streak}d
                   </span>
                 )}
@@ -79,7 +83,7 @@ function HabitsPage() {
                   <button
                     onClick={() => removeHabit(habit.id)}
                     aria-label={`Remove ${habit.name}`}
-                    className="text-muted-foreground transition-colors hover:text-destructive"
+                    className="-mr-1.5 grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:text-destructive active:bg-muted"
                   >
                     <Trash2 className="size-4" />
                   </button>
@@ -99,14 +103,19 @@ function HabitsPage() {
             toast.success("Habit added");
           }}
         >
-          <Input placeholder="Add a custom habit — e.g. Read 10 pages" value={name} onChange={(e) => setName(e.target.value)} />
-          <Button type="submit" variant="outline" className="shrink-0">
+          <Input
+            placeholder="Add a habit — e.g. Read 10 pages"
+            className="h-11 min-w-0 flex-1"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Button type="submit" variant="outline" className="tap h-11 shrink-0">
             <Plus className="mr-1 size-4" /> Add
           </Button>
         </form>
       </div>
 
-      <div className="panel mt-4 p-5">
+      <div className="panel mt-4 p-4 sm:p-5">
         <p className="text-sm font-medium">Last 7 days</p>
         <div className="mt-4 space-y-2.5">
           {week.daily.map((d) => (
