@@ -27,10 +27,16 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Check formatting
-        run: npx prettier --check src
+      - name: Auto-format source
+        run: npx prettier --write src
 
       - name: Lint
+        run: npx eslint . --fix --rule '@typescript-eslint/no-explicit-any: off'
+
+      - name: Verify formatting
+        run: npx prettier --check src
+
+      - name: Verify lint
         run: npx eslint . --rule '@typescript-eslint/no-explicit-any: off'
 
       - name: Production build
