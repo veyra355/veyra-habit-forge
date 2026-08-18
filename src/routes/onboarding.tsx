@@ -65,7 +65,7 @@ function OnboardingPage() {
       <div className="mx-auto w-full max-w-2xl px-4 py-6 sm:px-6">
         <Logo />
       </div>
-      <div className="mx-auto max-w-2xl px-4 pb-20 sm:px-6">
+      <div className="mx-auto max-w-2xl px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] sm:px-6">
         <div className="mb-6">
           <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
             <span>
@@ -76,7 +76,7 @@ function OnboardingPage() {
           <Progress value={((step + 1) / STEPS.length) * 100} className="h-1.5" />
         </div>
 
-        <div className="panel space-y-7 p-6 sm:p-8">
+        <div className="panel space-y-7 p-4 sm:p-8">
           {step === 0 && (
             <>
               <Header title="About you" sub="This shapes how your first week is built." />
@@ -151,18 +151,18 @@ function OnboardingPage() {
                 <Summary label="Days / week" value={data.daysPerWeek || "4"} />
                 <Summary label="Session length" value={data.duration || data.timePerDay || "30 min"} />
               </div>
-              <Button size="lg" className="mt-8 w-full rounded-full sm:w-auto sm:px-10" onClick={finish}>
+              <Button size="lg" className="tap mt-8 w-full rounded-full sm:w-auto sm:px-10" onClick={finish}>
                 Build My Plan
               </Button>
             </div>
           )}
 
           {step < 4 && (
-            <div className="flex items-center justify-between border-t border-border pt-5">
-              <Button variant="ghost" disabled={step === 0} onClick={() => setStep((s) => s - 1)}>
+            <div className="flex items-center justify-between gap-3 border-t border-border pt-5">
+              <Button variant="ghost" className="tap" disabled={step === 0} onClick={() => setStep((s) => s - 1)}>
                 <ArrowLeft className="mr-1.5 size-4" /> Back
               </Button>
-              <Button onClick={() => setStep((s) => s + 1)}>
+              <Button className="tap flex-1 rounded-full sm:flex-none sm:px-8" onClick={() => setStep((s) => s + 1)}>
                 Continue <ArrowRight className="ml-1.5 size-4" />
               </Button>
             </div>

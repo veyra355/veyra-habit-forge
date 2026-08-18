@@ -59,7 +59,7 @@ function ProfilePage() {
       <PageHeader title="Profile & Settings" subtitle="Your account, preferences and data choices." />
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <div className="panel p-6 lg:col-span-1">
+        <div className="panel p-5 sm:p-6 lg:col-span-1">
           <div className="flex flex-col items-center text-center">
             <div className="grid size-20 place-items-center rounded-full bg-accent text-2xl font-semibold text-accent-foreground">
               {user.name.charAt(0).toUpperCase()}
@@ -76,7 +76,7 @@ function ProfilePage() {
         </div>
 
         <div className="space-y-4 lg:col-span-2">
-          <section className="panel p-6">
+          <section className="panel p-5 sm:p-6">
             <div className="flex items-center gap-2">
               <User className="size-4 text-muted-foreground" />
               <h3 className="font-semibold">Account</h3>
@@ -91,30 +91,30 @@ function ProfilePage() {
                 <Input id="email" type="email" value={user.email} disabled />
               </div>
             </div>
-            <Button className="mt-4 rounded-full" onClick={saveName}>
+            <Button className="tap mt-4 w-full rounded-full sm:w-auto sm:px-8" onClick={saveName}>
               Save changes
             </Button>
           </section>
 
-          <section className="panel p-6">
+          <section className="panel p-5 sm:p-6">
             <div className="flex items-center gap-2">
               <CreditCard className="size-4 text-muted-foreground" />
               <h3 className="font-semibold">Plan</h3>
             </div>
-            <div className="mt-4 flex items-center justify-between rounded-xl border border-border bg-muted/30 p-4">
-              <div>
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-muted/30 p-4">
+              <div className="min-w-0">
                 <p className="font-medium capitalize">{user.plan}</p>
                 <p className="text-sm text-muted-foreground">
                   {user.plan === "free" ? "Upgrade to unlock full coaching." : "You're on a paid plan."}
                 </p>
               </div>
-              <Button asChild variant="outline" className="rounded-full">
+              <Button asChild variant="outline" className="tap shrink-0 rounded-full">
                 <Link to="/pricing">Manage</Link>
               </Button>
             </div>
           </section>
 
-          <section className="panel p-6">
+          <section className="panel p-5 sm:p-6">
             <div className="flex items-center gap-2">
               <Palette className="size-4 text-muted-foreground" />
               <h3 className="font-semibold">Appearance</h3>
@@ -122,14 +122,14 @@ function ProfilePage() {
             <div className="mt-4 flex gap-2">
               <Button
                 variant={state.theme === "light" ? "default" : "outline"}
-                className="flex-1 gap-2 rounded-full"
+                className="tap flex-1 gap-2 rounded-full"
                 onClick={() => update({ theme: "light" })}
               >
                 <Sun className="size-4" /> Light
               </Button>
               <Button
                 variant={state.theme === "dark" ? "default" : "outline"}
-                className="flex-1 gap-2 rounded-full"
+                className="tap flex-1 gap-2 rounded-full"
                 onClick={() => update({ theme: "dark" })}
               >
                 <Moon className="size-4" /> Dark
@@ -137,7 +137,7 @@ function ProfilePage() {
             </div>
           </section>
 
-          <section className="panel p-6">
+          <section className="panel p-5 sm:p-6">
             <div className="flex items-center gap-2">
               <Bell className="size-4 text-muted-foreground" />
               <h3 className="font-semibold">Notifications</h3>
@@ -149,11 +149,12 @@ function ProfilePage() {
                 { key: "weekly" as const, label: "Weekly summary", desc: "A recap of your consistency and progress." },
               ].map((item) => (
                 <div key={item.key} className="flex items-center justify-between gap-4">
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-sm font-medium">{item.label}</p>
                     <p className="text-xs text-muted-foreground">{item.desc}</p>
                   </div>
                   <Switch
+                    className="shrink-0"
                     checked={state.notifications[item.key]}
                     onCheckedChange={() => toggleNotification(item.key)}
                   />
@@ -162,44 +163,44 @@ function ProfilePage() {
             </div>
           </section>
 
-          <section className="panel p-6">
+          <section className="panel p-5 sm:p-6">
             <div className="flex items-center gap-2">
               <Shield className="size-4 text-muted-foreground" />
               <h3 className="font-semibold">Privacy</h3>
             </div>
             <div className="mt-4 space-y-3">
               <div className="flex items-center justify-between gap-4">
-                <div>
+                <div className="min-w-0">
                   <p className="text-sm font-medium">Usage analytics</p>
                   <p className="text-xs text-muted-foreground">Help us improve by sharing anonymous usage data.</p>
                 </div>
-                <Switch checked={state.privacy.analytics} onCheckedChange={() => togglePrivacy("analytics")} />
+                <Switch className="shrink-0" checked={state.privacy.analytics} onCheckedChange={() => togglePrivacy("analytics")} />
               </div>
               <div className="flex items-center justify-between gap-4">
-                <div>
+                <div className="min-w-0">
                   <p className="text-sm font-medium">Personalization</p>
                   <p className="text-xs text-muted-foreground">Let the coach adapt recommendations to your history.</p>
                 </div>
-                <Switch checked={state.privacy.personalization} onCheckedChange={() => togglePrivacy("personalization")} />
+                <Switch className="shrink-0" checked={state.privacy.personalization} onCheckedChange={() => togglePrivacy("personalization")} />
               </div>
             </div>
           </section>
 
-          <section className="panel p-6">
+          <section className="panel p-5 sm:p-6">
             <div className="flex items-center gap-2">
               <Lock className="size-4 text-muted-foreground" />
               <h3 className="font-semibold">Security</h3>
             </div>
             <button
               onClick={() => toast.info("Password reset link sent (demo)")}
-              className="mt-4 flex w-full items-center justify-between rounded-xl border border-border bg-muted/30 p-4 text-left transition-colors hover:bg-muted/50"
+              className="mt-4 flex min-h-12 w-full items-center justify-between rounded-xl border border-border bg-muted/30 p-4 text-left transition-colors hover:bg-muted/50 active:bg-muted"
             >
               <span className="text-sm font-medium">Change password</span>
-              <ChevronRight className="size-4 text-muted-foreground" />
+              <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
             </button>
           </section>
 
-          <Button variant="destructive" className="w-full rounded-full" onClick={signOut}>
+          <Button variant="destructive" className="tap w-full rounded-full" onClick={signOut}>
             Sign out
           </Button>
         </div>
