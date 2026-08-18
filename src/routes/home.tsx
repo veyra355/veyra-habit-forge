@@ -99,12 +99,13 @@ function HomePage() {
           </div>
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
             {state.habits.slice(0, 6).map((habit) => {
-              const Icon = HABIT_ICONS[habit.id] ?? Activity;
+              const iconKey = habit.name.toLowerCase().replace(/[^a-z]/g, "");
+              const Icon = iconKey.includes("sleep") ? Moon : iconKey.includes("hydration") ? Droplets : iconKey.includes("movement") ? Wind : iconKey.includes("groom") ? Sparkles : iconKey.includes("workout") ? Dumbbell : iconKey.includes("focus") ? Target : Activity;
               const done = today.includes(habit.id);
               return (
                 <button
                   key={habit.id}
-                  onClick={() => toggleHabit(habit.id)}
+                  onClick={() => void toggleHabit(habit.id)}
                   className={`flex items-center gap-3 rounded-xl border border-border px-4 py-3 text-left text-sm transition-all hover:border-primary/50 ${
                     done ? "border-primary bg-accent text-accent-foreground" : "bg-card"
                   }`}
