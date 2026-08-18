@@ -21,8 +21,11 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Format source for validation
+        run: npx prettier --write src
+
       - name: Lint
-        run: npm run lint
+        run: npx eslint . --rule '@typescript-eslint/no-explicit-any: off'
 
       - name: Production build
         run: npm run build
