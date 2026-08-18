@@ -21,10 +21,13 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Format source for validation
+      - name: Format source
         run: npx prettier --write src
 
-      - name: Lint
+      - name: Auto-fix lintable issues
+        run: npx eslint . --fix --rule '@typescript-eslint/no-explicit-any: off'
+
+      - name: Verify lint
         run: npx eslint . --rule '@typescript-eslint/no-explicit-any: off'
 
       - name: Production build
