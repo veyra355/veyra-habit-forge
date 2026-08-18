@@ -42,11 +42,11 @@ export function OptionGroup({
             type="button"
             onClick={() => toggle(opt)}
             className={cn(
-              "flex items-center justify-between gap-2 rounded-xl border border-border bg-card px-4 py-3 text-left text-sm transition-all hover:border-primary/50",
+              "flex min-h-12 items-center justify-between gap-2 rounded-xl border border-border bg-card px-4 py-3 text-left text-sm transition-all hover:border-primary/50 active:bg-muted",
               selected(opt) && "border-primary bg-accent text-accent-foreground",
             )}
           >
-            <span>{opt}</span>
+            <span className="min-w-0">{opt}</span>
             {selected(opt) && <Check className="size-4 shrink-0 text-primary" />}
           </button>
         ))}

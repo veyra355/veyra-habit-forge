@@ -65,7 +65,7 @@ function WorkoutPage() {
           as part of the plan, so take the rest of today easy.
         </p>
         <Button
-          className="mt-7 rounded-full px-8"
+          className="tap mt-7 w-full rounded-full px-8 sm:w-auto"
           onClick={() => {
             setDone(false);
             setFeedback(null);
@@ -111,7 +111,7 @@ function WorkoutPage() {
           return (
             <div key={ex.id} className={`panel p-5 transition-colors ${isDone ? "border-primary/60" : ""}`}>
               <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="flex-1">
+                <div className="min-w-0 flex-1">
                   <p className="text-xs text-muted-foreground">Exercise {i + 1}</p>
                   <h3 className="mt-0.5 text-base font-semibold">{ex.name}</h3>
                   <div className="mt-2.5 flex flex-wrap gap-2 text-xs">
@@ -123,7 +123,7 @@ function WorkoutPage() {
                 </div>
                 <Button
                   variant={isDone ? "secondary" : "outline"}
-                  className="rounded-full"
+                  className="tap w-full rounded-full sm:w-auto"
                   onClick={() => toggleExercise(ex.id)}
                 >
                   {isDone ? <CheckCircle2 className="mr-1.5 size-4 text-primary" /> : <Circle className="mr-1.5 size-4" />}
@@ -137,12 +137,12 @@ function WorkoutPage() {
 
       <div className="panel mt-6 p-5">
         <p className="text-sm font-medium">How did this workout feel?</p>
-        <div className="mt-3 grid gap-2 sm:grid-cols-4">
+        <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
           {FEEDBACK.map((f) => (
             <button
               key={f.id}
               onClick={() => setFeedback(f.id)}
-              className={`rounded-xl border border-border px-4 py-3 text-sm transition-all hover:border-primary/50 ${
+              className={`min-h-12 rounded-xl border border-border px-3 py-3 text-sm transition-all hover:border-primary/50 ${
                 feedback === f.id ? "border-primary bg-accent text-accent-foreground" : "bg-card"
               }`}
             >
@@ -150,7 +150,7 @@ function WorkoutPage() {
             </button>
           ))}
         </div>
-        <Button className="mt-4 w-full rounded-full sm:w-auto sm:px-10" onClick={finish}>
+        <Button className="tap mt-4 w-full rounded-full sm:w-auto sm:px-10" onClick={finish}>
           Finish workout
         </Button>
         <p className="mt-3 text-xs text-muted-foreground">
@@ -160,7 +160,7 @@ function WorkoutPage() {
       </div>
 
       <h2 className="mb-3 mt-8 text-lg font-semibold">Coming up</h2>
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {upcomingWorkouts.map((w) => (
           <div key={w.title} className="panel p-5">
             <p className="text-xs uppercase tracking-wide text-muted-foreground">{w.day}</p>

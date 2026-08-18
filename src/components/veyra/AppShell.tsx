@@ -12,10 +12,12 @@ import {
   Sun,
   ShieldCheck,
   LogOut,
+  MoreHorizontal,
 } from "lucide-react";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useVeyra } from "@/lib/veyra-store";
 import { Logo } from "./Logo";
@@ -31,10 +33,25 @@ const NAV = [
   { to: "/profile", label: "Profile", icon: User },
 ] as const;
 
+const PRIMARY_NAV = [
+  { to: "/home", label: "Home", icon: Home },
+  { to: "/workout", label: "Workout", icon: Dumbbell },
+  { to: "/habits", label: "Habits", icon: SquareCheckBig },
+  { to: "/coach", label: "Coach", icon: Sparkles },
+] as const;
+
+const MORE_NAV = [
+  { to: "/grooming", label: "Grooming", icon: ScissorsLineDashed },
+  { to: "/presentation", label: "Presentation", icon: ScanFace },
+  { to: "/progress", label: "Progress", icon: LineChart },
+  { to: "/profile", label: "Profile", icon: User },
+] as const;
+
 export function AppShell({ children }: { children: ReactNode }) {
   const { state, hydrated, update, signOut } = useVeyra();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const [moreOpen, setMoreOpen] = useState(false);
 
   useEffect(() => {
     if (hydrated && !state.user) navigate({ to: "/auth", replace: true });
@@ -42,20 +59,23 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   if (!hydrated || !state.user) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">
-        Loading your plan…
+      <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-3 px-6 text-center">
+        <span className="size-8 animate-spin rounded-full border-2 border-border border-t-primary" />
+        <p className="text-sm text-muted-foreground">Loading your plan…</p>
       </div>
     );
   }
 
+  const moreActive = MORE_NAV.some((i) => i.to === pathname);
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-[100dvh] bg-background">
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
-          <Link to="/home" className="shrink-0">
+        <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-3 sm:px-6">
+          <Link to="/home" className="-mx-1 flex shrink-0 items-center px-1 py-2.5" aria-label="Veyra home">
             <Logo />
           </Link>
-          <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
+          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1 lg:flex">
             {NAV.map((item) => (
               <Link
                 key={item.to}
@@ -69,42 +89,46 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Link>
             ))}
           </nav>
-          <div className="ml-auto flex items-center gap-1.5">
+          <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1.5">
             {state.user.role === "admin" && (
-              <Button asChild variant="ghost" size="icon" aria-label="Admin dashboard">
+              <Button asChild variant="ghost" size="icon" className="tap" aria-label="Admin dashboard">
                 <Link to="/admin">
-                  <ShieldCheck className="size-4" />
+                  <ShieldCheck className="size-5" />
                 </Link>
               </Button>
             )}
             <Button
               variant="ghost"
               size="icon"
+              className="tap"
               aria-label="Toggle theme"
               onClick={() => update({ theme: state.theme === "dark" ? "light" : "dark" })}
             >
-              {state.theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+              {state.theme === "dark" ? <Sun className="size-5" /> : <Moon className="size-5" />}
             </Button>
             <Button
               variant="ghost"
               size="icon"
+              className="tap"
               aria-label="Sign out"
               onClick={() => {
                 signOut();
                 navigate({ to: "/", replace: true });
               }}
             >
-              <LogOut className="size-4" />
+              <LogOut className="size-5" />
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 pb-28 pt-6 sm:px-6 lg:pb-16">{children}</main>
+      <main className="mx-auto w-full max-w-6xl px-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] pt-5 sm:px-6 sm:pt-6 lg:pb-16">
+        {children}
+      </main>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/95 backdrop-blur-xl lg:hidden">
-        <div className="flex items-stretch justify-between px-1 pb-[env(safe-area-inset-bottom)]">
-          {NAV.map((item) => {
+        <div className="safe-bottom flex items-stretch justify-between px-1">
+          {PRIMARY_NAV.map((item) => {
             const Icon = item.icon;
             const active = pathname === item.to;
             return (
@@ -112,15 +136,51 @@ export function AppShell({ children }: { children: ReactNode }) {
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  "flex flex-1 flex-col items-center gap-1 py-2.5 text-[10px] font-medium transition-colors",
+                  "flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-medium transition-colors active:bg-muted/60",
                   active ? "text-primary" : "text-muted-foreground",
                 )}
               >
-                <Icon className="size-5" />
-                <span className="truncate">{item.label}</span>
+                <Icon className="size-5 shrink-0" />
+                <span className="max-w-full truncate">{item.label}</span>
               </Link>
             );
           })}
+
+          <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
+            <SheetTrigger
+              className={cn(
+                "flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-medium transition-colors active:bg-muted/60",
+                moreActive ? "text-primary" : "text-muted-foreground",
+              )}
+            >
+              <MoreHorizontal className="size-5 shrink-0" />
+              <span>More</span>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="rounded-t-3xl border-border pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+              <SheetHeader className="text-left">
+                <SheetTitle className="display-italic text-xl">More</SheetTitle>
+              </SheetHeader>
+              <div className="grid grid-cols-2 gap-2 px-4 pb-2">
+                {MORE_NAV.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      onClick={() => setMoreOpen(false)}
+                      className={cn(
+                        "flex min-h-14 items-center gap-3 rounded-2xl border border-border bg-card px-4 text-sm font-medium transition-colors active:bg-muted",
+                        pathname === item.to && "border-primary/60 text-primary",
+                      )}
+                    >
+                      <Icon className="size-5 shrink-0" />
+                      <span className="truncate">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </nav>
     </div>
@@ -137,10 +197,10 @@ export function PageHeader({
   action?: ReactNode;
 }) {
   return (
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <h1 className="display-italic text-[clamp(1.6rem,3.6vw,2.2rem)]">{title}</h1>
-        {subtitle && <p className="mt-1.5 max-w-2xl text-sm text-muted-foreground">{subtitle}</p>}
+    <div className="mb-5 grid grid-cols-[minmax(0,1fr)] items-end gap-3 sm:mb-6 sm:flex sm:flex-wrap sm:justify-between">
+      <div className="min-w-0">
+        <h1 className="display-italic text-[clamp(1.5rem,7vw,2.2rem)]">{title}</h1>
+        {subtitle && <p className="mt-1.5 max-w-2xl text-[0.9375rem] leading-relaxed text-muted-foreground">{subtitle}</p>}
       </div>
       {action}
     </div>

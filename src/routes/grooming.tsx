@@ -57,22 +57,22 @@ function GroomingPage() {
 
       <div className="mt-8">
         <Tabs defaultValue="hair">
-          <TabsList className="flex h-auto w-full flex-wrap justify-start gap-1">
+          <TabsList className="no-scrollbar -mx-4 flex h-auto w-[calc(100%+2rem)] justify-start gap-1 overflow-x-auto px-4 sm:mx-0 sm:w-full sm:flex-wrap sm:px-1">
             {groomingCategories.map((c) => (
-              <TabsTrigger key={c.id} value={c.id}>
+              <TabsTrigger key={c.id} value={c.id} className="min-h-10 shrink-0 whitespace-nowrap px-4">
                 {c.title}
               </TabsTrigger>
             ))}
           </TabsList>
           {groomingCategories.map((c) => (
             <TabsContent key={c.id} value={c.id} className="mt-5">
-              <div className="panel p-5 sm:p-6">
+              <div className="panel p-4 sm:p-6">
                 <h2 className="text-lg font-semibold">{c.title}</h2>
                 <p className="mt-1 text-sm text-muted-foreground">{c.blurb}</p>
                 <Accordion type="single" collapsible className="mt-4">
                   {c.items.map((item) => (
                     <AccordionItem key={item.name} value={item.name}>
-                      <AccordionTrigger className="text-left text-sm">{item.name}</AccordionTrigger>
+                      <AccordionTrigger className="min-h-12 text-left text-sm">{item.name}</AccordionTrigger>
                       <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
                         {item.detail}
                       </AccordionContent>
