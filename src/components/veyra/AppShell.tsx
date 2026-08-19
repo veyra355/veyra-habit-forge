@@ -1,22 +1,6 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import {
-  Dumbbell,
-  Home,
-  LineChart,
-  ScissorsLineDashed,
-  ScanFace,
-  Sparkles,
-  SquareCheckBig,
-  User,
-  Moon,
-  Sun,
-  ShieldCheck,
-  LogOut,
-  MoreHorizontal,
-  Trophy,
-} from "lucide-react";
+import { Dumbbell, Home, LineChart, ScissorsLineDashed, ScanFace, Sparkles, SquareCheckBig, User, Moon, Sun, ShieldCheck, LogOut, MoreHorizontal, Trophy } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
-
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
@@ -24,114 +8,29 @@ import { useVeyra } from "@/lib/veyra-store";
 import { Logo } from "./Logo";
 
 const NAV = [
-  { to: "/home", label: "Home", icon: Home },
-  { to: "/workout", label: "Workout", icon: Dumbbell },
-  { to: "/grooming", label: "Grooming", icon: ScissorsLineDashed },
-  { to: "/presentation", label: "Presentation", icon: ScanFace },
-  { to: "/habits", label: "Habits", icon: SquareCheckBig },
-  { to: "/progress", label: "Progress", icon: LineChart },
-  { to: "/coach", label: "AI Coach", icon: Sparkles },
-  { to: "/profile", label: "Profile", icon: User },
+  { to: "/home", label: "Home", icon: Home }, { to: "/workout", label: "Workout", icon: Dumbbell }, { to: "/grooming", label: "Grooming", icon: ScissorsLineDashed }, { to: "/presentation", label: "Presentation", icon: ScanFace }, { to: "/habits", label: "Habits", icon: SquareCheckBig }, { to: "/progress", label: "Progress", icon: LineChart }, { to: "/coach", label: "AI Coach", icon: Sparkles }, { to: "/profile", label: "Profile", icon: User },
 ] as const;
-
-const PRIMARY_NAV = [
-  { to: "/home", label: "Home", icon: Home },
-  { to: "/workout", label: "Workout", icon: Dumbbell },
-  { to: "/habits", label: "Habits", icon: SquareCheckBig },
-  { to: "/coach", label: "Coach", icon: Sparkles },
-] as const;
-
-const MORE_NAV = [
-  { to: "/grooming", label: "Grooming", icon: ScissorsLineDashed },
-  { to: "/presentation", label: "Presentation", icon: ScanFace },
-  { to: "/progress", label: "Progress", icon: LineChart },
-  { to: "/profile", label: "Profile", icon: User },
-] as const;
+const PRIMARY_NAV = [{ to: "/home", label: "Home", icon: Home }, { to: "/workout", label: "Workout", icon: Dumbbell }, { to: "/habits", label: "Habits", icon: SquareCheckBig }, { to: "/coach", label: "Coach", icon: Sparkles }] as const;
+const MORE_NAV = [{ to: "/grooming", label: "Grooming", icon: ScissorsLineDashed }, { to: "/presentation", label: "Presentation", icon: ScanFace }, { to: "/progress", label: "Progress", icon: LineChart }, { to: "/profile", label: "Profile", icon: User }] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const { state, hydrated, update, signOut } = useVeyra();
+  const { state, hydrated, authLoading, update, signOut } = useVeyra();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [moreOpen, setMoreOpen] = useState(false);
-
-  useEffect(() => {
-    if (hydrated && !state.user) navigate({ to: "/auth", replace: true });
-  }, [hydrated, state.user, navigate]);
-
-  if (!hydrated || !state.user) {
-    return (
-      <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-3 px-6 text-center">
-        <span className="size-8 animate-spin rounded-full border-2 border-border border-t-primary" />
-        <p className="text-sm text-muted-foreground">Loading your plan…</p>
-      </div>
-    );
-  }
-
+  useEffect(() => { if (hydrated && !authLoading && !state.user) navigate({ to: "/auth", replace: true }); }, [hydrated, authLoading, state.user, navigate]);
+  if (!hydrated || authLoading) return <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-3 px-6 text-center"><span className="size-8 animate-spin rounded-full border-2 border-border border-t-primary" /><p className="text-sm text-muted-foreground">Loading your Veyra profile…</p></div>;
+  if (!state.user) return null;
   const moreActive = MORE_NAV.some((i) => i.to === pathname);
   const xpToNextLevel = 25 * state.currentLevel ** 2;
   const xpFromLevelStart = 25 * Math.max(0, state.currentLevel - 1) ** 2;
   const xpProgress = Math.max(0, Math.min(100, ((state.totalXp - xpFromLevelStart) / Math.max(1, xpToNextLevel - xpFromLevelStart)) * 100));
-
-  return (
-    <div className="min-h-[100dvh] bg-background">
-      <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-3 sm:px-6">
-          <Link to="/home" className="-mx-1 flex shrink-0 items-center px-1 py-2.5" aria-label="Veyra home">
-            <Logo />
-          </Link>
-          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1 lg:flex">
-            {NAV.map((item) => (
-              <Link key={item.to} to={item.to} className={cn("rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground", pathname === item.to && "bg-secondary text-primary")}>
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1.5">
-            {state.user.role === "admin" && <Button asChild variant="ghost" size="icon" className="tap" aria-label="Admin dashboard"><Link to="/admin"><ShieldCheck className="size-5" /></Link></Button>}
-            <Button variant="ghost" size="icon" className="tap" aria-label="Toggle theme" onClick={() => update({ theme: state.theme === "dark" ? "light" : "dark" })}>{state.theme === "dark" ? <Sun className="size-5" /> : <Moon className="size-5" />}</Button>
-            <Button variant="ghost" size="icon" className="tap" aria-label="Sign out" onClick={() => { signOut(); navigate({ to: "/", replace: true }); }}><LogOut className="size-5" /></Button>
-          </div>
-        </div>
-      </header>
-
-      <div className="border-b border-primary/20 bg-gradient-to-r from-primary/10 via-purple-500/5 to-cyan-500/10">
-        <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2 sm:px-6">
-          <Trophy className="size-4 shrink-0 text-primary" />
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center justify-between gap-2 text-[11px] font-semibold uppercase tracking-wider">
-              <span className="truncate">{state.currentRank} · Level {state.currentLevel}</span>
-              <span className="text-muted-foreground">{state.totalXp} XP</span>
-            </div>
-            <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted">
-              <div className="h-full rounded-full bg-gradient-to-r from-primary to-cyan-400 transition-all duration-500" style={{ width: `${xpProgress}%` }} />
-            </div>
-          </div>
-          <span className="hidden text-xs font-medium text-primary sm:block">BUILD YOURSELF. LEVEL BY LEVEL.</span>
-        </div>
-      </div>
-
-      <main className="mx-auto w-full max-w-6xl px-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] pt-5 sm:px-6 sm:pt-6 lg:pb-16">{children}</main>
-
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/95 backdrop-blur-xl lg:hidden">
-        <div className="safe-bottom flex items-stretch justify-between px-1">
-          {PRIMARY_NAV.map((item) => { const Icon = item.icon; const active = pathname === item.to; return <Link key={item.to} to={item.to} className={cn("flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-medium transition-colors active:bg-muted/60", active ? "text-primary" : "text-muted-foreground")}><Icon className="size-5 shrink-0" /><span className="max-w-full truncate">{item.label}</span></Link>; })}
-          <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
-            <SheetTrigger className={cn("flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-medium transition-colors active:bg-muted/60", moreActive ? "text-primary" : "text-muted-foreground")}><MoreHorizontal className="size-5 shrink-0" /><span>More</span></SheetTrigger>
-            <SheetContent side="bottom" className="rounded-t-3xl border-border pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
-              <SheetHeader className="text-left"><SheetTitle className="display-italic text-xl">More</SheetTitle></SheetHeader>
-              <div className="grid grid-cols-2 gap-2 px-4 pb-2">{MORE_NAV.map((item) => { const Icon = item.icon; return <Link key={item.to} to={item.to} onClick={() => setMoreOpen(false)} className={cn("flex min-h-14 items-center gap-3 rounded-2xl border border-border bg-card px-4 text-sm font-medium transition-colors active:bg-muted", pathname === item.to && "border-primary/60 text-primary")}><Icon className="size-5 shrink-0" /><span className="truncate">{item.label}</span></Link>; })}</div>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </nav>
-    </div>
-  );
+  return <div className="min-h-[100dvh] bg-background">
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-xl"><div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-3 sm:px-6"><Link to="/home" className="-mx-1 flex shrink-0 items-center px-1 py-2.5" aria-label="Veyra home"><Logo /></Link><nav className="hidden min-w-0 flex-1 items-center justify-center gap-1 lg:flex">{NAV.map((item) => <Link key={item.to} to={item.to} className={cn("rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground", pathname === item.to && "bg-secondary text-primary")}>{item.label}</Link>)}</nav><div className="ml-auto flex shrink-0 items-center gap-0.5 sm:gap-1.5">{state.user.role === "admin" && <Button asChild variant="ghost" size="icon" className="tap" aria-label="Admin dashboard"><Link to="/admin"><ShieldCheck className="size-5" /></Link></Button>}<Button variant="ghost" size="icon" className="tap" aria-label="Toggle theme" onClick={() => update({ theme: state.theme === "dark" ? "light" : "dark" })}>{state.theme === "dark" ? <Sun className="size-5" /> : <Moon className="size-5" />}</Button><Button variant="ghost" size="icon" className="tap" aria-label="Sign out" onClick={() => { void signOut(); navigate({ to: "/", replace: true }); }}><LogOut className="size-5" /></Button></div></div></header>
+    <div className="border-b border-primary/20 bg-gradient-to-r from-primary/10 via-purple-500/5 to-cyan-500/10"><div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2 sm:px-6"><Trophy className="size-4 shrink-0 text-primary" /><div className="min-w-0 flex-1"><div className="flex items-center justify-between gap-2 text-[11px] font-semibold uppercase tracking-wider"><span className="truncate">{state.currentRank} · Level {state.currentLevel}</span><span className="text-muted-foreground">{state.totalXp} XP</span></div><div className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-gradient-to-r from-primary to-cyan-400 transition-all duration-500" style={{ width: `${xpProgress}%` }} /></div></div><span className="hidden text-xs font-medium text-primary sm:block">BUILD YOURSELF. LEVEL BY LEVEL.</span></div></div>
+    <main className="mx-auto w-full max-w-6xl px-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] pt-5 sm:px-6 sm:pt-6 lg:pb-16">{children}</main>
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/95 backdrop-blur-xl lg:hidden"><div className="safe-bottom flex items-stretch justify-between px-1">{PRIMARY_NAV.map((item) => { const Icon = item.icon; const active = pathname === item.to; return <Link key={item.to} to={item.to} className={cn("flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-medium transition-colors active:bg-muted/60", active ? "text-primary" : "text-muted-foreground")}><Icon className="size-5 shrink-0" /><span className="max-w-full truncate">{item.label}</span></Link>; })}<Sheet open={moreOpen} onOpenChange={setMoreOpen}><SheetTrigger className={cn("flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[11px] font-medium transition-colors active:bg-muted/60", moreActive ? "text-primary" : "text-muted-foreground")}><MoreHorizontal className="size-5 shrink-0" /><span>More</span></SheetTrigger><SheetContent side="bottom" className="rounded-t-3xl border-border pb-[calc(1.5rem+env(safe-area-inset-bottom))]"><SheetHeader className="text-left"><SheetTitle className="display-italic text-xl">More</SheetTitle></SheetHeader><div className="grid grid-cols-2 gap-2 px-4 pb-2">{MORE_NAV.map((item) => { const Icon = item.icon; return <Link key={item.to} to={item.to} onClick={() => setMoreOpen(false)} className={cn("flex min-h-14 items-center gap-3 rounded-2xl border border-border bg-card px-4 text-sm font-medium transition-colors active:bg-muted", pathname === item.to && "border-primary/60 text-primary")}><Icon className="size-5 shrink-0" /><span className="truncate">{item.label}</span></Link>; })}</div></SheetContent></Sheet></div></nav>
+  </div>;
 }
-
-export function PageHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: ReactNode }) {
-  return <div className="mb-5 grid grid-cols-[minmax(0,1fr)] items-end gap-3 sm:mb-6 sm:flex sm:flex-wrap sm:justify-between"><div className="min-w-0"><h1 className="display-italic text-[clamp(1.65rem,7vw,2.35rem)]">{title}</h1>{subtitle && <p className="mt-1.5 max-w-2xl text-base leading-relaxed text-muted-foreground">{subtitle}</p>}</div>{action}</div>;
-}
-
-export function SafetyNote({ children }: { children: ReactNode }) {
-  return <p className="mt-6 rounded-xl border border-border bg-muted/50 p-4 text-xs leading-relaxed text-muted-foreground">{children}</p>;
-}
+export function PageHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: ReactNode }) { return <div className="mb-5 grid grid-cols-[minmax(0,1fr)] items-end gap-3 sm:mb-6 sm:flex sm:flex-wrap sm:justify-between"><div className="min-w-0"><h1 className="display-italic text-[clamp(1.65rem,7vw,2.35rem)]">{title}</h1>{subtitle && <p className="mt-1.5 max-w-2xl text-base leading-relaxed text-muted-foreground">{subtitle}</p>}</div>{action}</div>; }
+export function SafetyNote({ children }: { children: ReactNode }) { return <p className="mt-6 rounded-xl border border-border bg-muted/50 p-4 text-xs leading-relaxed text-muted-foreground">{children}</p>; }
