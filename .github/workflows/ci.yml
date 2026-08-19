@@ -30,9 +30,6 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Format source files
-        run: npx prettier --write src
-
       - name: Check formatting
         run: npx prettier --check src
 
