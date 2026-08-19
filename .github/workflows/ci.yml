@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - 'fix/**'
+      - 'feature/**'
   pull_request:
     branches:
       - main
@@ -31,7 +32,7 @@ jobs:
         run: npx prettier --check src
 
       - name: Lint
-        run: npx eslint . --rule '@typescript-eslint/no-explicit-any: off'
+        run: npx eslint . --rule "@typescript-eslint/no-explicit-any: off"
 
       - name: Production build
         run: npm run build
