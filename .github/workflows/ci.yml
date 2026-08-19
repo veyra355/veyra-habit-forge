@@ -1,6 +1,6 @@
 name: Veyra CI
 
-on:
+"on":
   push:
     branches:
       - main
@@ -28,16 +28,16 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: "npm install --no-audit --no-fund"
 
       - name: Format source files
-        run: npx prettier --write src
+        run: "npx prettier --write src"
 
       - name: Check formatting
-        run: npx prettier --check src
+        run: "npx prettier --check src"
 
       - name: Lint
-        run: npx eslint .
+        run: "npx eslint ."
 
       - name: Production build
-        run: npm run build
+        run: "npm run build"
