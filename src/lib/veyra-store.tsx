@@ -49,13 +49,18 @@ export type VeyraState = {
   user: VeyraUser | null;
   onboarding: Onboarding | null;
   habits: HabitDefinition[];
-  completions: Record<string, string[]>; // date -> habit ids
+  completions: Record<string, string[]>;
   sessions: WorkoutSession[];
   completedExercises: string[];
   messages: ChatMessage[];
   theme: "dark" | "light";
   notifications: { workout: boolean; habits: boolean; weekly: boolean };
   privacy: { analytics: boolean; personalization: boolean };
+  totalXp: number;
+  currentLevel: number;
+  currentRank: string;
+  currentStreak: number;
+  longestStreak: number;
 };
 
 export const DEFAULT_HABITS: HabitDefinition[] = [
@@ -67,6 +72,15 @@ export const DEFAULT_HABITS: HabitDefinition[] = [
   { id: "focus", name: "Study/work focus" },
 ];
 
+const HABIT_XP: Record<string, number> = {
+  workout: 100,
+  sleep: 30,
+  hydration: 20,
+  grooming: 25,
+  movement: 20,
+  focus: 30,
+};
+
 export const todayKey = () => new Date().toISOString().slice(0, 10);
 
 export const dayKey = (offset: number) => {
@@ -74,6 +88,55 @@ export const dayKey = (offset: number) => {
   d.setDate(d.getDate() - offset);
   return d.toISOString().slice(0, 10);
 };
+
+export function xpForLevel(level: number) {
+  return 25 * level ** 2;
+}
+
+export function levelFromXp(xp: number) {
+  let level = 1;
+  while (xp >= xpForLevel(level) && level < 100) level += 1;
+  return level;
+}
+
+export function rankFromLevel(level: number) {
+  if (level >= 31) return "Platinum";
+  if (level >= 11) return "Gold";
+  return "Bronze";
+}
+
+function streaks(completions: Record<string, string[]>) {
+  let current = 0;
+  for (let i = 0; i < 365; i += 1) {
+    if ((completions[dayKey(i)] ?? []).length === 0) break;
+    current += 1;
+  }
+
+  let longest = 0;
+  let run = 0;
+  for (let i = 364; i >= 0; i -= 1) {
+    if ((completions[dayKey(i)] ?? []).length > 0) {
+      run += 1;
+      longest = Math.max(longest, run);
+    } else {
+      run = 0;
+    }
+  }
+  return { current, longest };
+}
+
+function withProgress(state: VeyraState, totalXp: number, completions = state.completions): VeyraState {
+  const level = levelFromXp(Math.max(0, totalXp));
+  const streak = streaks(completions);
+  return {
+    ...state,
+    totalXp: Math.max(0, totalXp),
+    currentLevel: level,
+    currentRank: rankFromLevel(level),
+    currentStreak: streak.current,
+    longestStreak: Math.max(state.longestStreak, streak.longest),
+  };
+}
 
 function seedCompletions(habits: HabitDefinition[]) {
   const seeded: Record<string, string[]> = {};
@@ -95,7 +158,7 @@ function seedSessions(): WorkoutSession[] {
   }));
 }
 
-const STORAGE_KEY = "veyra-state-v1";
+const STORAGE_KEY = "veyra-state-v2";
 
 const initialState: VeyraState = {
   user: null,
@@ -108,6 +171,11 @@ const initialState: VeyraState = {
   theme: "dark",
   notifications: { workout: true, habits: true, weekly: true },
   privacy: { analytics: true, personalization: true },
+  totalXp: 0,
+  currentLevel: 1,
+  currentRank: "Bronze",
+  currentStreak: 0,
+  longestStreak: 0,
 };
 
 type Ctx = {
@@ -132,7 +200,10 @@ export function VeyraProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setState({ ...initialState, ...(JSON.parse(raw) as VeyraState) });
+      if (raw) {
+        const saved = JSON.parse(raw) as Partial<VeyraState>;
+        setState({ ...initialState, ...saved, habits: saved.habits?.length ? saved.habits : DEFAULT_HABITS });
+      }
     } catch {
       /* ignore corrupt state */
     }
@@ -178,8 +249,10 @@ export function VeyraProvider({ children }: { children: ReactNode }) {
   const toggleHabit = useCallback((id: string, date = todayKey()) => {
     setState((prev) => {
       const list = prev.completions[date] ?? [];
-      const next = list.includes(id) ? list.filter((h) => h !== id) : [...list, id];
-      return { ...prev, completions: { ...prev.completions, [date]: next } };
+      const wasDone = list.includes(id);
+      const next = wasDone ? list.filter((h) => h !== id) : [...list, id];
+      const delta = (HABIT_XP[id] ?? 20) * (wasDone ? -1 : 1);
+      return withProgress(prev, prev.totalXp + delta, { ...prev.completions, [date]: next });
     });
   }, []);
 
@@ -198,17 +271,21 @@ export function VeyraProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const completeWorkout = useCallback((title: string, feedback: WorkoutSession["feedback"]) => {
-    setState((prev) => ({
-      ...prev,
-      sessions: [
-        { id: `s-${Date.now()}`, date: todayKey(), title, feedback },
-        ...prev.sessions,
-      ],
-      completions: {
+    setState((prev) => {
+      const date = todayKey();
+      const completedToday = prev.completions[date] ?? [];
+      const alreadyDone = completedToday.includes("workout");
+      const completions = {
         ...prev.completions,
-        [todayKey()]: Array.from(new Set([...(prev.completions[todayKey()] ?? []), "workout"])),
-      },
-    }));
+        [date]: Array.from(new Set([...completedToday, "workout"])),
+      };
+      const next = {
+        ...prev,
+        sessions: [{ id: `s-${Date.now()}`, date, title, feedback }, ...prev.sessions],
+        completions,
+      };
+      return withProgress(next, prev.totalXp + (alreadyDone ? 0 : HABIT_XP.workout + 100), completions);
+    });
   }, []);
 
   const toggleExercise = useCallback((id: string) => {
