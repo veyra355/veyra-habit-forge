@@ -1,14 +1,14 @@
 name: Veyra CI
 
-"on":
+on:
   push:
     branches:
       - main
-      - 'fix/**'
+      - "fix/**"
   pull_request:
     branches:
       - main
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 permissions:
   contents: read
@@ -28,16 +28,13 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: "npm install --no-audit --no-fund"
-
-      - name: Format source files
-        run: "npx prettier --write src"
+        run: npm install --no-audit --no-fund
 
       - name: Check formatting
-        run: "npx prettier --check src"
+        run: npx prettier --check src
 
       - name: Lint
-        run: "npx eslint ."
+        run: npx eslint .
 
       - name: Production build
-        run: "npm run build"
+        run: npm run build
