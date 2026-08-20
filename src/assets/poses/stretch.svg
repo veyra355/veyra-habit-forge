@@ -1,0 +1,20 @@
+<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .pose-line { fill: none; stroke: #7C3AED; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+      .pose-fill { fill: #7C3AED; }
+      .pose-label { fill: #94A3B8; font-family: Inter, sans-serif; font-size: 13px; font-weight: 600; }
+      .floor { stroke: #334155; stroke-width: 2; }
+    </style>
+  </defs>
+
+  <g transform="translate(90,30)">
+    <line class="floor" x1="-30" y1="150" x2="230" y2="150" />
+    <!-- seated, folding forward -->
+    <path class="pose-line" d="M20 150 L110 150" />
+    <circle class="pose-fill" cx="30" cy="95" r="11" />
+    <path class="pose-line" d="M32 106 L60 140" />
+    <path class="pose-line" d="M45 120 L100 140" />
+    <text class="pose-label" x="0" y="175">EASE INTO EACH STRETCH</text>
+  </g>
+</svg>

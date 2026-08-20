@@ -1,0 +1,23 @@
+<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .pose-line { fill: none; stroke: #2563EB; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+      .pose-fill { fill: #2563EB; }
+      .pose-label { fill: #94A3B8; font-family: Inter, sans-serif; font-size: 13px; font-weight: 600; }
+      .floor { stroke: #334155; stroke-width: 2; }
+    </style>
+  </defs>
+
+  <g transform="translate(70,40)">
+    <line class="floor" x1="-20" y1="140" x2="200" y2="140" />
+    <!-- head -->
+    <circle class="pose-fill" cx="10" cy="120" r="11" />
+    <!-- torso lifted -->
+    <path class="pose-line" d="M20 118 L90 70" />
+    <!-- bent legs -->
+    <path class="pose-line" d="M90 70 L130 100 L130 140" />
+    <!-- arms flat on floor -->
+    <path class="pose-line" d="M30 125 L50 140" />
+    <text class="pose-label" x="0" y="170">HIPS UP — SQUEEZE GLUTES</text>
+  </g>
+</svg>

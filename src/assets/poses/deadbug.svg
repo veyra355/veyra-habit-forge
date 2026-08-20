@@ -1,0 +1,24 @@
+<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .pose-line { fill: none; stroke: #2563EB; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+      .pose-fill { fill: #2563EB; }
+      .pose-label { fill: #94A3B8; font-family: Inter, sans-serif; font-size: 13px; font-weight: 600; }
+      .floor { stroke: #334155; stroke-width: 2; }
+    </style>
+  </defs>
+
+  <g transform="translate(90,30)">
+    <line class="floor" x1="-30" y1="150" x2="230" y2="150" />
+    <!-- lying on back, head -->
+    <circle class="pose-fill" cx="10" cy="60" r="11" />
+    <path class="pose-line" d="M20 65 L90 65" />
+    <!-- extended opposite arm + leg -->
+    <path class="pose-line" d="M45 65 L15 30" />
+    <path class="pose-line" d="M90 65 L140 40" />
+    <!-- bent opposite side -->
+    <path class="pose-line" d="M55 65 L60 100 L40 130" />
+    <path class="pose-line" d="M90 65 L110 100 L100 130" />
+    <text class="pose-label" x="0" y="175">OPPOSITE ARM + LEG EXTEND</text>
+  </g>
+</svg>

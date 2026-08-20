@@ -1,3 +1,10 @@
+import bridgePose from "@/assets/poses/bridge.svg";
+import deadbugPose from "@/assets/poses/deadbug.svg";
+import pushupPose from "@/assets/poses/pushup.svg";
+import rowPose from "@/assets/poses/row.svg";
+import squatPose from "@/assets/poses/squat.svg";
+import stretchPose from "@/assets/poses/stretch.svg";
+
 export type Exercise = {
   id: string;
   name: string;
@@ -5,6 +12,7 @@ export type Exercise = {
   reps: string;
   rest: string;
   instructions: string;
+  poseImage: string;
 };
 
 export const todaysWorkout = {
@@ -22,6 +30,7 @@ export const todaysWorkout = {
       rest: "60s rest",
       instructions:
         "Feet shoulder-width apart, chest tall. Sit back through the hips and drive evenly through both feet. Stop the set if form breaks down.",
+      poseImage: squatPose,
     },
     {
       id: "ex-2",
@@ -31,6 +40,7 @@ export const todaysWorkout = {
       rest: "60s rest",
       instructions:
         "Hands under shoulders, body in one line. Lower with control, elbows at roughly 45°, and press back up.",
+      poseImage: pushupPose,
     },
     {
       id: "ex-3",
@@ -40,6 +50,7 @@ export const todaysWorkout = {
       rest: "45s rest",
       instructions:
         "Hinge at the hips with a flat back. Pull the dumbbell towards your hip, pause, then lower slowly.",
+      poseImage: rowPose,
     },
     {
       id: "ex-4",
@@ -49,6 +60,7 @@ export const todaysWorkout = {
       rest: "45s rest",
       instructions:
         "Lie on your back, heels close to hips. Press hips up until your body is level, squeeze, then lower.",
+      poseImage: bridgePose,
     },
     {
       id: "ex-5",
@@ -58,6 +70,7 @@ export const todaysWorkout = {
       rest: "30s rest",
       instructions:
         "Keep your lower back gently pressed down. Extend opposite arm and leg slowly, breathing steadily.",
+      poseImage: deadbugPose,
     },
     {
       id: "ex-6",
@@ -67,6 +80,7 @@ export const todaysWorkout = {
       rest: "—",
       instructions:
         "Hip flexor stretch, chest opener, hamstring stretch and neck release. Move gently and never force a stretch.",
+      poseImage: stretchPose,
     },
   ] as Exercise[],
 };

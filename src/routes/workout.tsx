@@ -121,17 +121,29 @@ function WorkoutPage() {
               className={`panel p-5 transition-colors ${isDone ? "border-primary/60" : ""}`}
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs text-muted-foreground">Exercise {i + 1}</p>
-                  <h3 className="mt-0.5 text-base font-semibold">{ex.name}</h3>
-                  <div className="mt-2.5 flex flex-wrap gap-2 text-xs">
-                    <Badge variant="outline">{ex.sets}</Badge>
-                    <Badge variant="outline">{ex.reps}</Badge>
-                    <Badge variant="outline">{ex.rest}</Badge>
+                <div className="flex w-full gap-4 sm:w-auto">
+                  <div className="hidden shrink-0 overflow-hidden rounded-xl border border-border bg-muted/40 sm:block">
+                    <img src={ex.poseImage} alt={`${ex.name} pose diagram`} className="size-28" />
                   </div>
-                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                    {ex.instructions}
-                  </p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs text-muted-foreground">Exercise {i + 1}</p>
+                    <h3 className="mt-0.5 text-base font-semibold">{ex.name}</h3>
+                    <div className="mt-2.5 flex flex-wrap gap-2 text-xs">
+                      <Badge variant="outline">{ex.sets}</Badge>
+                      <Badge variant="outline">{ex.reps}</Badge>
+                      <Badge variant="outline">{ex.rest}</Badge>
+                    </div>
+                    <div className="mt-3 overflow-hidden rounded-xl border border-border bg-muted/40 sm:hidden">
+                      <img
+                        src={ex.poseImage}
+                        alt={`${ex.name} pose diagram`}
+                        className="h-32 w-full object-contain"
+                      />
+                    </div>
+                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                      {ex.instructions}
+                    </p>
+                  </div>
                 </div>
                 <Button
                   variant={isDone ? "secondary" : "outline"}
