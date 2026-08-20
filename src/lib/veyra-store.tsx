@@ -521,6 +521,7 @@ export function VeyraProvider({ children }: { children: ReactNode }) {
       signInWithPassword,
       signInWithGoogle,
       signOut,
+      awardXp,
       toggleHabit,
       addHabit,
       removeHabit,
