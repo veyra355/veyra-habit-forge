@@ -506,13 +506,13 @@ export function VeyraProvider({ children }: { children: ReactNode }) {
       signInWithPassword,
       signInWithGoogle,
       signOut,
+      awardXp,
       toggleHabit,
       addHabit,
       removeHabit,
       completeWorkout,
       toggleExercise,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       state,
       hydrated,
