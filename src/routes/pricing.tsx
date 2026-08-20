@@ -72,9 +72,14 @@ function PricingPage() {
             return (
               <div
                 key={p.id}
-                className={cn("panel flex flex-col p-6", p.highlight && "border-primary/40 glow-lime")}
+                className={cn(
+                  "panel flex flex-col p-6",
+                  p.highlight && "border-primary/40 glow-lime",
+                )}
               >
-                {p.highlight && <span className="mb-3 self-start eyebrow text-primary">Recommended</span>}
+                {p.highlight && (
+                  <span className="mb-3 self-start eyebrow text-primary">Recommended</span>
+                )}
                 <p className="eyebrow text-muted-foreground">{p.name}</p>
                 <p className="mt-2 font-display text-4xl font-bold">
                   {p.price}
@@ -103,8 +108,8 @@ function PricingPage() {
         </div>
 
         <p className="mt-8 flex items-center justify-center gap-2 text-center text-xs text-muted-foreground">
-          <Lock className="size-3.5" />
-          A payment provider is not connected yet, so paid plans can&apos;t be purchased. Free stays free.
+          <Lock className="size-3.5" />A payment provider is not connected yet, so paid plans
+          can&apos;t be purchased. Free stays free.
         </p>
       </div>
     </div>

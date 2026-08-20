@@ -2,14 +2,7 @@
 // Level thresholds: xpForLevel(n) = 25 * (n - 1) * (n + 2)
 // L1 = 0, L2 = 100, L3 = 250, L4 = 450, L5 = 700, ... (mirrors the SQL functions)
 
-export type RankKey =
-  | "bronze"
-  | "silver"
-  | "gold"
-  | "platinum"
-  | "diamond"
-  | "master"
-  | "veyra";
+export type RankKey = "bronze" | "silver" | "gold" | "platinum" | "diamond" | "master" | "veyra";
 
 export type RankMeta = {
   key: RankKey;
@@ -23,13 +16,62 @@ export type RankMeta = {
 };
 
 export const RANKS: RankMeta[] = [
-  { key: "bronze", label: "Bronze", title: "The Starter", minLevel: 1, maxLevel: 5, theme: "rank-bronze" },
-  { key: "silver", label: "Silver", title: "The Builder", minLevel: 6, maxLevel: 10, theme: "rank-silver" },
-  { key: "gold", label: "Gold", title: "The Disciplined", minLevel: 11, maxLevel: 20, theme: "rank-gold" },
-  { key: "platinum", label: "Platinum", title: "The Consistent", minLevel: 21, maxLevel: 35, theme: "rank-platinum" },
-  { key: "diamond", label: "Diamond", title: "The Elite", minLevel: 36, maxLevel: 50, theme: "rank-diamond" },
-  { key: "master", label: "Master", title: "The Master", minLevel: 51, maxLevel: 75, theme: "rank-master" },
-  { key: "veyra", label: "Veyra", title: "Beyond Levels", minLevel: 76, maxLevel: null, theme: "rank-veyra" },
+  {
+    key: "bronze",
+    label: "Bronze",
+    title: "The Starter",
+    minLevel: 1,
+    maxLevel: 5,
+    theme: "rank-bronze",
+  },
+  {
+    key: "silver",
+    label: "Silver",
+    title: "The Builder",
+    minLevel: 6,
+    maxLevel: 10,
+    theme: "rank-silver",
+  },
+  {
+    key: "gold",
+    label: "Gold",
+    title: "The Disciplined",
+    minLevel: 11,
+    maxLevel: 20,
+    theme: "rank-gold",
+  },
+  {
+    key: "platinum",
+    label: "Platinum",
+    title: "The Consistent",
+    minLevel: 21,
+    maxLevel: 35,
+    theme: "rank-platinum",
+  },
+  {
+    key: "diamond",
+    label: "Diamond",
+    title: "The Elite",
+    minLevel: 36,
+    maxLevel: 50,
+    theme: "rank-diamond",
+  },
+  {
+    key: "master",
+    label: "Master",
+    title: "The Master",
+    minLevel: 51,
+    maxLevel: 75,
+    theme: "rank-master",
+  },
+  {
+    key: "veyra",
+    label: "Veyra",
+    title: "Beyond Levels",
+    minLevel: 76,
+    maxLevel: null,
+    theme: "rank-veyra",
+  },
 ];
 
 export function xpForLevel(level: number): number {

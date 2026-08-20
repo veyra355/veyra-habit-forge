@@ -14,6 +14,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CoachRouteImport } from './routes/coach'
+import { Route as GameRouteImport } from './routes/game'
 import { Route as GroomingRouteImport } from './routes/grooming'
 import { Route as HabitsRouteImport } from './routes/habits'
 import { Route as HomeRouteImport } from './routes/home'
@@ -47,6 +48,11 @@ const AuthRoute = AuthRouteImport.update({
 const CoachRoute = CoachRouteImport.update({
   id: '/coach',
   path: '/coach',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameRoute = GameRouteImport.update({
+  id: '/game',
+  path: '/game',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GroomingRoute = GroomingRouteImport.update({
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/coach': typeof CoachRoute
+  '/game': typeof GameRoute
   '/grooming': typeof GroomingRoute
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/coach': typeof CoachRoute
+  '/game': typeof GameRoute
   '/grooming': typeof GroomingRoute
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/coach': typeof CoachRoute
+  '/game': typeof GameRoute
   '/grooming': typeof GroomingRoute
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/coach'
+    | '/game'
     | '/grooming'
     | '/habits'
     | '/home'
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/coach'
+    | '/game'
     | '/grooming'
     | '/habits'
     | '/home'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/coach'
+    | '/game'
     | '/grooming'
     | '/habits'
     | '/home'
@@ -201,6 +213,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   CoachRoute: typeof CoachRoute
+  GameRoute: typeof GameRoute
   GroomingRoute: typeof GroomingRoute
   HabitsRoute: typeof HabitsRoute
   HomeRoute: typeof HomeRoute
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/coach'
       fullPath: '/coach'
       preLoaderRoute: typeof CoachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game': {
+      id: '/game'
+      path: '/game'
+      fullPath: '/game'
+      preLoaderRoute: typeof GameRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/grooming': {
@@ -321,6 +341,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   CoachRoute: CoachRoute,
+  GameRoute: GameRoute,
   GroomingRoute: GroomingRoute,
   HabitsRoute: HabitsRoute,
   HomeRoute: HomeRoute,

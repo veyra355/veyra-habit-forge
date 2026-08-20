@@ -14,7 +14,11 @@ export const Route = createFileRoute("/workout")({
   head: () => ({
     meta: [
       { title: "Today's Workout — Veyra" },
-      { name: "description", content: "Your adaptive session for today: exercises, sets, rest periods and simple form cues." },
+      {
+        name: "description",
+        content:
+          "Your adaptive session for today: exercises, sets, rest periods and simple form cues.",
+      },
       { property: "og:title", content: "Today's Workout — Veyra" },
       { property: "og:description", content: "Exercises, sets, rest and form cues for today." },
     ],
@@ -61,8 +65,8 @@ function WorkoutPage() {
         </span>
         <h1 className="mt-5 text-2xl font-semibold">Workout Complete 🎉</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Logged, along with your feedback. Your coach will use it to tune the next session — recovery counts
-          as part of the plan, so take the rest of today easy.
+          Logged, along with your feedback. Your coach will use it to tune the next session —
+          recovery counts as part of the plan, so take the rest of today easy.
         </p>
         <Button
           className="tap mt-7 w-full rounded-full px-8 sm:w-auto"
@@ -79,7 +83,10 @@ function WorkoutPage() {
 
   return (
     <>
-      <PageHeader title="Today's Workout" subtitle="Adapted from your goals, equipment and last session feedback." />
+      <PageHeader
+        title="Today's Workout"
+        subtitle="Adapted from your goals, equipment and last session feedback."
+      />
 
       <div className="panel p-5">
         <h2 className="font-display text-xl font-semibold">{todaysWorkout.title}</h2>
@@ -109,7 +116,10 @@ function WorkoutPage() {
         {todaysWorkout.exercises.map((ex, i) => {
           const isDone = completed.includes(ex.id);
           return (
-            <div key={ex.id} className={`panel p-5 transition-colors ${isDone ? "border-primary/60" : ""}`}>
+            <div
+              key={ex.id}
+              className={`panel p-5 transition-colors ${isDone ? "border-primary/60" : ""}`}
+            >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="text-xs text-muted-foreground">Exercise {i + 1}</p>
@@ -119,14 +129,20 @@ function WorkoutPage() {
                     <Badge variant="outline">{ex.reps}</Badge>
                     <Badge variant="outline">{ex.rest}</Badge>
                   </div>
-                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">{ex.instructions}</p>
+                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                    {ex.instructions}
+                  </p>
                 </div>
                 <Button
                   variant={isDone ? "secondary" : "outline"}
                   className="tap w-full rounded-full sm:w-auto"
                   onClick={() => toggleExercise(ex.id)}
                 >
-                  {isDone ? <CheckCircle2 className="mr-1.5 size-4 text-primary" /> : <Circle className="mr-1.5 size-4" />}
+                  {isDone ? (
+                    <CheckCircle2 className="mr-1.5 size-4 text-primary" />
+                  ) : (
+                    <Circle className="mr-1.5 size-4" />
+                  )}
                   {isDone ? "Completed" : "Mark Complete"}
                 </Button>
               </div>
@@ -154,8 +170,8 @@ function WorkoutPage() {
           Finish workout
         </Button>
         <p className="mt-3 text-xs text-muted-foreground">
-          Your answer changes the next session&apos;s volume and intensity — “too difficult” scales things back, no
-          judgement attached.
+          Your answer changes the next session&apos;s volume and intensity — “too difficult” scales
+          things back, no judgement attached.
         </p>
       </div>
 
@@ -173,8 +189,8 @@ function WorkoutPage() {
       </div>
 
       <SafetyNote>
-        This is general fitness guidance, not rehabilitation or injury treatment. If something hurts, stop and
-        speak to a qualified healthcare professional before continuing.
+        This is general fitness guidance, not rehabilitation or injury treatment. If something
+        hurts, stop and speak to a qualified healthcare professional before continuing.
       </SafetyNote>
     </>
   );

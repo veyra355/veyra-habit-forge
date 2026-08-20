@@ -14,9 +14,16 @@ export const Route = createFileRoute("/coach")({
   head: () => ({
     meta: [
       { title: "Your AI Coach — Veyra" },
-      { name: "description", content: "Ask your Veyra coach for today's workout, a shorter session, a weekly routine or a simple grooming plan." },
+      {
+        name: "description",
+        content:
+          "Ask your Veyra coach for today's workout, a shorter session, a weekly routine or a simple grooming plan.",
+      },
       { property: "og:title", content: "Your AI Coach — Veyra" },
-      { property: "og:description", content: "Guidance built on your goals, history and feedback." },
+      {
+        property: "og:description",
+        content: "Guidance built on your goals, history and feedback.",
+      },
     ],
   }),
   component: () => (
@@ -75,7 +82,11 @@ function CoachPage() {
         },
       });
       update({
-        messages: [...state.messages, userMsg, { id: `c-${Date.now()}`, role: "coach", content: res.reply }],
+        messages: [
+          ...state.messages,
+          userMsg,
+          { id: `c-${Date.now()}`, role: "coach", content: res.reply },
+        ],
       });
     } finally {
       setPending(false);
@@ -84,7 +95,10 @@ function CoachPage() {
 
   return (
     <>
-      <PageHeader title="Your AI Coach" subtitle="Built on your profile, goals, history and session feedback." />
+      <PageHeader
+        title="Your AI Coach"
+        subtitle="Built on your profile, goals, history and session feedback."
+      />
 
       <div className="panel flex h-[calc(100dvh-16rem)] min-h-[380px] flex-col overflow-hidden lg:h-[62vh]">
         <div className="flex-1 space-y-4 overflow-y-auto overflow-x-hidden p-4 sm:p-5">
@@ -100,7 +114,10 @@ function CoachPage() {
             </div>
           )}
           {state.messages.map((m) => (
-            <div key={m.id} className={m.role === "user" ? "flex justify-end" : "flex justify-start"}>
+            <div
+              key={m.id}
+              className={m.role === "user" ? "flex justify-end" : "flex justify-start"}
+            >
               <div
                 className={`max-w-[88%] break-words whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                   m.role === "user"
@@ -147,7 +164,13 @@ function CoachPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
-            <Button type="submit" size="icon" className="tap size-11 shrink-0" disabled={pending} aria-label="Send">
+            <Button
+              type="submit"
+              size="icon"
+              className="tap size-11 shrink-0"
+              disabled={pending}
+              aria-label="Send"
+            >
               <Send className="size-4" />
             </Button>
           </form>
@@ -155,9 +178,10 @@ function CoachPage() {
       </div>
 
       <SafetyNote>
-        Your coach gives general fitness, habit and grooming guidance. It does not diagnose conditions, prescribe
-        medication, or recommend extreme diets or excessive training. For symptoms, injuries, medication or
-        treatment questions, please consult a qualified healthcare professional.
+        Your coach gives general fitness, habit and grooming guidance. It does not diagnose
+        conditions, prescribe medication, or recommend extreme diets or excessive training. For
+        symptoms, injuries, medication or treatment questions, please consult a qualified healthcare
+        professional.
       </SafetyNote>
     </>
   );

@@ -1,7 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Sun, Moon } from "lucide-react";
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppShell, PageHeader, SafetyNote } from "@/components/veyra/AppShell";
 import { groomingCategories, groomingRoutines } from "@/lib/sample-data";
@@ -10,9 +15,16 @@ export const Route = createFileRoute("/grooming")({
   head: () => ({
     meta: [
       { title: "Grooming — Veyra" },
-      { name: "description", content: "Simple hair, skin, grooming, style and presentation routines you can actually keep up with." },
+      {
+        name: "description",
+        content:
+          "Simple hair, skin, grooming, style and presentation routines you can actually keep up with.",
+      },
       { property: "og:title", content: "Grooming — Veyra" },
-      { property: "og:description", content: "Simple routines for hair, skin, style and presentation." },
+      {
+        property: "og:description",
+        content: "Simple routines for hair, skin, style and presentation.",
+      },
     ],
   }),
   component: () => (
@@ -59,7 +71,11 @@ function GroomingPage() {
         <Tabs defaultValue="hair">
           <TabsList className="no-scrollbar -mx-4 flex h-auto w-[calc(100%+2rem)] justify-start gap-1 overflow-x-auto px-4 sm:mx-0 sm:w-full sm:flex-wrap sm:px-1">
             {groomingCategories.map((c) => (
-              <TabsTrigger key={c.id} value={c.id} className="min-h-10 shrink-0 whitespace-nowrap px-4">
+              <TabsTrigger
+                key={c.id}
+                value={c.id}
+                className="min-h-10 shrink-0 whitespace-nowrap px-4"
+              >
                 {c.title}
               </TabsTrigger>
             ))}
@@ -72,7 +88,9 @@ function GroomingPage() {
                 <Accordion type="single" collapsible className="mt-4">
                   {c.items.map((item) => (
                     <AccordionItem key={item.name} value={item.name}>
-                      <AccordionTrigger className="min-h-12 text-left text-sm">{item.name}</AccordionTrigger>
+                      <AccordionTrigger className="min-h-12 text-left text-sm">
+                        {item.name}
+                      </AccordionTrigger>
                       <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
                         {item.detail}
                       </AccordionContent>
@@ -86,9 +104,9 @@ function GroomingPage() {
       </div>
 
       <SafetyNote>
-        Veyra does not diagnose skin, scalp or hair conditions and makes no promises about permanent physical
-        changes. For persistent concerns — hair loss, acne, rashes, irritation — please consult a dermatologist
-        or another qualified healthcare professional.
+        Veyra does not diagnose skin, scalp or hair conditions and makes no promises about permanent
+        physical changes. For persistent concerns — hair loss, acne, rashes, irritation — please
+        consult a dermatologist or another qualified healthcare professional.
       </SafetyNote>
     </>
   );

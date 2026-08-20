@@ -122,7 +122,8 @@ export const groomingCategories = [
     items: [
       {
         name: "Simple skincare routine",
-        detail: "Cleanse, moisturise, protect. Three steps done consistently beat ten steps done occasionally.",
+        detail:
+          "Cleanse, moisturise, protect. Three steps done consistently beat ten steps done occasionally.",
       },
       {
         name: "Sun protection",
@@ -141,12 +142,19 @@ export const groomingCategories = [
     title: "Grooming",
     blurb: "The everyday maintenance layer.",
     items: [
-      { name: "Hygiene", detail: "Daily shower, clean clothes, deodorant, and a fresh towel rotation." },
+      {
+        name: "Hygiene",
+        detail: "Daily shower, clean clothes, deodorant, and a fresh towel rotation.",
+      },
       {
         name: "Facial-hair grooming",
-        detail: "Define your neckline and cheek line, trim in the direction of growth, and keep blades clean and sharp.",
+        detail:
+          "Define your neckline and cheek line, trim in the direction of growth, and keep blades clean and sharp.",
       },
-      { name: "Nail care", detail: "Trim weekly, keep edges smooth, and clean under the nails after workouts." },
+      {
+        name: "Nail care",
+        detail: "Trim weekly, keep edges smooth, and clean under the nails after workouts.",
+      },
     ],
   },
   {
@@ -156,12 +164,17 @@ export const groomingCategories = [
     items: [
       {
         name: "Outfit suggestions",
-        detail: "Build around 8–10 pieces that mix easily: two pairs of trousers, denim, plain tees, one overshirt, clean sneakers.",
+        detail:
+          "Build around 8–10 pieces that mix easily: two pairs of trousers, denim, plain tees, one overshirt, clean sneakers.",
       },
-      { name: "Colour coordination", detail: "Anchor with neutrals, add one accent colour, and keep textures varied." },
+      {
+        name: "Colour coordination",
+        detail: "Anchor with neutrals, add one accent colour, and keep textures varied.",
+      },
       {
         name: "Occasion-based styling",
-        detail: "College, work, family functions and evenings out each get one default outfit you never have to think about.",
+        detail:
+          "College, work, family functions and evenings out each get one default outfit you never have to think about.",
       },
     ],
   },
@@ -170,11 +183,19 @@ export const groomingCategories = [
     title: "Presentation",
     blurb: "How you carry the routine into the room.",
     items: [
-      { name: "Posture", detail: "Stack ribs over hips, relax the shoulders down, and take short posture breaks while studying." },
-      { name: "Organization", detail: "Lay out clothes and bag the night before to remove morning friction." },
+      {
+        name: "Posture",
+        detail:
+          "Stack ribs over hips, relax the shoulders down, and take short posture breaks while studying.",
+      },
+      {
+        name: "Organization",
+        detail: "Lay out clothes and bag the night before to remove morning friction.",
+      },
       {
         name: "Communication habits",
-        detail: "Steady pace, eye contact, and one clear point at a time. Small practice reps compound.",
+        detail:
+          "Steady pace, eye contact, and one clear point at a time. Small practice reps compound.",
       },
     ],
   },

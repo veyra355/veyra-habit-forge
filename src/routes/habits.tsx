@@ -15,7 +15,11 @@ export const Route = createFileRoute("/habits")({
   head: () => ({
     meta: [
       { title: "Habits — Veyra" },
-      { name: "description", content: "Track sleep, hydration, movement, grooming and focus with encouraging streaks and monthly consistency." },
+      {
+        name: "description",
+        content:
+          "Track sleep, hydration, movement, grooming and focus with encouraging streaks and monthly consistency.",
+      },
       { property: "og:title", content: "Habits — Veyra" },
       { property: "og:description", content: "Daily habits, weekly streaks, monthly consistency." },
     ],
@@ -36,17 +40,36 @@ function HabitsPage() {
   const monthDays = Array.from({ length: 28 }, (_, i) => dayKey(27 - i));
   const habitCount = Math.max(state.habits.length, 1);
   const monthly = Math.round(
-    (monthDays.reduce((a, d) => a + (state.completions[d] ?? []).length / habitCount, 0) / 28) * 100,
+    (monthDays.reduce((a, d) => a + (state.completions[d] ?? []).length / habitCount, 0) / 28) *
+      100,
   );
 
   return (
     <>
-      <PageHeader title="Habits" subtitle="Small daily wins compound. Missing a day is data, not failure." />
+      <PageHeader
+        title="Habits"
+        subtitle="Small daily wins compound. Missing a day is data, not failure."
+      />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
-        <StatCard label="Today" value={`${today.length}/${state.habits.length}`} progress={(today.length / habitCount) * 100} hint="Habits completed today" />
-        <StatCard label="This week" value={`${week.habitPct}%`} progress={week.habitPct} hint="Average completion" />
-        <StatCard label="This month" value={`${monthly}%`} progress={monthly} hint="28-day consistency" />
+        <StatCard
+          label="Today"
+          value={`${today.length}/${state.habits.length}`}
+          progress={(today.length / habitCount) * 100}
+          hint="Habits completed today"
+        />
+        <StatCard
+          label="This week"
+          value={`${week.habitPct}%`}
+          progress={week.habitPct}
+          hint="Average completion"
+        />
+        <StatCard
+          label="This month"
+          value={`${monthly}%`}
+          progress={monthly}
+          hint="28-day consistency"
+        />
       </div>
 
       <div className="panel mt-4 p-4 sm:p-5">
@@ -133,8 +156,8 @@ function HabitsPage() {
       </div>
 
       <SafetyNote>
-        Streaks are here to encourage, not to pressure. If a week goes off track, restart with one habit — that
-        is still progress.
+        Streaks are here to encourage, not to pressure. If a week goes off track, restart with one
+        habit — that is still progress.
       </SafetyNote>
     </>
   );

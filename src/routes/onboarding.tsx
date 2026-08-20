@@ -13,7 +13,11 @@ export const Route = createFileRoute("/onboarding")({
   head: () => ({
     meta: [
       { title: "Set up your plan — Veyra" },
-      { name: "description", content: "Answer a few questions about your goals, schedule and setup so Veyra can build your personalized plan." },
+      {
+        name: "description",
+        content:
+          "Answer a few questions about your goals, schedule and setup so Veyra can build your personalized plan.",
+      },
       { property: "og:title", content: "Set up your plan — Veyra" },
       { property: "og:description", content: "A few questions, then your plan is ready." },
     ],
@@ -80,18 +84,66 @@ function OnboardingPage() {
           {step === 0 && (
             <>
               <Header title="About you" sub="This shapes how your first week is built." />
-              <OptionGroup label="Age range" options={["16–20", "21–25", "26–30", "31–40", "40+"]} value={data.ageRange} onChange={(v) => set("ageRange", v as string)} columns={3} />
-              <OptionGroup label="Fitness experience" options={["Just starting", "Some experience", "Consistent for months", "Very experienced"]} value={data.experience} onChange={(v) => set("experience", v as string)} />
-              <OptionGroup label="Workout location" options={["Home", "Gym", "Outdoors", "Mix of these"]} value={data.location} onChange={(v) => set("location", v as string)} />
-              <OptionGroup label="Available equipment" multi options={["None (bodyweight)", "Dumbbells", "Resistance bands", "Pull-up bar", "Full gym", "Yoga mat"]} value={data.equipment} onChange={(v) => set("equipment", v as string[])} />
-              <OptionGroup label="Days available per week" options={["2", "3", "4", "5", "6"]} value={data.daysPerWeek} onChange={(v) => set("daysPerWeek", v as string)} columns={3} />
-              <OptionGroup label="Typical workout time" options={["Early morning", "Morning", "Afternoon", "Evening", "Late night"]} value={data.workoutTime} onChange={(v) => set("workoutTime", v as string)} />
+              <OptionGroup
+                label="Age range"
+                options={["16–20", "21–25", "26–30", "31–40", "40+"]}
+                value={data.ageRange}
+                onChange={(v) => set("ageRange", v as string)}
+                columns={3}
+              />
+              <OptionGroup
+                label="Fitness experience"
+                options={[
+                  "Just starting",
+                  "Some experience",
+                  "Consistent for months",
+                  "Very experienced",
+                ]}
+                value={data.experience}
+                onChange={(v) => set("experience", v as string)}
+              />
+              <OptionGroup
+                label="Workout location"
+                options={["Home", "Gym", "Outdoors", "Mix of these"]}
+                value={data.location}
+                onChange={(v) => set("location", v as string)}
+              />
+              <OptionGroup
+                label="Available equipment"
+                multi
+                options={[
+                  "None (bodyweight)",
+                  "Dumbbells",
+                  "Resistance bands",
+                  "Pull-up bar",
+                  "Full gym",
+                  "Yoga mat",
+                ]}
+                value={data.equipment}
+                onChange={(v) => set("equipment", v as string[])}
+              />
+              <OptionGroup
+                label="Days available per week"
+                options={["2", "3", "4", "5", "6"]}
+                value={data.daysPerWeek}
+                onChange={(v) => set("daysPerWeek", v as string)}
+                columns={3}
+              />
+              <OptionGroup
+                label="Typical workout time"
+                options={["Early morning", "Morning", "Afternoon", "Evening", "Late night"]}
+                value={data.workoutTime}
+                onChange={(v) => set("workoutTime", v as string)}
+              />
             </>
           )}
 
           {step === 1 && (
             <>
-              <Header title="Your goals" sub="Pick as many as apply. You can change these any time." />
+              <Header
+                title="Your goals"
+                sub="Pick as many as apply. You can change these any time."
+              />
               <OptionGroup
                 label="What do you want to work on?"
                 multi
@@ -117,20 +169,64 @@ function OnboardingPage() {
           {step === 2 && (
             <>
               <Header title="Lifestyle" sub="So your plan fits the week you actually have." />
-              <OptionGroup label="Typical sleep schedule" options={["Before 11 pm", "11 pm – 1 am", "After 1 am", "Irregular"]} value={data.sleepSchedule} onChange={(v) => set("sleepSchedule", v as string)} />
-              <OptionGroup label="Activity level" options={["Mostly sitting", "Lightly active", "Moderately active", "Very active"]} value={data.activityLevel} onChange={(v) => set("activityLevel", v as string)} />
-              <OptionGroup label="Work / study schedule" options={["Student", "9-to-5 job", "Shift work", "Flexible / remote"]} value={data.workSchedule} onChange={(v) => set("workSchedule", v as string)} />
-              <OptionGroup label="Available time per day" options={["15 min", "30 min", "45 min", "60+ min"]} value={data.timePerDay} onChange={(v) => set("timePerDay", v as string)} columns={2} />
+              <OptionGroup
+                label="Typical sleep schedule"
+                options={["Before 11 pm", "11 pm – 1 am", "After 1 am", "Irregular"]}
+                value={data.sleepSchedule}
+                onChange={(v) => set("sleepSchedule", v as string)}
+              />
+              <OptionGroup
+                label="Activity level"
+                options={["Mostly sitting", "Lightly active", "Moderately active", "Very active"]}
+                value={data.activityLevel}
+                onChange={(v) => set("activityLevel", v as string)}
+              />
+              <OptionGroup
+                label="Work / study schedule"
+                options={["Student", "9-to-5 job", "Shift work", "Flexible / remote"]}
+                value={data.workSchedule}
+                onChange={(v) => set("workSchedule", v as string)}
+              />
+              <OptionGroup
+                label="Available time per day"
+                options={["15 min", "30 min", "45 min", "60+ min"]}
+                value={data.timePerDay}
+                onChange={(v) => set("timePerDay", v as string)}
+                columns={2}
+              />
             </>
           )}
 
           {step === 3 && (
             <>
               <Header title="Preferences" sub="Final details before we build the plan." />
-              <OptionGroup label="Food preference" options={["Vegetarian", "Non-vegetarian", "Eggetarian", "Other"]} value={data.diet} onChange={(v) => set("diet", v as string)} />
-              <OptionGroup label="Where you'll train" options={["Home", "Gym", "Outdoor"]} value={data.place} onChange={(v) => set("place", v as string)} columns={3} />
-              <OptionGroup label="Training level" options={["Beginner", "Intermediate", "Advanced"]} value={data.level} onChange={(v) => set("level", v as string)} columns={3} />
-              <OptionGroup label="Preferred workout duration" options={["20 min", "30 min", "45 min", "60 min"]} value={data.duration} onChange={(v) => set("duration", v as string)} columns={2} />
+              <OptionGroup
+                label="Food preference"
+                options={["Vegetarian", "Non-vegetarian", "Eggetarian", "Other"]}
+                value={data.diet}
+                onChange={(v) => set("diet", v as string)}
+              />
+              <OptionGroup
+                label="Where you'll train"
+                options={["Home", "Gym", "Outdoor"]}
+                value={data.place}
+                onChange={(v) => set("place", v as string)}
+                columns={3}
+              />
+              <OptionGroup
+                label="Training level"
+                options={["Beginner", "Intermediate", "Advanced"]}
+                value={data.level}
+                onChange={(v) => set("level", v as string)}
+                columns={3}
+              />
+              <OptionGroup
+                label="Preferred workout duration"
+                options={["20 min", "30 min", "45 min", "60 min"]}
+                value={data.duration}
+                onChange={(v) => set("duration", v as string)}
+                columns={2}
+              />
             </>
           )}
 
@@ -142,16 +238,25 @@ function OnboardingPage() {
               <h2 className="mt-5 text-2xl font-semibold">Your personal plan is ready.</h2>
               <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
                 We&apos;ve set up workouts, daily habits and a grooming routine around{" "}
-                {data.goals.length ? data.goals.slice(0, 2).join(" and ").toLowerCase() : "your goals"}. You can adjust
-                everything later.
+                {data.goals.length
+                  ? data.goals.slice(0, 2).join(" and ").toLowerCase()
+                  : "your goals"}
+                . You can adjust everything later.
               </p>
               <div className="mt-6 grid gap-2 text-left sm:grid-cols-2">
                 <Summary label="Level" value={data.level || data.experience || "Beginner"} />
                 <Summary label="Training at" value={data.place || data.location || "Home"} />
                 <Summary label="Days / week" value={data.daysPerWeek || "4"} />
-                <Summary label="Session length" value={data.duration || data.timePerDay || "30 min"} />
+                <Summary
+                  label="Session length"
+                  value={data.duration || data.timePerDay || "30 min"}
+                />
               </div>
-              <Button size="lg" className="tap mt-8 w-full rounded-full sm:w-auto sm:px-10" onClick={finish}>
+              <Button
+                size="lg"
+                className="tap mt-8 w-full rounded-full sm:w-auto sm:px-10"
+                onClick={finish}
+              >
                 Build My Plan
               </Button>
             </div>
@@ -159,10 +264,18 @@ function OnboardingPage() {
 
           {step < 4 && (
             <div className="flex items-center justify-between gap-3 border-t border-border pt-5">
-              <Button variant="ghost" className="tap" disabled={step === 0} onClick={() => setStep((s) => s - 1)}>
+              <Button
+                variant="ghost"
+                className="tap"
+                disabled={step === 0}
+                onClick={() => setStep((s) => s - 1)}
+              >
                 <ArrowLeft className="mr-1.5 size-4" /> Back
               </Button>
-              <Button className="tap flex-1 rounded-full sm:flex-none sm:px-8" onClick={() => setStep((s) => s + 1)}>
+              <Button
+                className="tap flex-1 rounded-full sm:flex-none sm:px-8"
+                onClick={() => setStep((s) => s + 1)}
+              >
                 Continue <ArrowRight className="ml-1.5 size-4" />
               </Button>
             </div>

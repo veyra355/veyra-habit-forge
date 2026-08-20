@@ -17,7 +17,12 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/veyra/Logo";
 import { faqs, plans } from "@/lib/sample-data";
@@ -38,7 +43,8 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Veyra — Build Your Best Routine" },
       {
         property: "og:description",
-        content: "Personalized workouts, grooming routines and daily habits — one system, infinite progress.",
+        content:
+          "Personalized workouts, grooming routines and daily habits — one system, infinite progress.",
       },
     ],
   }),
@@ -87,10 +93,22 @@ const FEATURES = [
 ] as const;
 
 const STEPS = [
-  { icon: Target, title: "Tell us your goals", text: "A short questionnaire about your schedule, setup and focus." },
-  { icon: Sparkles, title: "Get your plan", text: "Workouts, habits and grooming built around your real week." },
+  {
+    icon: Target,
+    title: "Tell us your goals",
+    text: "A short questionnaire about your schedule, setup and focus.",
+  },
+  {
+    icon: Sparkles,
+    title: "Get your plan",
+    text: "Workouts, habits and grooming built around your real week.",
+  },
   { icon: CalendarCheck, title: "Check in daily", text: "Log sessions and habits in seconds." },
-  { icon: Brain, title: "Watch it adapt", text: "Volume, intensity and focus shift with your feedback." },
+  {
+    icon: Brain,
+    title: "Watch it adapt",
+    text: "Volume, intensity and focus shift with your feedback.",
+  },
 ];
 
 function ProgressRing({ value, size = 56 }: { value: number; size?: number }) {
@@ -98,7 +116,14 @@ function ProgressRing({ value, size = 56 }: { value: number; size?: number }) {
   const c = 2 * Math.PI * r;
   return (
     <svg width={size} height={size} className="-rotate-90" aria-hidden="true">
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="4" />
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={r}
+        fill="none"
+        stroke="rgba(255,255,255,0.12)"
+        strokeWidth="4"
+      />
       <circle
         cx={size / 2}
         cy={size / 2}
@@ -146,7 +171,9 @@ function Navbar() {
                 )}
               >
                 {item.label}
-                {i === 0 && <span className="mx-auto mt-0.5 block h-0.5 w-5 rounded-full bg-primary" />}
+                {i === 0 && (
+                  <span className="mx-auto mt-0.5 block h-0.5 w-5 rounded-full bg-primary" />
+                )}
               </a>
             ),
           )}
@@ -232,17 +259,26 @@ function Hero() {
           </h1>
 
           <p className="mt-5 max-w-lg text-base leading-relaxed text-muted-foreground">
-            Personalized workouts, grooming routines, and daily habits — all powered by AI that adapts to you.
-            One system. Infinite progress.
+            Personalized workouts, grooming routines, and daily habits — all powered by AI that
+            adapts to you. One system. Infinite progress.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild size="lg" className="h-12 rounded-full px-7 font-semibold tracking-wide glow-lime">
+            <Button
+              asChild
+              size="lg"
+              className="h-12 rounded-full px-7 font-semibold tracking-wide glow-lime"
+            >
               <Link to="/auth">
                 START YOUR FREE PLAN <ArrowRight className="ml-1.5 size-4" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="h-12 rounded-full border-border px-6">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="h-12 rounded-full border-border px-6"
+            >
               <a href="#how">
                 <Play className="mr-2 size-4" /> See how it works
               </a>
@@ -256,7 +292,9 @@ function Hero() {
               ["One system", "Fitness, habits, grooming"],
             ].map(([title, sub]) => (
               <div key={title} className="glass p-3.5">
-                <p className="font-display text-sm font-bold uppercase tracking-wide text-primary">{title}</p>
+                <p className="font-display text-sm font-bold uppercase tracking-wide text-primary">
+                  {title}
+                </p>
                 <p className="mt-1 text-[11px] leading-snug text-muted-foreground">{sub}</p>
               </div>
             ))}
@@ -309,7 +347,11 @@ function FeatureStrip() {
           <div key={f.title} className="group flex items-start gap-3.5 p-5">
             <span
               className="grid size-10 shrink-0 place-items-center rounded-xl border border-border"
-              style={{ background: "rgba(255,255,255,0.03)", color: f.color, boxShadow: `0 0 24px -12px ${f.color}` }}
+              style={{
+                background: "rgba(255,255,255,0.03)",
+                color: f.color,
+                boxShadow: `0 0 24px -12px ${f.color}`,
+              }}
             >
               <f.icon className="size-5" />
             </span>
@@ -317,7 +359,13 @@ function FeatureStrip() {
               <p className="font-display text-sm font-bold uppercase tracking-wide">{f.title}</p>
               <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{f.text}</p>
             </div>
-            <Button asChild variant="ghost" size="icon" className="shrink-0 rounded-full" aria-label={`Open ${f.title}`}>
+            <Button
+              asChild
+              variant="ghost"
+              size="icon"
+              className="shrink-0 rounded-full"
+              aria-label={`Open ${f.title}`}
+            >
               <Link to={f.to}>
                 <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
@@ -362,8 +410,8 @@ function BodyBuilder() {
               <span className="text-primary">Transform.</span>
             </h2>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              Build a training goal and let Veyra create a plan around it. No appearance scores, no comparisons —
-              just a realistic path to a stronger, more consistent you.
+              Build a training goal and let Veyra create a plan around it. No appearance scores, no
+              comparisons — just a realistic path to a stronger, more consistent you.
             </p>
           </div>
 
@@ -375,7 +423,9 @@ function BodyBuilder() {
                   onClick={() => setTab(t)}
                   className={cn(
                     "flex-1 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide transition-colors",
-                    tab === t ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground",
+                    tab === t
+                      ? "bg-primary/15 text-primary"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   {t}
@@ -390,11 +440,16 @@ function BodyBuilder() {
                 loading="lazy"
                 width={1024}
                 height={1280}
-                className={cn("h-full w-full object-cover transition-all duration-500", tab === "goal" && "scale-105 contrast-115")}
+                className={cn(
+                  "h-full w-full object-cover transition-all duration-500",
+                  tab === "goal" && "scale-105 contrast-115",
+                )}
               />
               <div
                 className="pointer-events-none absolute inset-0"
-                style={{ background: "linear-gradient(to top, rgba(5,7,6,0.9), rgba(5,7,6,0) 55%)" }}
+                style={{
+                  background: "linear-gradient(to top, rgba(5,7,6,0.9), rgba(5,7,6,0) 55%)",
+                }}
               />
               <p className="absolute inset-x-0 bottom-3 text-center eyebrow text-muted-foreground">
                 {tab === "current" ? "Current focus" : "Goal focus"}
@@ -428,7 +483,9 @@ function BodyBuilder() {
                   key={g}
                   className={cn(
                     "flex-1 rounded-xl border border-border px-3 py-2.5 text-center text-xs",
-                    (g === "Current") === (tab === "current") ? "text-primary" : "text-muted-foreground",
+                    (g === "Current") === (tab === "current")
+                      ? "text-primary"
+                      : "text-muted-foreground",
                   )}
                 >
                   {g}
@@ -436,10 +493,13 @@ function BodyBuilder() {
               ))}
             </div>
             <p className="mt-5 text-[11px] leading-relaxed text-muted-foreground">
-              Height and weight stay optional profile measurements — Veyra never presents height as something it
-              can change.
+              Height and weight stay optional profile measurements — Veyra never presents height as
+              something it can change.
             </p>
-            <Button onClick={build} className="mt-5 w-full rounded-full font-semibold tracking-wide">
+            <Button
+              onClick={build}
+              className="mt-5 w-full rounded-full font-semibold tracking-wide"
+            >
               BUILD MY PLAN <ArrowRight className="ml-1.5 size-4" />
             </Button>
           </div>
@@ -463,7 +523,10 @@ function Landing() {
           <p className="mt-2 text-sm text-muted-foreground">Four steps, then it runs with you.</p>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((s, i) => (
-              <div key={s.title} className="panel p-5 transition-shadow hover:shadow-[var(--shadow-lift)]">
+              <div
+                key={s.title}
+                className="panel p-5 transition-shadow hover:shadow-[var(--shadow-lift)]"
+              >
                 <div className="flex items-center justify-between">
                   <span className="grid size-9 place-items-center rounded-xl border border-border bg-primary/10 text-primary">
                     <s.icon className="size-4" />
@@ -491,9 +554,14 @@ function Landing() {
           {plans.map((p) => (
             <div
               key={p.id}
-              className={cn("panel flex flex-col p-6", p.highlight && "border-primary/40 glow-lime")}
+              className={cn(
+                "panel flex flex-col p-6",
+                p.highlight && "border-primary/40 glow-lime",
+              )}
             >
-              {p.highlight && <span className="mb-3 self-start eyebrow text-primary">Recommended</span>}
+              {p.highlight && (
+                <span className="mb-3 self-start eyebrow text-primary">Recommended</span>
+              )}
               <p className="eyebrow text-muted-foreground">{p.name}</p>
               <p className="mt-2 font-display text-3xl font-bold">
                 {p.price}
@@ -508,7 +576,11 @@ function Landing() {
                   </li>
                 ))}
               </ul>
-              <Button asChild variant={p.highlight ? "default" : "outline"} className="mt-6 rounded-full">
+              <Button
+                asChild
+                variant={p.highlight ? "default" : "outline"}
+                className="mt-6 rounded-full"
+              >
                 <Link to="/pricing">{p.cta}</Link>
               </Button>
             </div>
@@ -523,7 +595,9 @@ function Landing() {
             {faqs.map((f) => (
               <AccordionItem key={f.q} value={f.q}>
                 <AccordionTrigger className="text-left text-base">{f.q}</AccordionTrigger>
-                <AccordionContent className="text-sm leading-relaxed text-muted-foreground">{f.a}</AccordionContent>
+                <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
+                  {f.a}
+                </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
@@ -538,7 +612,11 @@ function Landing() {
           <p className="max-w-md text-sm text-muted-foreground">
             Free to begin. Upgrade only when the routine already feels like yours.
           </p>
-          <Button asChild size="lg" className="h-12 rounded-full px-8 font-semibold tracking-wide glow-lime">
+          <Button
+            asChild
+            size="lg"
+            className="h-12 rounded-full px-8 font-semibold tracking-wide glow-lime"
+          >
             <Link to="/auth">
               START FREE <ArrowRight className="ml-1.5 size-4" />
             </Link>
@@ -551,16 +629,24 @@ function Landing() {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <Logo />
             <nav className="flex flex-wrap gap-5 text-sm text-muted-foreground">
-              <Link to="/about" className="hover:text-foreground">About</Link>
-              <Link to="/pricing" className="hover:text-foreground">Pricing</Link>
-              <Link to="/coach" className="hover:text-foreground">AI Coach</Link>
-              <a href="mailto:hello@veyra.app" className="hover:text-foreground">Contact</a>
+              <Link to="/about" className="hover:text-foreground">
+                About
+              </Link>
+              <Link to="/pricing" className="hover:text-foreground">
+                Pricing
+              </Link>
+              <Link to="/coach" className="hover:text-foreground">
+                AI Coach
+              </Link>
+              <a href="mailto:hello@veyra.app" className="hover:text-foreground">
+                Contact
+              </a>
             </nav>
           </div>
           <p className="text-xs leading-relaxed text-muted-foreground">
-            Veyra provides general fitness, habit and grooming guidance only. It does not diagnose conditions,
-            prescribe medication or replace professional medical care. For any medical concern, consult a
-            qualified healthcare professional.
+            Veyra provides general fitness, habit and grooming guidance only. It does not diagnose
+            conditions, prescribe medication or replace professional medical care. For any medical
+            concern, consult a qualified healthcare professional.
           </p>
         </div>
       </footer>

@@ -35,7 +35,9 @@ export function QuestCard({ quest, onComplete }: QuestCardProps) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-lg">{categoryIcons[quest.category]}</span>
-          <h3 className={`font-semibold ${quest.completed ? "text-emerald-400 line-through" : "text-slate-100"}`}>
+          <h3
+            className={`font-semibold ${quest.completed ? "text-emerald-400 line-through" : "text-slate-100"}`}
+          >
             {quest.title}
           </h3>
         </div>

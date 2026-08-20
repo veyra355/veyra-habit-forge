@@ -1,12 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import {
-  BarChart3,
-  Crown,
-  MessageSquare,
-  Users,
-} from "lucide-react";
+import { BarChart3, Crown, MessageSquare, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { AppShell, PageHeader } from "@/components/veyra/AppShell";
@@ -16,7 +11,10 @@ export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
       { title: "Admin Dashboard — Veyra" },
-      { name: "description", content: "Veyra admin overview: users, plans, coach usage and platform health." },
+      {
+        name: "description",
+        content: "Veyra admin overview: users, plans, coach usage and platform health.",
+      },
       { property: "og:title", content: "Admin Dashboard — Veyra" },
       { property: "og:description", content: "User, plan and coach usage overview." },
     ],
@@ -83,7 +81,10 @@ function AdminPage() {
               { name: "Rohan Mehta", email: "rohan.m@example.com", plan: "pro" },
               { name: "Sneha Iyer", email: "sneha.i@example.com", plan: "free" },
             ].map((u) => (
-              <li key={u.email} className="flex items-center justify-between rounded-xl border border-border bg-muted/30 p-3">
+              <li
+                key={u.email}
+                className="flex items-center justify-between rounded-xl border border-border bg-muted/30 p-3"
+              >
                 <div>
                   <p className="text-sm font-medium">{u.name}</p>
                   <p className="text-xs text-muted-foreground">{u.email}</p>

@@ -14,7 +14,10 @@ export const Route = createFileRoute("/about")({
           "Veyra is an AI fitness, grooming and habit coach built on respectful principles: no appearance scoring, no body shaming, no medical diagnosis.",
       },
       { property: "og:title", content: "About Veyra" },
-      { property: "og:description", content: "Respectful, realistic coaching for fitness, habits and grooming." },
+      {
+        property: "og:description",
+        content: "Respectful, realistic coaching for fitness, habits and grooming.",
+      },
     ],
   }),
   component: AboutPage,
@@ -57,9 +60,9 @@ function AboutPage() {
           <span className="text-primary">not pressure.</span>
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-          Veyra is a single system for training, daily habits, grooming and presentation — designed for young
-          adults in India who want to build a routine that actually lasts. Everything adapts to your week, your
-          equipment and your honest feedback.
+          Veyra is a single system for training, daily habits, grooming and presentation — designed
+          for young adults in India who want to build a routine that actually lasts. Everything
+          adapts to your week, your equipment and your honest feedback.
         </p>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-3">

@@ -45,7 +45,8 @@ export const Route = createFileRoute("/presentation")({
       { property: "og:title", content: "Presentation Coach — Veyra" },
       {
         property: "og:description",
-        content: "Practical lighting, framing, grooming and style feedback with a 7-day and 30-day routine.",
+        content:
+          "Practical lighting, framing, grooming and style feedback with a 7-day and 30-day routine.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -170,7 +171,14 @@ function PresentationCoachPage() {
         action={
           analysis && (
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => { stopCamera(); setStep("intro"); }}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  stopCamera();
+                  setStep("intro");
+                }}
+              >
                 <RefreshCw className="mr-2 size-4" /> New check
               </Button>
               <Button variant="ghost" size="sm" onClick={clearData}>
@@ -182,7 +190,14 @@ function PresentationCoachPage() {
       />
 
       {step === "intro" && (
-        <IntroScreen error={error} onStart={startCamera} onSkip={() => { persist(manualAnalysis()); setStep("results"); }} />
+        <IntroScreen
+          error={error}
+          onStart={startCamera}
+          onSkip={() => {
+            persist(manualAnalysis());
+            setStep("results");
+          }}
+        />
       )}
 
       {step === "camera" && (
@@ -201,13 +216,19 @@ function PresentationCoachPage() {
               <Button onClick={capture} disabled={!streaming}>
                 <Camera className="mr-2 size-4" /> Capture &amp; analyse
               </Button>
-              <Button variant="outline" onClick={() => { stopCamera(); setStep("intro"); }}>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  stopCamera();
+                  setStep("intro");
+                }}
+              >
                 Cancel
               </Button>
             </div>
             <p className="mt-3 text-xs text-muted-foreground">
-              The frame is analysed on your device the moment you capture it, then discarded. No photo is uploaded and
-              none is saved by default.
+              The frame is analysed on your device the moment you capture it, then discarded. No
+              photo is uploaded and none is saved by default.
             </p>
           </div>
 
@@ -232,11 +253,15 @@ function PresentationCoachPage() {
           <Sparkles className="mx-auto size-6 animate-pulse text-primary" />
           <p className="mt-3 text-sm font-medium">Checking lighting, clarity and framing…</p>
           <Progress value={70} className="mx-auto mt-4 h-1.5 max-w-sm" />
-          <p className="mt-3 text-xs text-muted-foreground">Running on your device. Nothing is being uploaded.</p>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Running on your device. Nothing is being uploaded.
+          </p>
         </div>
       )}
 
-      {step === "results" && analysis && <Results analysis={analysis} onRetake={startCamera} onClear={clearData} />}
+      {step === "results" && analysis && (
+        <Results analysis={analysis} onRetake={startCamera} onClear={clearData} />
+      )}
 
       <SafetyNote>{PRESENTATION_DISCLAIMER}</SafetyNote>
     </>
@@ -255,11 +280,14 @@ function IntroScreen({
   return (
     <div className="grid gap-4 lg:grid-cols-[1.15fr_1fr]">
       <div className="panel p-5 sm:p-6">
-        <Badge variant="secondary" className="mb-3">Presentation, not appearance</Badge>
+        <Badge variant="secondary" className="mb-3">
+          Presentation, not appearance
+        </Badge>
         <h2 className="text-lg font-semibold">What this actually checks</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Veyra looks at the technical and presentation factors you can control — how well-lit and clear the frame is,
-          where the camera sits, and whether your grooming is visible enough to comment on. That&apos;s it.
+          Veyra looks at the technical and presentation factors you can control — how well-lit and
+          clear the frame is, where the camera sits, and whether your grooming is visible enough to
+          comment on. That&apos;s it.
         </p>
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-border bg-card p-4">
@@ -274,7 +302,9 @@ function IntroScreen({
             </ul>
           </div>
           <div className="rounded-xl border border-border bg-muted/40 p-4">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">We never</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              We never
+            </p>
             <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
               <li>· Score attractiveness or beauty</li>
               <li>· Rank or rate your face</li>
@@ -312,23 +342,23 @@ function IntroScreen({
         </p>
         <ul className="mt-3 space-y-3 text-sm text-muted-foreground">
           <li>
-            The camera preview stays in your browser. When you capture, a single frame is measured on your device for
-            brightness, evenness, sharpness and position.
+            The camera preview stays in your browser. When you capture, a single frame is measured
+            on your device for brightness, evenness, sharpness and position.
           </li>
           <li>
-            That frame is held in memory only for the moment of measurement, then discarded. No image is uploaded to any
-            server and none is saved by default.
+            That frame is held in memory only for the moment of measurement, then discarded. No
+            image is uploaded to any server and none is saved by default.
           </li>
           <li>
-            Only the resulting text guidance is kept on this device so you can come back to it — and you can delete it
-            any time with &quot;Clear data&quot;.
+            Only the resulting text guidance is kept on this device so you can come back to it — and
+            you can delete it any time with &quot;Clear data&quot;.
           </li>
         </ul>
         <p className="mt-4 flex gap-2 rounded-xl border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
           <Info className="mt-0.5 size-3.5 shrink-0" />
           <span>
-            Prefer not to use the camera? Continue without it and you&apos;ll still get the full grooming and
-            presentation routine.
+            Prefer not to use the camera? Continue without it and you&apos;ll still get the full
+            grooming and presentation routine.
           </span>
         </p>
       </div>
@@ -359,7 +389,9 @@ function Results({
           <div key={c.id} className="panel p-5">
             <div className="flex items-center justify-between gap-2">
               <p className="text-sm font-medium">{c.label}</p>
-              <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLE[c.status]}`}>
+              <span
+                className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${STATUS_STYLE[c.status]}`}
+              >
                 {STATUS_LABEL[c.status]}
               </span>
             </div>
@@ -379,8 +411,8 @@ function Results({
       <div className="panel mt-6 p-5 sm:p-6">
         <h2 className="text-lg font-semibold">Your improvement plan</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Healthy, realistic habits — grooming, hair care, basic skincare, sun protection, sleep, exercise, posture,
-          style and hygiene. Start where you are; every day you tick counts.
+          Healthy, realistic habits — grooming, hair care, basic skincare, sun protection, sleep,
+          exercise, posture, style and hygiene. Start where you are; every day you tick counts.
         </p>
         <Tabs defaultValue="week" className="mt-5">
           <TabsList>

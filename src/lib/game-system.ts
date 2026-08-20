@@ -3,7 +3,8 @@
  * Complete game mechanics for XP, Levels, Ranks, Achievement systems
  */
 
-export type Rank = "STARTER" | "BUILDER" | "DISCIPLINED" | "FOCUSED" | "CONSISTENT" | "ELITE" | "MASTER" | "VEYRA";
+export type Rank =
+  "STARTER" | "BUILDER" | "DISCIPLINED" | "FOCUSED" | "CONSISTENT" | "ELITE" | "MASTER" | "VEYRA";
 
 export interface GameStats {
   totalXp: number;
@@ -301,15 +302,17 @@ export function checkAndUnlockAchievements(
   gameStats: GameStats,
   newXp: number,
   streak: number,
-  workoutCount: number
+  workoutCount: number,
 ): string[] {
   const unlocked: string[] = [];
 
   // Streak-based achievements
   if (streak >= 3 && !gameStats.achievements.includes("3day-streak")) unlocked.push("3day-streak");
   if (streak >= 7 && !gameStats.achievements.includes("7day-streak")) unlocked.push("7day-streak");
-  if (streak >= 30 && !gameStats.achievements.includes("30day-streak")) unlocked.push("30day-streak");
-  if (streak >= 100 && !gameStats.achievements.includes("100day-streak")) unlocked.push("100day-streak");
+  if (streak >= 30 && !gameStats.achievements.includes("30day-streak"))
+    unlocked.push("30day-streak");
+  if (streak >= 100 && !gameStats.achievements.includes("100day-streak"))
+    unlocked.push("100day-streak");
 
   // Level-based achievements
   const currentLevel = calculateLevelFromXp(newXp);
@@ -319,10 +322,14 @@ export function checkAndUnlockAchievements(
   if (currentLevel >= 50 && !gameStats.achievements.includes("level-50")) unlocked.push("level-50");
 
   // Workout-based achievements
-  if (workoutCount >= 1 && !gameStats.achievements.includes("first-workout")) unlocked.push("first-workout");
-  if (workoutCount >= 5 && !gameStats.achievements.includes("5-workouts")) unlocked.push("5-workouts");
-  if (workoutCount >= 25 && !gameStats.achievements.includes("25-workouts")) unlocked.push("25-workouts");
-  if (workoutCount >= 100 && !gameStats.achievements.includes("100-workouts")) unlocked.push("100-workouts");
+  if (workoutCount >= 1 && !gameStats.achievements.includes("first-workout"))
+    unlocked.push("first-workout");
+  if (workoutCount >= 5 && !gameStats.achievements.includes("5-workouts"))
+    unlocked.push("5-workouts");
+  if (workoutCount >= 25 && !gameStats.achievements.includes("25-workouts"))
+    unlocked.push("25-workouts");
+  if (workoutCount >= 100 && !gameStats.achievements.includes("100-workouts"))
+    unlocked.push("100-workouts");
 
   return unlocked;
 }

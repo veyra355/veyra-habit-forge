@@ -48,7 +48,13 @@ const MEDICAL_TERMS = [
   "sprain",
 ];
 
-const EXTREME_TERMS = ["starve", "crash diet", "fasting for days", "lose 10 kg in a week", "steroid"];
+const EXTREME_TERMS = [
+  "starve",
+  "crash diet",
+  "fasting for days",
+  "lose 10 kg in a week",
+  "steroid",
+];
 
 function medicalRedirect() {
   return `That sounds like something a qualified healthcare professional should look at — I'm not able to assess symptoms, injuries or medication.
@@ -133,7 +139,12 @@ Sun — Rest, grooming reset and plan next week
 Keep grooming and hydration daily. We'll adjust after your feedback on the first two sessions.`;
   }
 
-  if (text.includes("groom") || text.includes("skin") || text.includes("hair") || text.includes("style")) {
+  if (
+    text.includes("groom") ||
+    text.includes("skin") ||
+    text.includes("hair") ||
+    text.includes("style")
+  ) {
     return `A simple routine you can actually keep:
 
 Morning — gentle cleanser, light moisturiser, SPF 30+, tidy hair
@@ -143,7 +154,12 @@ Weekly — nails, wash bedsheets and towels, lay out outfits for the week
 Give it 3–4 weeks before judging results. For any persistent skin or scalp concern, see a dermatologist — I can't assess conditions.`;
   }
 
-  if (text.includes("diet") || text.includes("food") || text.includes("eat") || text.includes("meal")) {
+  if (
+    text.includes("diet") ||
+    text.includes("food") ||
+    text.includes("eat") ||
+    text.includes("meal")
+  ) {
     const diet = context.diet ?? "vegetarian";
     return `Nothing restrictive — just structure. A ${diet}-friendly frame:
 

@@ -24,7 +24,10 @@ export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
       { title: "Profile & Settings — Veyra" },
-      { name: "description", content: "Manage your Veyra account, preferences, notifications and privacy settings." },
+      {
+        name: "description",
+        content: "Manage your Veyra account, preferences, notifications and privacy settings.",
+      },
       { property: "og:title", content: "Profile & Settings — Veyra" },
       { property: "og:description", content: "Account, preferences and privacy." },
     ],
@@ -56,7 +59,10 @@ function ProfilePage() {
 
   return (
     <>
-      <PageHeader title="Profile & Settings" subtitle="Your account, preferences and data choices." />
+      <PageHeader
+        title="Profile & Settings"
+        subtitle="Your account, preferences and data choices."
+      />
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="panel p-5 sm:p-6 lg:col-span-1">
@@ -105,7 +111,9 @@ function ProfilePage() {
               <div className="min-w-0">
                 <p className="font-medium capitalize">{user.plan}</p>
                 <p className="text-sm text-muted-foreground">
-                  {user.plan === "free" ? "Upgrade to unlock full coaching." : "You're on a paid plan."}
+                  {user.plan === "free"
+                    ? "Upgrade to unlock full coaching."
+                    : "You're on a paid plan."}
                 </p>
               </div>
               <Button asChild variant="outline" className="tap shrink-0 rounded-full">
@@ -144,9 +152,21 @@ function ProfilePage() {
             </div>
             <div className="mt-4 space-y-3">
               {[
-                { key: "workout" as const, label: "Workout reminders", desc: "Daily nudges before your scheduled session." },
-                { key: "habits" as const, label: "Habit reminders", desc: "Evening check-ins for your tracked habits." },
-                { key: "weekly" as const, label: "Weekly summary", desc: "A recap of your consistency and progress." },
+                {
+                  key: "workout" as const,
+                  label: "Workout reminders",
+                  desc: "Daily nudges before your scheduled session.",
+                },
+                {
+                  key: "habits" as const,
+                  label: "Habit reminders",
+                  desc: "Evening check-ins for your tracked habits.",
+                },
+                {
+                  key: "weekly" as const,
+                  label: "Weekly summary",
+                  desc: "A recap of your consistency and progress.",
+                },
               ].map((item) => (
                 <div key={item.key} className="flex items-center justify-between gap-4">
                   <div className="min-w-0">
@@ -172,16 +192,28 @@ function ProfilePage() {
               <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-sm font-medium">Usage analytics</p>
-                  <p className="text-xs text-muted-foreground">Help us improve by sharing anonymous usage data.</p>
+                  <p className="text-xs text-muted-foreground">
+                    Help us improve by sharing anonymous usage data.
+                  </p>
                 </div>
-                <Switch className="shrink-0" checked={state.privacy.analytics} onCheckedChange={() => togglePrivacy("analytics")} />
+                <Switch
+                  className="shrink-0"
+                  checked={state.privacy.analytics}
+                  onCheckedChange={() => togglePrivacy("analytics")}
+                />
               </div>
               <div className="flex items-center justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-sm font-medium">Personalization</p>
-                  <p className="text-xs text-muted-foreground">Let the coach adapt recommendations to your history.</p>
+                  <p className="text-xs text-muted-foreground">
+                    Let the coach adapt recommendations to your history.
+                  </p>
                 </div>
-                <Switch className="shrink-0" checked={state.privacy.personalization} onCheckedChange={() => togglePrivacy("personalization")} />
+                <Switch
+                  className="shrink-0"
+                  checked={state.privacy.personalization}
+                  onCheckedChange={() => togglePrivacy("personalization")}
+                />
               </div>
             </div>
           </section>

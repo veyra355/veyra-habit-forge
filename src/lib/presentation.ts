@@ -42,7 +42,11 @@ export const PRESENTATION_DISCLAIMER =
   "This is a general grooming and presentation tool, not a medical or diagnostic service. Veyra does not score attractiveness, rank faces, judge skin tone, or assess skin, scalp or hair conditions. For any health concern, please consult a qualified healthcare professional.";
 
 /** Computes simple, non-identifying technical metrics from raw RGBA pixels. */
-export function computeMetrics(data: Uint8ClampedArray, width: number, height: number): ImageMetrics {
+export function computeMetrics(
+  data: Uint8ClampedArray,
+  width: number,
+  height: number,
+): ImageMetrics {
   let total = 0;
   let leftSum = 0;
   let rightSum = 0;
@@ -88,7 +92,10 @@ export function computeMetrics(data: Uint8ClampedArray, width: number, height: n
 
   const leftAvg = leftCount ? leftSum / leftCount : 0;
   const rightAvg = rightCount ? rightSum / rightCount : 0;
-  const balance = Math.max(leftAvg, rightAvg) === 0 ? 0 : Math.min(leftAvg, rightAvg) / Math.max(leftAvg, rightAvg);
+  const balance =
+    Math.max(leftAvg, rightAvg) === 0
+      ? 0
+      : Math.min(leftAvg, rightAvg) / Math.max(leftAvg, rightAvg);
   const clarityRaw = edgeSamples ? edgeEnergy / edgeSamples : 0;
   const samplesTotal = edgeSamples || 1;
   const centerX = brightPixels ? brightX / brightPixels : width / 2;
@@ -121,7 +128,10 @@ export const STATUS_LABEL: Record<PresentationStatus, string> = {
 
 export function analyzeMetrics(metrics: ImageMetrics): PresentationAnalysis {
   const lightingScore = Math.round(
-    (metrics.brightness > 78 ? 100 - (metrics.brightness - 78) * 2.2 : (metrics.brightness / 55) * 100) * 0.6 +
+    (metrics.brightness > 78
+      ? 100 - (metrics.brightness - 78) * 2.2
+      : (metrics.brightness / 55) * 100) *
+      0.6 +
       metrics.evenness * 0.4,
   );
   const framingScore = Math.round(metrics.centering * 0.5 + fillScore(metrics.subjectFill) * 0.5);
@@ -144,7 +154,9 @@ export function analyzeMetrics(metrics: ImageMetrics): PresentationAnalysis {
         : metrics.brightness > 82
           ? "Step back from the direct light source or diffuse it with a curtain."
           : "Try facing a window for softer, more even lighting.",
-      metrics.evenness < 70 ? "Turn slightly so light reaches both sides of your face evenly." : "Avoid overhead-only light — front light is kinder and clearer.",
+      metrics.evenness < 70
+        ? "Turn slightly so light reaches both sides of your face evenly."
+        : "Avoid overhead-only light — front light is kinder and clearer.",
     ],
   };
 
@@ -166,7 +178,9 @@ export function analyzeMetrics(metrics: ImageMetrics): PresentationAnalysis {
         : metrics.subjectFill < 18
           ? "Come a little closer so your head and shoulders fill the frame."
           : "Keep head and shoulders in frame with a little space above your head.",
-      metrics.centering < 70 ? "Centre yourself horizontally before capturing." : "Keep the lens at eye level rather than tilted up or down.",
+      metrics.centering < 70
+        ? "Centre yourself horizontally before capturing."
+        : "Keep the lens at eye level rather than tilted up or down.",
     ],
   };
 
@@ -235,35 +249,50 @@ export function manualAnalysis(): PresentationAnalysis {
         label: "Lighting",
         status: "unknown",
         statusNote: "Not measured — no image was captured.",
-        tips: ["Face a window or place a lamp in front of you, never behind.", "Avoid overhead-only light; front light is more even."],
+        tips: [
+          "Face a window or place a lamp in front of you, never behind.",
+          "Avoid overhead-only light; front light is more even.",
+        ],
       },
       {
         id: "framing",
         label: "Camera framing",
         status: "unknown",
         statusNote: "Not measured — no image was captured.",
-        tips: ["Keep the camera at eye level, roughly an arm's length away.", "Frame head and shoulders with a little space above your head."],
+        tips: [
+          "Keep the camera at eye level, roughly an arm's length away.",
+          "Frame head and shoulders with a little space above your head.",
+        ],
       },
       {
         id: "presentation",
         label: "Presentation",
         status: "unknown",
         statusNote: "General guidance only.",
-        tips: ["Sit tall, shoulders relaxed, chin level.", "Pause for a breath before you start speaking."],
+        tips: [
+          "Sit tall, shoulders relaxed, chin level.",
+          "Pause for a breath before you start speaking.",
+        ],
       },
       {
         id: "grooming",
         label: "Grooming",
         status: "unknown",
         statusNote: "General guidance only.",
-        tips: ["Cleanse, moisturise and apply SPF each morning.", "Keep hair and facial hair on a fixed trim schedule."],
+        tips: [
+          "Cleanse, moisturise and apply SPF each morning.",
+          "Keep hair and facial hair on a fixed trim schedule.",
+        ],
       },
       {
         id: "style",
         label: "Style",
         status: "unknown",
         statusNote: "General guidance only.",
-        tips: ["Pick tops that contrast with your usual background.", "Prepare a few outfit combinations in advance."],
+        tips: [
+          "Pick tops that contrast with your usual background.",
+          "Prepare a few outfit combinations in advance.",
+        ],
       },
     ],
   };
@@ -271,7 +300,10 @@ export function manualAnalysis(): PresentationAnalysis {
 
 export type PlanDay = { label: string; items: string[] };
 
-export function buildPlan(analysis: PresentationAnalysis | null): { week: PlanDay[]; month: PlanDay[] } {
+export function buildPlan(analysis: PresentationAnalysis | null): {
+  week: PlanDay[];
+  month: PlanDay[];
+} {
   const needsLighting = analysis?.categories.find((c) => c.id === "lighting")?.status === "improve";
   const needsFraming = analysis?.categories.find((c) => c.id === "framing")?.status === "improve";
 
@@ -280,52 +312,96 @@ export function buildPlan(analysis: PresentationAnalysis | null): { week: PlanDa
       label: "Day 1 — Set the basics",
       items: [
         "Gentle cleanser morning and evening, light moisturiser after",
-        needsLighting ? "Find one spot at home with good front lighting and make it your call spot" : "Note your best-lit spot at home for calls",
+        needsLighting
+          ? "Find one spot at home with good front lighting and make it your call spot"
+          : "Note your best-lit spot at home for calls",
         "10-minute walk and lights off at a fixed time tonight",
       ],
     },
     {
       label: "Day 2 — Sun protection",
-      items: ["Add SPF 30+ every morning, even indoors near windows", "Full glass of water with each meal", "20–30 minute workout or brisk walk"],
+      items: [
+        "Add SPF 30+ every morning, even indoors near windows",
+        "Full glass of water with each meal",
+        "20–30 minute workout or brisk walk",
+      ],
     },
     {
       label: "Day 3 — Hair care",
-      items: ["Wash hair with a mild shampoo; condition mid-lengths to ends", "Decide your trim schedule (every 3–4 weeks)", "5 minutes of neck and shoulder mobility"],
+      items: [
+        "Wash hair with a mild shampoo; condition mid-lengths to ends",
+        "Decide your trim schedule (every 3–4 weeks)",
+        "5 minutes of neck and shoulder mobility",
+      ],
     },
     {
       label: "Day 4 — Posture",
-      items: ["Two posture resets: chest open, shoulders down, chin level", needsFraming ? "Set your camera at eye level and check the framing once" : "Check your on-camera posture once on a call", "Strength session or bodyweight circuit"],
+      items: [
+        "Two posture resets: chest open, shoulders down, chin level",
+        needsFraming
+          ? "Set your camera at eye level and check the framing once"
+          : "Check your on-camera posture once on a call",
+        "Strength session or bodyweight circuit",
+      ],
     },
     {
       label: "Day 5 — Style prep",
-      items: ["Lay out 3 outfit combinations for the coming week", "Iron or steam what you actually wear most", "Sleep routine: screens down 30 minutes before bed"],
+      items: [
+        "Lay out 3 outfit combinations for the coming week",
+        "Iron or steam what you actually wear most",
+        "Sleep routine: screens down 30 minutes before bed",
+      ],
     },
     {
       label: "Day 6 — Hygiene reset",
-      items: ["Nails, wash bedsheets and towels, restock basics", "Clean your phone and laptop camera lens", "Longer walk or a light conditioning session"],
+      items: [
+        "Nails, wash bedsheets and towels, restock basics",
+        "Clean your phone and laptop camera lens",
+        "Longer walk or a light conditioning session",
+      ],
     },
     {
       label: "Day 7 — Review",
-      items: ["Retake a presentation check and compare notes, not looks", "Pick the two habits that were easiest and keep them", "Plan next week's training days and sleep window"],
+      items: [
+        "Retake a presentation check and compare notes, not looks",
+        "Pick the two habits that were easiest and keep them",
+        "Plan next week's training days and sleep window",
+      ],
     },
   ];
 
   const month: PlanDay[] = [
     {
       label: "Week 1 — Foundation",
-      items: ["Lock a simple morning and evening skincare routine (cleanse, moisturise, SPF)", "Fixed sleep and wake times, 7 days out of 7", "Three short workouts and daily walks"],
+      items: [
+        "Lock a simple morning and evening skincare routine (cleanse, moisturise, SPF)",
+        "Fixed sleep and wake times, 7 days out of 7",
+        "Three short workouts and daily walks",
+      ],
     },
     {
       label: "Week 2 — Consistency",
-      items: ["Add a fourth training day and one mobility session", "Hair wash and trim schedule on the calendar", "Daily posture resets while working"],
+      items: [
+        "Add a fourth training day and one mobility session",
+        "Hair wash and trim schedule on the calendar",
+        "Daily posture resets while working",
+      ],
     },
     {
       label: "Week 3 — Presentation",
-      items: ["Set up your lighting and camera position once, permanently", "Practise a 60-second intro on camera twice this week", "Refine outfit combinations that photograph well"],
+      items: [
+        "Set up your lighting and camera position once, permanently",
+        "Practise a 60-second intro on camera twice this week",
+        "Refine outfit combinations that photograph well",
+      ],
     },
     {
       label: "Week 4 — Lock it in",
-      items: ["Review what stuck and drop anything you dread", "Hydration, sleep and SPF are non-negotiables now", "Re-run the presentation check and update your routine"],
+      items: [
+        "Review what stuck and drop anything you dread",
+        "Hydration, sleep and SPF are non-negotiables now",
+        "Re-run the presentation check and update your routine",
+      ],
     },
   ];
 

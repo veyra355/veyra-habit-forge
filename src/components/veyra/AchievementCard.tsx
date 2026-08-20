@@ -17,7 +17,9 @@ export function AchievementCard({ achievement, unlocked }: AchievementCardProps)
       <div className="text-4xl mb-2">{achievement.icon}</div>
       <h3 className="text-center text-sm font-semibold text-slate-100">{achievement.title}</h3>
       <p className="text-xs text-slate-400 text-center mt-1">{achievement.description}</p>
-      {unlocked && <div className="text-xs text-yellow-400 font-semibold mt-2">+{achievement.xpReward} XP</div>}
+      {unlocked && (
+        <div className="text-xs text-yellow-400 font-semibold mt-2">+{achievement.xpReward} XP</div>
+      )}
     </div>
   );
 }
