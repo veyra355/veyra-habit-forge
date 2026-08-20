@@ -2,6 +2,8 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "./types";
 
+const VEYRA_AUTH_STORAGE_KEY = "veyra-auth-v1";
+
 function isNewSupabaseApiKey(value: string): boolean {
   return value.startsWith("sb_publishable_") || value.startsWith("sb_secret_");
 }
@@ -11,27 +13,39 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
     const headers = new Headers(
       typeof Request !== "undefined" && input instanceof Request ? input.headers : undefined,
     );
-
     if (init?.headers) {
       new Headers(init.headers).forEach((value, key) => headers.set(key, value));
     }
-
-    // New Supabase API keys are opaque strings, not bearer JWTs.
     if (
       isNewSupabaseApiKey(supabaseKey) &&
       headers.get("Authorization") === `Bearer ${supabaseKey}`
     ) {
       headers.delete("Authorization");
     }
-
     headers.set("apikey", supabaseKey);
     return fetch(input, { ...init, headers });
   };
 }
 
+function migrateExistingAuthSession() {
+  if (typeof window === "undefined") return;
+  try {
+    if (window.localStorage.getItem(VEYRA_AUTH_STORAGE_KEY)) return;
+    for (let i = 0; i < window.localStorage.length; i += 1) {
+      const key = window.localStorage.key(i);
+      if (!key || !/^sb-.+-auth-token$/.test(key)) continue;
+      const value = window.localStorage.getItem(key);
+      if (value) {
+        window.localStorage.setItem(VEYRA_AUTH_STORAGE_KEY, value);
+        break;
+      }
+    }
+  } catch {
+    // Storage can be unavailable in privacy-restricted browser contexts.
+  }
+}
+
 function createSupabaseClient() {
-  // Use import.meta.env for client-side (Vite build-time replacement)
-  // Fall back to process.env for SSR (server-side rendering)
   const SUPABASE_URL = import.meta.env["VITE_SUPABASE_URL"] || process.env["SUPABASE_URL"];
   const SUPABASE_PUBLISHABLE_KEY =
     import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] || process.env["SUPABASE_PUBLISHABLE_KEY"];
@@ -46,22 +60,22 @@ function createSupabaseClient() {
     throw new Error(message);
   }
 
+  migrateExistingAuthSession();
+
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-    global: {
-      fetch: createSupabaseFetch(SUPABASE_PUBLISHABLE_KEY),
-    },
+    global: { fetch: createSupabaseFetch(SUPABASE_PUBLISHABLE_KEY) },
     auth: {
-      storage: typeof window !== "undefined" ? localStorage : undefined,
+      storage: typeof window !== "undefined" ? window.localStorage : undefined,
+      storageKey: VEYRA_AUTH_STORAGE_KEY,
       persistSession: true,
       autoRefreshToken: true,
+      detectSessionInUrl: true,
     },
   });
 }
 
 let _supabase: ReturnType<typeof createSupabaseClient> | undefined;
 
-// Import the supabase client like this:
-// import { supabase } from "@/integrations/supabase/client";
 export const supabase = new Proxy({} as ReturnType<typeof createSupabaseClient>, {
   get(_, prop, receiver) {
     if (!_supabase) _supabase = createSupabaseClient();
