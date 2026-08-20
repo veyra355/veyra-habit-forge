@@ -148,6 +148,7 @@ const initialState: VeyraState = {
   longestStreak: 0,
 };
 export type AuthResult = { error: string | null; needsEmailConfirmation?: boolean };
+export type XpResult = { levelUp: boolean; level: number; totalXp: number; awarded: boolean };
 type Ctx = {
   state: VeyraState;
   hydrated: boolean;
@@ -157,6 +158,7 @@ type Ctx = {
   signInWithPassword: (email: string, password: string) => Promise<AuthResult>;
   signInWithGoogle: () => Promise<AuthResult>;
   signOut: () => Promise<void>;
+  awardXp: (amount: number, source: string, sourceKey: string) => Promise<XpResult | null>;
   toggleHabit: (id: string, date?: string) => void;
   addHabit: (name: string) => void;
   removeHabit: (id: string) => void;
