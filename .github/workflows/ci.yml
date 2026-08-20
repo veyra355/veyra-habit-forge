@@ -1,5 +1,7 @@
 name: Veyra CI
 
+# Re-registered to force GitHub to re-parse triggers (workflow_dispatch was not
+# recognized by the Actions API even though it was present in the file).
 on:
   push:
     branches:
