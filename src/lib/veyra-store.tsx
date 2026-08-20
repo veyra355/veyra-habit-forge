@@ -344,10 +344,11 @@ export function VeyraProvider({ children }: { children: ReactNode }) {
 
   const update = useCallback((patch: Partial<VeyraState>) => {
     setState((p) => ({ ...p, ...patch }));
-    if (patch.onboarding)
-      void currentUserId().then((id) => {
-        if (id)
-          return supabase.from("profiles").update({ onboarding: patch.onboarding }).eq("id", id);
+    const onboarding = patch.onboarding;
+    if (onboarding)
+      void currentUserId().then(async (id) => {
+        if (!id) return;
+        await supabase.from("profiles").update({ onboarding }).eq("id", id);
       });
   }, []);
   const signUpWithPassword = useCallback(
@@ -380,24 +381,32 @@ export function VeyraProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
   }, []);
   const awardXp = useCallback(
-    async (amount: number, source: string, sourceKey: string) => {
-      if (!state.user) return;
+    async (amount: number, source: string, sourceKey: string): Promise<XpResult | null> => {
+      if (!state.user) return null;
       const { data, error } = await supabase.rpc("award_xp", {
         _amount: amount,
         _source: source,
         _source_key: sourceKey,
       });
-      if (!error && data)
-        setState((p) => ({
-          ...p,
-          totalXp: data.total_xp,
-          currentLevel: data.level,
-          currentRank: data.rank.charAt(0).toUpperCase() + data.rank.slice(1),
-          currentStreak: data.current_streak,
-          longestStreak: data.longest_streak,
-        }));
+      if (error || !data) return null;
+      const previousLevel = state.currentLevel;
+      const previousXp = state.totalXp;
+      setState((p) => ({
+        ...p,
+        totalXp: data.total_xp,
+        currentLevel: data.level,
+        currentRank: data.rank.charAt(0).toUpperCase() + data.rank.slice(1),
+        currentStreak: data.current_streak,
+        longestStreak: data.longest_streak,
+      }));
+      return {
+        levelUp: data.level > previousLevel,
+        level: data.level,
+        totalXp: data.total_xp,
+        awarded: data.total_xp > previousXp,
+      };
     },
-    [state.user],
+    [state.user, state.currentLevel, state.totalXp],
   );
 
   const toggleHabit = useCallback(
