@@ -18,7 +18,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { AppShell, PageHeader, SafetyNote } from "@/components/veyra/AppShell";
-import { todayKey, useVeyra, xpForLevel } from "@/lib/veyra-store";
+import { AchievementCard } from "@/components/veyra/AchievementCard";
+import { LevelUpAnimation } from "@/components/veyra/LevelUpAnimation";
+import { QuestCard } from "@/components/veyra/QuestCard";
+import { questCategory, type GameQuest } from "@/lib/quest-display";
+import { useGame } from "@/lib/use-game";
+import { useVeyra, xpForLevel } from "@/lib/veyra-store";
 
 export const Route = createFileRoute("/game")({
   head: () => ({
@@ -46,74 +51,21 @@ const RANKS = [
 
 function GameModePage() {
   const { state } = useVeyra();
-  const today = state.completions[todayKey()] ?? [];
+  const { loading, daily, weekly, missions, achievements, completeQuest, levelUpTo, clearLevelUp } =
+    useGame();
   const nextLevel = xpForLevel(state.currentLevel);
   const previousLevel = xpForLevel(Math.max(0, state.currentLevel - 1));
   const range = Math.max(1, nextLevel - previousLevel);
   const levelProgress = Math.max(0, Math.min(100, ((state.totalXp - previousLevel) / range) * 100));
-
-  const quests = [
-    {
-      title: "Enter the Arena",
-      detail: "Complete today's workout",
-      reward: 200,
-      done: today.includes("workout"),
-      icon: Swords,
-      href: "/workout" as const,
-    },
-    {
-      title: "Build the Streak",
-      detail: "Complete a daily habit",
-      reward: 20,
-      done: today.length > 0,
-      icon: Flame,
-      href: "/habits" as const,
-    },
-    {
-      title: "Coach Mission",
-      detail: "Ask AI Coach for your next mission",
-      reward: 0,
-      done: false,
-      icon: Sparkles,
-      href: "/coach" as const,
-    },
-  ];
-  const achievements = [
-    {
-      title: "First Step",
-      detail: "Complete your first action",
-      unlocked: state.totalXp > 0,
-      icon: Target,
-    },
-    {
-      title: "On Fire",
-      detail: "Reach a 3-day streak",
-      unlocked: state.longestStreak >= 3,
-      icon: Flame,
-    },
-    { title: "Level Up", detail: "Reach Level 2", unlocked: state.currentLevel >= 2, icon: Zap },
-    {
-      title: "Gold Hunter",
-      detail: "Reach Level 11",
-      unlocked: state.currentLevel >= 11,
-      icon: Trophy,
-    },
-    {
-      title: "Session Master",
-      detail: "Complete 10 workout sessions",
-      unlocked: state.sessions.length >= 10,
-      icon: Swords,
-    },
-    {
-      title: "Consistency",
-      detail: "Reach a 7-day best streak",
-      unlocked: state.longestStreak >= 7,
-      icon: Crown,
-    },
+  const questBoards: { eyebrow: string; title: string; trailing: string; items: GameQuest[] }[] = [
+    { eyebrow: "Daily quests", title: "Today's mission board", trailing: "Resets daily", items: daily },
+    { eyebrow: "Weekly quests", title: "This week's objectives", trailing: "Resets weekly", items: weekly },
+    { eyebrow: "Missions", title: "Long-term missions", trailing: "One-time", items: missions },
   ];
 
   return (
     <>
+      {levelUpTo !== null && <LevelUpAnimation level={levelUpTo} onComplete={clearLevelUp} />}
       <PageHeader
         title="Game Mode"
         subtitle="Turn useful real-world actions into quests, XP, ranks and achievements."
