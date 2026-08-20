@@ -512,6 +512,7 @@ export function VeyraProvider({ children }: { children: ReactNode }) {
       completeWorkout,
       toggleExercise,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       state,
       hydrated,
