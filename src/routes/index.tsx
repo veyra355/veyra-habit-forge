@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { IntroSequence } from "@/components/veyra/IntroSequence";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -549,8 +550,19 @@ function BodyBuilder() {
 }
 
 function Landing() {
+  const [showIntro, setShowIntro] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return !window.sessionStorage.getItem("veyra-intro-seen");
+  });
+
+  const handleIntroComplete = () => {
+    window.sessionStorage.setItem("veyra-intro-seen", "true");
+    setShowIntro(false);
+  };
+
   return (
     <div className="min-h-screen">
+      {showIntro && <IntroSequence onComplete={handleIntroComplete} />}
       <Navbar />
       <Hero />
       <FeatureStrip />
