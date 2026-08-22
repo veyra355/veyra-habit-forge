@@ -248,7 +248,7 @@ function Hero() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(60% 55% at 68% 35%, rgba(255,255,255,0.13), transparent 70%), radial-gradient(45% 40% at 10% 10%, rgba(53,231,255,0.06), transparent 70%)",
+            "radial-gradient(60% 55% at 68% 35%, rgba(184,243,74,0.13), transparent 70%), radial-gradient(45% 40% at 10% 10%, rgba(53,231,255,0.06), transparent 70%)",
         }}
       />
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 pb-10 pt-12 sm:px-6 lg:grid-cols-2 lg:pb-16 lg:pt-16">
@@ -311,7 +311,7 @@ function Hero() {
           <div className="absolute left-1/2 top-1/2 -z-0 aspect-square w-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/10" />
           <div
             className="relative mx-auto max-w-md overflow-hidden rounded-[2rem] border border-primary/20 bg-gradient-to-br from-primary/10 via-card to-background p-6"
-            style={{ boxShadow: "0 0 60px -12px rgba(255,255,255,0.25), 0 20px 50px -20px rgba(0,0,0,0.8)" }}
+            style={{ boxShadow: "0 0 60px -12px rgba(184,243,74,0.25), 0 20px 50px -20px rgba(0,0,0,0.8)" }}
           >
             <div className="flex items-center justify-between">
               <div>
