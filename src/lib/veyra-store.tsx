@@ -61,12 +61,12 @@ export type VeyraState = {
 };
 
 export const DEFAULT_HABITS: HabitDefinition[] = [
-  { id: "workout", name: "Workout" },
-  { id: "sleep", name: "Sleep routine" },
-  { id: "hydration", name: "Hydration" },
-  { id: "grooming", name: "Personal grooming" },
-  { id: "movement", name: "Movement" },
-  { id: "focus", name: "Study/work focus" },
+  { id: "workout", name: "Show up for training" },
+  { id: "sleep", name: "Lights out on time" },
+  { id: "hydration", name: "2L water in the tank" },
+  { id: "grooming", name: "Skin + grooming reset" },
+  { id: "movement", name: "10-min walk or stretch" },
+  { id: "focus", name: "One deep-focus block" },
 ];
 const HABIT_XP: Record<string, number> = {
   workout: 100,

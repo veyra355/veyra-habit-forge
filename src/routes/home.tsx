@@ -92,6 +92,13 @@ const DEFAULT_QUESTS: Quest[] = [
     duration: "15 min",
     exerciseIndex: 5,
   },
+  {
+    id: "reset",
+    title: "Daily reset",
+    detail: "Quick skin + grooming pass — cleanse, moisturise, sunscreen.",
+    reward: 40,
+    duration: "5 min",
+  },
 ];
 
 function buildWeeklyPlan(goal: string): WeeklyPlanDay[] {
