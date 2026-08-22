@@ -68,39 +68,39 @@
   --card-foreground: #fafafa;
   --popover: #0d0d0d;
   --popover-foreground: #fafafa;
-  --lime: #b8f34a;
-  --lime-bright: #c8ff32;
+  --lime: #e8e8e8;
+  --lime-bright: #ffffff;
   --cyan: #35e7ff;
   --purple: #a66cff;
   --gold: #ffd166;
-  --primary: #b8f34a;
-  --primary-foreground: #071008;
+  --primary: #e8e8e8;
+  --primary-foreground: #0a0a0a;
   --secondary: #151515;
   --secondary-foreground: #fafafa;
   --muted: #131313;
   --muted-foreground: #a7a6a6;
   --accent: #1a1a1a;
-  --accent-foreground: #c8ff32;
+  --accent-foreground: #ffffff;
   --destructive: #ff5f56;
   --destructive-foreground: #120404;
-  --success: #b8f34a;
-  --success-foreground: #071008;
+  --success: #e8e8e8;
+  --success-foreground: #0a0a0a;
   --border: rgba(255, 255, 255, 0.09);
   --input: rgba(255, 255, 255, 0.12);
-  --ring: #b8f34a;
-  --chart-1: #b8f34a;
+  --ring: #e8e8e8;
+  --chart-1: #e8e8e8;
   --chart-2: #35e7ff;
   --chart-3: #a66cff;
   --chart-4: #ffd166;
   --chart-5: #6b7d70;
   --sidebar: #0a0a0a;
   --sidebar-foreground: #fafafa;
-  --sidebar-primary: #b8f34a;
-  --sidebar-primary-foreground: #071008;
+  --sidebar-primary: #e8e8e8;
+  --sidebar-primary-foreground: #0a0a0a;
   --sidebar-accent: #151515;
   --sidebar-accent-foreground: #f5f7f5;
   --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-ring: #b8f34a;
+  --sidebar-ring: #e8e8e8;
   --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.5), 0 12px 32px -16px rgb(0 0 0 / 0.7);
   --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.55), 0 32px 64px -28px rgb(0 0 0 / 0.85);
 }
@@ -195,7 +195,7 @@
 @utility glass {
   background: linear-gradient(
     145deg,
-    rgba(184, 243, 74, 0.045),
+    rgba(255, 255, 255, 0.045),
     rgba(53, 231, 255, 0.025) 45%,
     rgba(166, 108, 255, 0.035)
   );
@@ -220,8 +220,8 @@
 }
 @utility glow-lime {
   box-shadow:
-    0 0 0 1px rgba(184, 243, 74, 0.25),
-    0 0 40px -10px rgba(184, 243, 74, 0.45);
+    0 0 0 1px rgba(255, 255, 255, 0.25),
+    0 0 40px -10px rgba(255, 255, 255, 0.45);
 }
 @utility glow-cyan {
   box-shadow:
@@ -236,7 +236,7 @@
 @utility gaming-gradient {
   background: linear-gradient(
     135deg,
-    rgba(184, 243, 74, 0.12),
+    rgba(255, 255, 255, 0.12),
     rgba(53, 231, 255, 0.08) 50%,
     rgba(166, 108, 255, 0.1)
   );
@@ -246,7 +246,7 @@
 }
 @utility hud-ring {
   border-radius: 9999px;
-  border: 1px dashed rgba(184, 243, 74, 0.28);
+  border: 1px dashed rgba(255, 255, 255, 0.28);
   animation: hud-spin 48s linear infinite;
 }
 @keyframes hud-spin {
