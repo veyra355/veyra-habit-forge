@@ -6,13 +6,17 @@ import {
   CalendarCheck,
   CheckCircle2,
   Dumbbell,
+  Flame,
+  Gamepad2,
   Menu,
   Play,
   ScissorsLineDashed,
   Sparkles,
   SquareCheckBig,
   Target,
+  Trophy,
   X,
+  Zap,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -249,18 +253,18 @@ function Hero() {
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 pb-10 pt-12 sm:px-6 lg:grid-cols-2 lg:pb-16 lg:pt-16">
         <div className="animate-fade-in">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
-            <Sparkles className="size-3.5" /> AI-powered fitness &amp; grooming coach
+            <Gamepad2 className="size-3.5" /> HEALTH RPG · AI coach adapts daily
           </span>
 
           <h1 className="mt-6 display-italic text-[clamp(2.6rem,7vw,4.6rem)]">
-            Build your
+            Build your streak.
             <br />
-            <span className="text-primary">Best routine.</span>
+            <span className="text-primary">Not your stress.</span>
           </h1>
 
           <p className="mt-5 max-w-lg text-base leading-relaxed text-muted-foreground">
-            Personalized workouts, grooming routines, and daily habits — all powered by AI that
-            adapts to you. One system. Infinite progress.
+            Workouts, grooming and habits that turn into daily quests — not a generic plan
+            you'll quit in 3 days. Earn XP, keep your streak, level up for real.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -304,21 +308,56 @@ function Hero() {
         <div className="relative">
           <div className="absolute left-1/2 top-1/2 -z-0 aspect-square w-[86%] -translate-x-1/2 -translate-y-1/2 hud-ring" />
           <div className="absolute left-1/2 top-1/2 -z-0 aspect-square w-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/10" />
-          <div className="relative mx-auto max-w-md overflow-hidden rounded-[2rem] border border-border">
-            <img
-              src={sculpture}
-              alt="Classical Greek marble sculpture of an athletic figure, lit in a dark studio"
-              width={1024}
-              height={1280}
-              className="h-full w-full object-cover"
-            />
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(5,7,6,0.95) 4%, rgba(5,7,6,0) 45%), radial-gradient(60% 60% at 50% 80%, rgba(184,243,74,0.12), transparent 70%)",
-              }}
-            />
+          <div className="relative mx-auto max-w-md overflow-hidden rounded-[2rem] border border-primary/20 bg-gradient-to-br from-primary/10 via-card to-background p-6 shadow-2xl">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="eyebrow text-primary">Player HUD</p>
+                <p className="mt-1 font-display text-2xl font-black">LVL 7</p>
+              </div>
+              <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
+                <Trophy className="size-6 text-primary" />
+              </div>
+            </div>
+
+            <div className="mt-5 flex items-center justify-between text-xs">
+              <span className="font-semibold">2,140 XP</span>
+              <span className="text-muted-foreground">2,500 XP</span>
+            </div>
+            <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-secondary">
+              <div className="h-full w-[86%] rounded-full bg-primary" />
+            </div>
+
+            <div className="mt-5 grid grid-cols-3 gap-2">
+              <div className="rounded-xl border border-border/70 bg-background/50 p-2.5 text-center">
+                <Flame className="mx-auto size-3.5 text-primary" />
+                <p className="mt-1 text-sm font-black">12d</p>
+                <p className="text-[9px] uppercase tracking-wide text-muted-foreground">streak</p>
+              </div>
+              <div className="rounded-xl border border-border/70 bg-background/50 p-2.5 text-center">
+                <Zap className="mx-auto size-3.5 text-primary" />
+                <p className="mt-1 text-sm font-black">+320</p>
+                <p className="text-[9px] uppercase tracking-wide text-muted-foreground">today</p>
+              </div>
+              <div className="rounded-xl border border-border/70 bg-background/50 p-2.5 text-center">
+                <CheckCircle2 className="mx-auto size-3.5 text-primary" />
+                <p className="mt-1 text-sm font-black">3/4</p>
+                <p className="text-[9px] uppercase tracking-wide text-muted-foreground">quests</p>
+              </div>
+            </div>
+
+            <div className="mt-5 flex gap-1.5">
+              {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
+                <div
+                  key={`${day}-${i}`}
+                  className={cn(
+                    "flex h-8 flex-1 items-center justify-center rounded-lg text-[11px] font-bold",
+                    i < 4 ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground",
+                  )}
+                >
+                  {day}
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="glass absolute -bottom-4 right-0 flex max-w-[17rem] items-center gap-3 p-4 sm:right-2">
