@@ -10,172 +10,35 @@ import { supabase } from "@/integrations/supabase/client";
 import { useVeyra } from "@/lib/veyra-store";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({
-    meta: [
-      { title: "Sign in to Veyra" },
-      { name: "description", content: "Log in or create your free Veyra account to get your personalized fitness, habit and grooming plan." },
-      { property: "og:title", content: "Sign in to Veyra" },
-      { property: "og:description", content: "Log in or create your free Veyra account." },
-    ],
-  }),
+  head: () => ({ meta: [{ title: "Sign in to Veyra" }, { name: "description", content: "Log in or create your free Veyra account." }] }),
   component: AuthPage,
 });
 
-function GoogleMark() {
-  return (
-    <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
-      <path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1A6.2 6.2 0 1 1 16.1 7.3l2.7-2.6A9.9 9.9 0 0 0 12 2a10 10 0 1 0 0 20c5.8 0 9.6-4 9.6-9.7 0-.7-.08-1.3-.2-2.1H12Z" />
-    </svg>
-  );
-}
-
-function friendlyAuthError(message: string) {
-  const m = message.toLowerCase();
-  if (m.includes("invalid login credentials")) return "Email or password is incorrect.";
-  if (m.includes("email not confirmed")) return "Please confirm your email before logging in.";
-  if (m.includes("user already registered")) return "An account with this email already exists. Try logging in.";
-  if (m.includes("password should be at least")) return "Password must be at least 6 characters.";
-  if (m.includes("rate limit")) return "Too many attempts. Please wait a moment and try again.";
-  return message;
-}
+function GoogleMark() { return <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true"><path fill="currentColor" d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1A6.2 6.2 0 1 1 16.1 7.3l2.7-2.6A9.9 9.9 0 0 0 12 2a10 10 0 1 0 0 20c5.8 0 9.6-4 9.6-9.7 0-.7-.08-1.3-.2-2.1H12Z" /></svg>; }
+function friendlyAuthError(message: string) { const m = message.toLowerCase(); if (m.includes("invalid login credentials")) return "Email or password is incorrect."; if (m.includes("email not confirmed")) return "Please confirm your email before logging in."; if (m.includes("user already registered")) return "An account with this email already exists. Try logging in."; if (m.includes("password should be at least")) return "Password must be at least 6 characters."; if (m.includes("rate limit")) return "Too many attempts. Please wait a moment and try again."; return message; }
 
 function AuthPage() {
   const { state, hydrated, authLoading, signInWithPassword } = useVeyra();
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
-  const [resetLoading, setResetLoading] = useState(false);
+  const [name, setName] = useState(""); const [email, setEmail] = useState(""); const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState(""); const [submitting, setSubmitting] = useState(false); const [googleLoading, setGoogleLoading] = useState(false); const [resetLoading, setResetLoading] = useState(false);
+  const [resetMode, setResetMode] = useState(false); const [confirmed, setConfirmed] = useState(false); const [verificationSent, setVerificationSent] = useState(false);
 
-  useEffect(() => {
-    if (hydrated && !authLoading && state.user) {
-      navigate({ to: state.onboarding ? "/home" : "/onboarding", replace: true });
-    }
-  }, [hydrated, authLoading, state.user, state.onboarding, navigate]);
+  useEffect(() => { const params = new URLSearchParams(window.location.search); setResetMode(params.get("reset") === "1"); setConfirmed(params.get("confirmed") === "1"); }, []);
+  useEffect(() => { if (hydrated && !authLoading && state.user && !resetMode) navigate({ to: state.onboarding ? "/home" : "/onboarding", replace: true }); }, [hydrated, authLoading, state.user, state.onboarding, navigate, resetMode]);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (submitting || googleLoading || resetLoading) return;
-    const cleanEmail = email.trim().toLowerCase();
-    if (!cleanEmail || !password) return void toast.error("Enter your email and password");
-    setSubmitting(true);
-    try {
-      const result = await signInWithPassword(cleanEmail, password);
-      if (result.error) toast.error(friendlyAuthError(result.error));
-      else toast.success("Welcome back");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (submitting || googleLoading || resetLoading) return;
-    const cleanName = name.trim();
-    const cleanEmail = email.trim().toLowerCase();
-    if (!cleanName || !cleanEmail || password.length < 6) {
-      return void toast.error("Add your name, email and a password of at least 6 characters");
-    }
-    setSubmitting(true);
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email: cleanEmail,
-        password,
-        options: {
-          data: { display_name: cleanName },
-          // Always return to Veyra after email confirmation instead of Supabase's default URL.
-          emailRedirectTo: `${window.location.origin}/auth?confirmed=1`,
-        },
-      });
-      if (error) {
-        toast.error(friendlyAuthError(error.message));
-        return;
-      }
-      if (!data.session) {
-        toast.success("Account created. Confirm your email — Veyra will open automatically.");
-        return;
-      }
-      toast.success("Account created — let's build your plan");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleGoogle = async () => {
-    if (submitting || googleLoading || resetLoading) return;
-    setGoogleLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth?oauth=1`,
-        },
-      });
-      if (error) {
-        toast.error(friendlyAuthError(error.message));
-        setGoogleLoading(false);
-      }
-    } catch (error) {
-      toast.error(friendlyAuthError(error instanceof Error ? error.message : "Google sign-in failed."));
-      setGoogleLoading(false);
-    }
-  };
-
-  const handleReset = async () => {
-    const cleanEmail = email.trim().toLowerCase();
-    if (!cleanEmail) return void toast.error("Enter your email first");
-    setResetLoading(true);
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
-        redirectTo: `${window.location.origin}/auth?reset=1`,
-      });
-      if (error) toast.error(friendlyAuthError(error.message));
-      else toast.success("If an account exists, a password reset email is on its way.");
-    } finally {
-      setResetLoading(false);
-    }
-  };
-
+  const handleLogin = async (e: React.FormEvent) => { e.preventDefault(); if (submitting || googleLoading || resetLoading) return; const cleanEmail = email.trim().toLowerCase(); if (!cleanEmail || !password) return void toast.error("Enter your email and password"); setSubmitting(true); try { const result = await signInWithPassword(cleanEmail, password); if (result.error) toast.error(friendlyAuthError(result.error)); else toast.success("Welcome back"); } finally { setSubmitting(false); } };
+  const handleSignup = async (e: React.FormEvent) => { e.preventDefault(); if (submitting || googleLoading || resetLoading) return; const cleanName = name.trim(); const cleanEmail = email.trim().toLowerCase(); if (!cleanName || !cleanEmail || password.length < 6) return void toast.error("Add your name, email and a password of at least 6 characters"); setSubmitting(true); try { const { data, error } = await supabase.auth.signUp({ email: cleanEmail, password, options: { data: { display_name: cleanName }, emailRedirectTo: `${window.location.origin}/auth?confirmed=1` } }); if (error) { toast.error(friendlyAuthError(error.message)); return; } if (!data.session) { setVerificationSent(true); toast.success("Check your inbox to verify your email."); } else toast.success("Account created — let's build your plan"); } finally { setSubmitting(false); } };
+  const handleGoogle = async () => { if (submitting || googleLoading || resetLoading) return; setGoogleLoading(true); try { const { error } = await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${window.location.origin}/auth?oauth=1` } }); if (error) toast.error(friendlyAuthError(error.message)); } catch (error) { toast.error(friendlyAuthError(error instanceof Error ? error.message : "Google sign-in failed.")); } finally { setGoogleLoading(false); } };
+  const handleReset = async () => { const cleanEmail = email.trim().toLowerCase(); if (!cleanEmail) return void toast.error("Enter your email first"); setResetLoading(true); try { const { error } = await supabase.auth.resetPasswordForEmail(cleanEmail, { redirectTo: `${window.location.origin}/auth?reset=1` }); if (error) toast.error(friendlyAuthError(error.message)); else toast.success("If an account exists, a password reset email is on its way."); } finally { setResetLoading(false); } };
+  const handleUpdatePassword = async (e: React.FormEvent) => { e.preventDefault(); if (newPassword.length < 6) return void toast.error("Password must be at least 6 characters."); setResetLoading(true); try { const { error } = await supabase.auth.updateUser({ password: newPassword }); if (error) toast.error(friendlyAuthError(error.message)); else { toast.success("Password updated. You can sign in now."); window.history.replaceState({}, "", "/auth"); setResetMode(false); setNewPassword(""); } } finally { setResetLoading(false); } };
+  const resendVerification = async () => { const cleanEmail = email.trim().toLowerCase(); if (!cleanEmail) return void toast.error("Enter your email first"); setVerificationSent(true); const { error } = await supabase.auth.resend({ type: "signup", email: cleanEmail }); if (error) toast.error(friendlyAuthError(error.message)); else toast.success("Verification email sent again."); };
   const busy = submitting || googleLoading || resetLoading;
 
-  return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6"><Link to="/"><Logo /></Link></div>
-      <div className="flex flex-1 items-center justify-center px-4 pb-16">
-        <div className="w-full max-w-md">
-          <h1 className="text-center text-2xl font-semibold sm:text-3xl">Welcome to Veyra</h1>
-          <p className="mt-2 text-center text-sm text-muted-foreground">Build better habits. Feel better. Show up better.</p>
-          <div className="panel mt-7 p-6">
-            <Tabs defaultValue="login">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login" disabled={busy}>Log in</TabsTrigger>
-                <TabsTrigger value="signup" disabled={busy}>Create account</TabsTrigger>
-              </TabsList>
-              <TabsContent value="login" className="mt-5">
-                <form onSubmit={handleLogin} className="space-y-4">
-                  <div className="space-y-1.5"><Label htmlFor="login-email">Email</Label><Input id="login-email" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={busy} /></div>
-                  <div className="space-y-1.5"><Label htmlFor="login-password">Password</Label><Input id="login-password" type="password" autoComplete="current-password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} disabled={busy} /></div>
-                  <button type="button" onClick={handleReset} disabled={busy} className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">{resetLoading ? "Sending reset email..." : "Forgot password?"}</button>
-                  <Button type="submit" className="w-full" disabled={busy}>{submitting ? "Signing you in..." : "Log in"}</Button>
-                </form>
-              </TabsContent>
-              <TabsContent value="signup" className="mt-5">
-                <form onSubmit={handleSignup} className="space-y-4">
-                  <div className="space-y-1.5"><Label htmlFor="name">Name</Label><Input id="name" autoComplete="name" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} disabled={busy} /></div>
-                  <div className="space-y-1.5"><Label htmlFor="signup-email">Email</Label><Input id="signup-email" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={busy} /></div>
-                  <div className="space-y-1.5"><Label htmlFor="signup-password">Password</Label><Input id="signup-password" type="password" autoComplete="new-password" placeholder="At least 6 characters" value={password} onChange={(e) => setPassword(e.target.value)} disabled={busy} /></div>
-                  <Button type="submit" className="w-full" disabled={busy}>{submitting ? "Creating your account..." : "Create account"}</Button>
-                </form>
-              </TabsContent>
-            </Tabs>
-            <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground"><span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" /></div>
-            <Button variant="outline" className="w-full gap-2" onClick={handleGoogle} disabled={busy}><GoogleMark /> {googleLoading ? "Connecting to Google..." : "Continue with Google"}</Button>
-            <p className="mt-5 text-center text-xs leading-relaxed text-muted-foreground">Your account, XP, habits and workout progress sync securely across devices.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  return <div className="flex min-h-screen flex-col bg-background"><div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6"><Link to="/"><Logo /></Link></div><div className="flex flex-1 items-center justify-center px-4 pb-16"><div className="w-full max-w-md"><h1 className="text-center text-2xl font-semibold sm:text-3xl">{resetMode ? "Set a new password" : "Welcome to Veyra"}</h1><p className="mt-2 text-center text-sm text-muted-foreground">{resetMode ? "Choose a new password for your Veyra account." : "Build better habits. Feel better. Show up better."}</p>
+    <div className="panel mt-7 p-6">
+      {confirmed && <div className="mb-5 rounded-lg border border-primary/30 bg-primary/5 p-3 text-sm">Email verified successfully. Welcome to Veyra.</div>}
+      {verificationSent && !resetMode && <div className="mb-5 rounded-lg border p-3 text-sm">Verification email sent. Check your inbox and spam folder. <button type="button" onClick={resendVerification} className="mt-1 underline">Resend email</button></div>}
+      {resetMode ? <form onSubmit={handleUpdatePassword} className="space-y-4"><div className="space-y-1.5"><Label htmlFor="new-password">New password</Label><Input id="new-password" type="password" autoComplete="new-password" placeholder="At least 6 characters" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} disabled={busy} /></div><Button type="submit" className="w-full" disabled={busy}>{resetLoading ? "Updating password..." : "Update password"}</Button><Link to="/auth" className="block text-center text-xs underline">Back to login</Link></form> : <><Tabs defaultValue="login"><TabsList className="grid w-full grid-cols-2"><TabsTrigger value="login" disabled={busy}>Log in</TabsTrigger><TabsTrigger value="signup" disabled={busy}>Create account</TabsTrigger></TabsList><TabsContent value="login" className="mt-5"><form onSubmit={handleLogin} className="space-y-4"><div className="space-y-1.5"><Label htmlFor="login-email">Email</Label><Input id="login-email" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={busy} /></div><div className="space-y-1.5"><Label htmlFor="login-password">Password</Label><Input id="login-password" type="password" autoComplete="current-password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} disabled={busy} /></div><button type="button" onClick={handleReset} disabled={busy} className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">{resetLoading ? "Sending reset email..." : "Forgot password?"}</button><Button type="submit" className="w-full" disabled={busy}>{submitting ? "Signing you in..." : "Log in"}</Button></form></TabsContent><TabsContent value="signup" className="mt-5"><form onSubmit={handleSignup} className="space-y-4"><div className="space-y-1.5"><Label htmlFor="name">Name</Label><Input id="name" autoComplete="name" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} disabled={busy} /></div><div className="space-y-1.5"><Label htmlFor="signup-email">Email</Label><Input id="signup-email" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} disabled={busy} /></div><div className="space-y-1.5"><Label htmlFor="signup-password">Password</Label><Input id="signup-password" type="password" autoComplete="new-password" placeholder="At least 6 characters" value={password} onChange={(e) => setPassword(e.target.value)} disabled={busy} /></div><Button type="submit" className="w-full" disabled={busy}>{submitting ? "Creating your account..." : "Create account"}</Button></form></TabsContent></Tabs><div className="my-5 flex items-center gap-3 text-xs text-muted-foreground"><span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" /></div><Button variant="outline" className="w-full gap-2" onClick={handleGoogle} disabled={busy}><GoogleMark /> {googleLoading ? "Connecting to Google..." : "Continue with Google"}</Button><p className="mt-5 text-center text-xs leading-relaxed text-muted-foreground">Your account, XP, habits and workout progress sync securely across devices.</p><div className="mt-5 flex justify-center gap-3 text-xs text-muted-foreground"><Link to="/privacy" className="underline">Privacy</Link><Link to="/terms" className="underline">Terms</Link><Link to="/support" className="underline">Support</Link></div></>}
+    </div></div></div></div>;
 }
