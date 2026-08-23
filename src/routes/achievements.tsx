@@ -12,10 +12,10 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { AppShell, PageHeader } from "@/components/veyra/AppShell";
-import { ACHIEVEMENTS, getAchievementContext } from "@/lib/achievements";
+import { ACHIEVEMENTS, countHabitCompletions, getAcademyVisitedCount } from "@/lib/achievements";
 import { useVeyra } from "@/lib/veyra-store";
 
 export const Route = createFileRoute("/achievements")({
@@ -39,14 +39,33 @@ const ICONS: Record<string, LucideIcon> = {
 
 function AchievementsPage() {
   const { state } = useVeyra();
-  const ctx = useMemo(() => getAchievementContext(state), [state]);
-  const unlockedCount = ACHIEVEMENTS.filter((a) => a.isUnlocked(ctx)).length;
+  const [ready, setReady] = useState(false);
+  const [academyVisitedCount, setAcademyVisitedCount] = useState(0);
+
+  useEffect(() => {
+    setAcademyVisitedCount(getAcademyVisitedCount());
+    setReady(true);
+  }, []);
+
+  const ctx = useMemo(
+    () => ({
+      state,
+      totalHabitCompletions: countHabitCompletions(state.completions),
+      academyVisitedCount,
+    }),
+    [state, academyVisitedCount],
+  );
+  const unlockedCount = ready ? ACHIEVEMENTS.filter((a) => a.isUnlocked(ctx)).length : 0;
 
   return (
     <AppShell>
       <PageHeader
         title="Achievements"
-        subtitle={`${unlockedCount} / ${ACHIEVEMENTS.length} unlocked — keep going!`}
+        subtitle={
+          ready
+            ? `${unlockedCount} / ${ACHIEVEMENTS.length} unlocked — keep going!`
+            : "Loading your badges…"
+        }
       />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

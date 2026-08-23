@@ -3,14 +3,16 @@
  * Academy step cards. `pose` roughly shapes the figure so each step looks
  * distinct without needing per-exercise artwork yet.
  */
+export type Pose = "stand" | "squat-low" | "push-up-top" | "push-up-bottom" | "curl" | "plank" | "lunge" | "press-up";
+
 export function ExercisePose({
   pose,
   className,
 }: {
-  pose: "stand" | "squat-low" | "push-up-top" | "push-up-bottom" | "curl" | "plank" | "lunge" | "press-up";
+  pose: Pose;
   className?: string;
 }) {
-  const paths: Record<typeof pose, { body: string; limbs: string }> = {
+  const paths: Record<Pose, { body: string; limbs: string }> = {
     stand: {
       body: "M60 30c0 8-6 14-14 14s-14-6-14-14 6-14 14-14 14 6 14 14Zm-14 18v50",
       limbs: "M46 60 L30 90 M46 60 L62 90 M46 74 L30 66 M46 74 L62 66",

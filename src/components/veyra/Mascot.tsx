@@ -32,6 +32,8 @@ export function Mascot({
 
   useEffect(() => {
     if (!animate) return;
+    const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
     let raf: number;
     const start = performance.now();
     const tick = (t: number) => {

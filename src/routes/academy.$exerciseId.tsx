@@ -4,7 +4,7 @@ import { AlertTriangle, ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { AppShell, SafetyNote } from "@/components/veyra/AppShell";
-import { ExercisePose } from "@/components/veyra/ExercisePose";
+import { ExercisePose, type Pose } from "@/components/veyra/ExercisePose";
 import { getExerciseById } from "@/lib/exercise-data";
 import { markAcademyVisited } from "@/lib/achievements";
 
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/academy/$exerciseId")({
   ),
 });
 
-const STEP_POSES: Record<string, string[]> = {
+const STEP_POSES: Record<string, Pose[]> = {
   "bodyweight-squat": ["stand", "squat-low", "squat-low", "stand"],
   "push-up": ["push-up-top", "push-up-bottom", "push-up-bottom", "push-up-top"],
   "dumbbell-curl": ["stand", "curl", "curl", "stand"],
@@ -51,7 +51,7 @@ const DIFFICULTY_COLOR: Record<string, string> = {
 
 function ExerciseDetailPage() {
   const exercise = Route.useLoaderData();
-  const poses = STEP_POSES[exercise.id] ?? ["stand", "stand", "stand", "stand"];
+  const poses: Pose[] = STEP_POSES[exercise.id] ?? ["stand", "stand", "stand", "stand"];
 
   useEffect(() => {
     markAcademyVisited(exercise.id);
@@ -65,7 +65,7 @@ function ExerciseDetailPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
         <div className="flex flex-col items-center justify-center rounded-[26px] border border-border bg-muted/30 p-8">
-          <ExercisePose pose={poses[1] as any} className="h-48 w-48" />
+          <ExercisePose pose={poses[1] ?? "stand"} className="h-48 w-48" />
         </div>
 
         <div>
@@ -97,7 +97,7 @@ function ExerciseDetailPage() {
           {exercise.steps.map((step, i) => (
             <div key={step.title} className="panel flex gap-4 p-4">
               <div className="flex size-16 shrink-0 items-center justify-center rounded-xl border border-border bg-muted/30">
-                <ExercisePose pose={poses[i] as any} className="h-12 w-12" />
+                <ExercisePose pose={poses[i] ?? "stand"} className="h-12 w-12" />
               </div>
               <div>
                 <p className="text-xs font-bold uppercase tracking-wide text-primary">Step {i + 1}</p>
