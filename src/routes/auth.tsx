@@ -48,12 +48,49 @@ function AuthPage() {
   const [submitting, setSubmitting] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
+  const [isRecovery, setIsRecovery] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [settingPassword, setSettingPassword] = useState(false);
+  const [oauthReturning, setOauthReturning] = useState(false);
 
   useEffect(() => {
-    if (hydrated && !authLoading && state.user) {
+    if (window.location.search.includes("oauth=1")) setOauthReturning(true);
+  }, []);
+
+  // A password-reset email link lands here with an auth event of
+  // PASSWORD_RECOVERY (Supabase parses the token from the URL itself).
+  // Without this, the reset link just dumped the user back on the normal
+  // login form with no way to actually set a new password.
+  useEffect(() => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") setIsRecovery(true);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  const handleSetNewPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPassword.length < 6) return void toast.error("Password must be at least 6 characters.");
+    setSettingPassword(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) {
+        toast.error(friendlyAuthError(error.message));
+        return;
+      }
+      toast.success("Password updated — you're all set.");
+      setIsRecovery(false);
+      navigate({ to: "/home", replace: true });
+    } finally {
+      setSettingPassword(false);
+    }
+  };
+
+  useEffect(() => {
+    if (hydrated && !authLoading && state.user && !isRecovery) {
       navigate({ to: state.onboarding ? "/home" : "/onboarding", replace: true });
     }
-  }, [hydrated, authLoading, state.user, state.onboarding, navigate]);
+  }, [hydrated, authLoading, state.user, state.onboarding, isRecovery, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,6 +140,12 @@ function AuthPage() {
     }
   };
 
+  useEffect(() => {
+    if (oauthReturning && hydrated && !authLoading && !state.user) {
+      setOauthReturning(false);
+    }
+  }, [oauthReturning, hydrated, authLoading, state.user]);
+
   const handleGoogle = async () => {
     if (submitting || googleLoading || resetLoading) return;
     setGoogleLoading(true);
@@ -139,6 +182,57 @@ function AuthPage() {
   };
 
   const busy = submitting || googleLoading || resetLoading;
+
+  // Avoid flashing the login form for a split second while we're still
+  // figuring out whether the user is already signed in (or mid Google
+  // OAuth redirect) — show a quiet loading state instead.
+  const showLoadingScreen = !hydrated || authLoading || (oauthReturning && !isRecovery);
+
+  if (showLoadingScreen) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-background px-4 text-center">
+        <Logo />
+        <p className="text-sm text-muted-foreground">
+          {oauthReturning ? "Completing your Google sign-in…" : "Loading…"}
+        </p>
+      </div>
+    );
+  }
+
+  if (isRecovery) {
+    return (
+      <div className="flex min-h-screen flex-col bg-background">
+        <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6"><Logo /></div>
+        <div className="flex flex-1 items-center justify-center px-4 pb-16">
+          <div className="w-full max-w-md">
+            <h1 className="text-center text-2xl font-semibold sm:text-3xl">Set a new password</h1>
+            <p className="mt-2 text-center text-sm text-muted-foreground">
+              Choose a new password for your account.
+            </p>
+            <div className="panel mt-7 p-6">
+              <form onSubmit={handleSetNewPassword} className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="new-password">New password</Label>
+                  <Input
+                    id="new-password"
+                    type="password"
+                    autoComplete="new-password"
+                    placeholder="At least 6 characters"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    disabled={settingPassword}
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={settingPassword}>
+                  {settingPassword ? "Updating password..." : "Update password"}
+                </Button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
