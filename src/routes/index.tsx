@@ -19,7 +19,7 @@ import {
   X,
   Zap,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import {
@@ -553,10 +553,17 @@ function BodyBuilder() {
 }
 
 function Landing() {
-  const [showIntro, setShowIntro] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return !window.sessionStorage.getItem("veyra-intro-seen");
-  });
+  // Default to true on both server and client render so the intro overlay
+  // covers the page from the very first paint — this avoids a hydration
+  // mismatch (server has no window/sessionStorage) that was letting the
+  // hero flash briefly before the V/character intro appeared.
+  const [showIntro, setShowIntro] = useState(true);
+
+  useEffect(() => {
+    if (window.sessionStorage.getItem("veyra-intro-seen")) {
+      setShowIntro(false);
+    }
+  }, []);
 
   const handleIntroComplete = () => {
     window.sessionStorage.setItem("veyra-intro-seen", "true");
