@@ -21,6 +21,7 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as WorkoutRouteImport } from './routes/workout'
@@ -85,6 +86,11 @@ const PricingRoute = PricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
   '/workout': typeof WorkoutRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
   '/workout': typeof WorkoutRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRoute
   '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
   '/workout': typeof WorkoutRoute
@@ -168,6 +177,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/presentation'
     | '/pricing'
+    | '/privacy'
     | '/profile'
     | '/progress'
     | '/workout'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/presentation'
     | '/pricing'
+    | '/privacy'
     | '/profile'
     | '/progress'
     | '/workout'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/presentation'
     | '/pricing'
+    | '/privacy'
     | '/profile'
     | '/progress'
     | '/workout'
@@ -220,6 +232,7 @@ export interface RootRouteChildren {
   OnboardingRoute: typeof OnboardingRoute
   PresentationRoute: typeof PresentationRoute
   PricingRoute: typeof PricingRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   ProgressRoute: typeof ProgressRoute
   WorkoutRoute: typeof WorkoutRoute
@@ -311,6 +324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -348,6 +368,7 @@ const rootRouteChildren: RootRouteChildren = {
   OnboardingRoute: OnboardingRoute,
   PresentationRoute: PresentationRoute,
   PricingRoute: PricingRoute,
+  PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   ProgressRoute: ProgressRoute,
   WorkoutRoute: WorkoutRoute,

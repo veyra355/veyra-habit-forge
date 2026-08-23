@@ -1,0 +1,27 @@
+{
+  "packageId": "com.veyra.app",
+  "host": "veyra-habit-forge.lovable.app",
+  "name": "Veyra",
+  "launcherName": "Veyra",
+  "display": "standalone",
+  "themeColor": "#000000",
+  "navigationColor": "#000000",
+  "backgroundColor": "#000000",
+  "startUrl": "/",
+  "iconUrl": "https://veyra-habit-forge.lovable.app/icon-512.png",
+  "maskableIconUrl": "https://veyra-habit-forge.lovable.app/icon-512.png",
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://veyra-habit-forge.lovable.app/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "enableNotifications": false,
+  "features": {},
+  "alphaDependencies": { "enabled": false },
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shareTarget": null
+}
