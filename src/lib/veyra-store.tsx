@@ -305,13 +305,37 @@ export function VeyraProvider({ children }: { children: ReactNode }) {
   }, [state.theme, hydrated]);
 
   const hydrateSession = useCallback(async (session: Session) => {
-    const [{ user, onboarding }, remote] = await Promise.all([
-      loadProfile(session),
-      loadRemoteState(session.user.id),
-    ]);
-    setState((p) =>
-      withProgress({ ...p, user, onboarding, ...remote }, remote.totalXp, remote.completions),
-    );
+    try {
+      const [{ user, onboarding }, remote] = await Promise.all([
+        loadProfile(session),
+        loadRemoteState(session.user.id),
+      ]);
+      setState((p) =>
+        withProgress({ ...p, user, onboarding, ...remote }, remote.totalXp, remote.completions),
+      );
+    } catch (err) {
+      // If profile/progress data fails to load (e.g. a missing table on a
+      // fresh database), still recognize the user as signed in using basic
+      // session info instead of silently leaving state.user null — that
+      // silent failure is what causes a valid login to look like it "didn't
+      // work" and keep bouncing the user back to the login screen.
+      console.error("Failed to fully hydrate session, falling back to basic user info:", err);
+      const email = session.user.email ?? "";
+      const meta = session.user.user_metadata ?? {};
+      const fallbackName = String(
+        meta["display_name"] ?? meta["full_name"] ?? email.split("@")[0] ?? "Friend",
+      );
+      setState((p) => ({
+        ...p,
+        user: {
+          name: fallbackName,
+          email,
+          role: "user",
+          plan: "free",
+          joinedAt: session.user.created_at ?? new Date().toISOString(),
+        },
+      }));
+    }
   }, []);
   useEffect(() => {
     let cancelled = false;
