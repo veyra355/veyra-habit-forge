@@ -109,7 +109,9 @@
   /* Hide the "Edit with Lovable" badge injected on published sites. */
   #lovable-badge,
   [id="lovable-badge"],
-  a[href*="lovable.dev"][class*="badge"] {
+  a[href*="lovable.dev"][class*="badge"],
+  a[href*="utm_source=lovable-badge"],
+  a[href*="lovable.dev/projects"] {
     display: none !important;
   }
   * {

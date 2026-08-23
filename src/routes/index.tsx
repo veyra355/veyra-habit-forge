@@ -372,7 +372,7 @@ function Hero() {
             <div className="min-w-0">
               <p className="eyebrow text-muted-foreground">Your progress</p>
               <p className="mt-1 text-xs leading-snug text-foreground/90">
-                Keep pushing. You&apos;re getting closer to your goal.
+                No excuses today. Just the next rep.
               </p>
             </div>
           </div>
