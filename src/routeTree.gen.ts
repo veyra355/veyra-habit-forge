@@ -19,6 +19,7 @@ import { Route as GameRouteImport } from './routes/game'
 import { Route as GroomingRouteImport } from './routes/grooming'
 import { Route as HabitsRouteImport } from './routes/habits'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as NutritionRouteImport } from './routes/nutrition'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as PresentationRouteImport } from './routes/presentation'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -79,6 +80,11 @@ const HomeRoute = HomeRouteImport.update({
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NutritionRoute = NutritionRouteImport.update({
+  id: '/nutrition',
+  path: '/nutrition',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/grooming': typeof GroomingRoute
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
+  '/nutrition': typeof NutritionRoute
   '/onboarding': typeof OnboardingRoute
   '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
@@ -157,6 +164,7 @@ export interface FileRoutesByTo {
   '/grooming': typeof GroomingRoute
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
+  '/nutrition': typeof NutritionRoute
   '/onboarding': typeof OnboardingRoute
   '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
@@ -179,6 +187,7 @@ export interface FileRoutesById {
   '/grooming': typeof GroomingRoute
   '/habits': typeof HabitsRoute
   '/home': typeof HomeRoute
+  '/nutrition': typeof NutritionRoute
   '/onboarding': typeof OnboardingRoute
   '/presentation': typeof PresentationRoute
   '/pricing': typeof PricingRoute
@@ -202,6 +211,7 @@ export interface FileRouteTypes {
     | '/grooming'
     | '/habits'
     | '/home'
+    | '/nutrition'
     | '/onboarding'
     | '/presentation'
     | '/pricing'
@@ -223,6 +233,7 @@ export interface FileRouteTypes {
     | '/grooming'
     | '/habits'
     | '/home'
+    | '/nutrition'
     | '/onboarding'
     | '/presentation'
     | '/pricing'
@@ -244,6 +255,7 @@ export interface FileRouteTypes {
     | '/grooming'
     | '/habits'
     | '/home'
+    | '/nutrition'
     | '/onboarding'
     | '/presentation'
     | '/pricing'
@@ -266,6 +278,7 @@ export interface RootRouteChildren {
   GroomingRoute: typeof GroomingRoute
   HabitsRoute: typeof HabitsRoute
   HomeRoute: typeof HomeRoute
+  NutritionRoute: typeof NutritionRoute
   OnboardingRoute: typeof OnboardingRoute
   PresentationRoute: typeof PresentationRoute
   PricingRoute: typeof PricingRoute
@@ -349,6 +362,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nutrition': {
+      id: '/nutrition'
+      path: '/nutrition'
+      fullPath: '/nutrition'
+      preLoaderRoute: typeof NutritionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
@@ -426,6 +446,7 @@ const rootRouteChildren: RootRouteChildren = {
   GroomingRoute: GroomingRoute,
   HabitsRoute: HabitsRoute,
   HomeRoute: HomeRoute,
+  NutritionRoute: NutritionRoute,
   OnboardingRoute: OnboardingRoute,
   PresentationRoute: PresentationRoute,
   PricingRoute: PricingRoute,
