@@ -2,6 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Dumbbell,
   Gamepad2,
+  GraduationCap,
   Home,
   LineChart,
   ScissorsLineDashed,
@@ -27,6 +28,7 @@ const NAV = [
   { to: "/home", label: "Home", icon: Home },
   { to: "/game", label: "Game", icon: Gamepad2 },
   { to: "/workout", label: "Workout", icon: Dumbbell },
+  { to: "/academy", label: "Academy", icon: GraduationCap },
   { to: "/grooming", label: "Grooming", icon: ScissorsLineDashed },
   { to: "/presentation", label: "Presentation", icon: ScanFace },
   { to: "/habits", label: "Habits", icon: SquareCheckBig },
@@ -41,6 +43,7 @@ const PRIMARY_NAV = [
   { to: "/habits", label: "Habits", icon: SquareCheckBig },
 ] as const;
 const MORE_NAV = [
+  { to: "/academy", label: "Academy", icon: GraduationCap },
   { to: "/grooming", label: "Grooming", icon: ScissorsLineDashed },
   { to: "/presentation", label: "Presentation", icon: ScanFace },
   { to: "/progress", label: "Progress", icon: LineChart },
