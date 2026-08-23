@@ -9,6 +9,7 @@ import {
   Moon,
   Palette,
   Shield,
+  Sparkles,
   Sun,
   User,
 } from "lucide-react";
@@ -118,6 +119,30 @@ function ProfilePage() {
               </div>
               <Button asChild variant="outline" className="tap shrink-0 rounded-full">
                 <Link to="/pricing">Manage</Link>
+              </Button>
+            </div>
+          </section>
+
+          <section className="panel p-5 sm:p-6">
+            <div className="flex items-center gap-2">
+              <Sparkles className="size-4 text-muted-foreground" />
+              <h3 className="font-semibold">Tutorial</h3>
+            </div>
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-muted/30 p-4">
+              <p className="text-sm text-muted-foreground">Want a refresher on how Veyra works?</p>
+              <Button
+                variant="outline"
+                className="tap shrink-0 rounded-full"
+                onClick={() => {
+                  try {
+                    window.localStorage.removeItem("veyra-tutorial-seen");
+                  } catch {
+                    // ignore
+                  }
+                  toast.success("Tutorial will show next time you open your dashboard.");
+                }}
+              >
+                Replay tutorial
               </Button>
             </div>
           </section>

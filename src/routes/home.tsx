@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
+import { Mascot } from "@/components/veyra/Mascot";
+import { TutorialModal, TUTORIAL_SEEN_KEY } from "@/components/veyra/TutorialModal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -166,6 +168,17 @@ function HomePage() {
   const firstName = state.user?.name.split(" ")[0] ?? "Player";
   const goals = state.onboarding?.goals ?? [];
   const [showIntro, setShowIntro] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (!window.localStorage.getItem(TUTORIAL_SEEN_KEY)) {
+        setShowTutorial(true);
+      }
+    } catch {
+      // ignore storage errors
+    }
+  }, []);
   const [goalOpen, setGoalOpen] = useState(false);
   const [weeklyPlanOpen, setWeeklyPlanOpen] = useState(false);
   const [goal, setGoal] = useState("");
@@ -237,6 +250,8 @@ function HomePage() {
 
   return (
     <div className="relative pb-10">
+      {showTutorial && <TutorialModal onClose={() => setShowTutorial(false)} />}
+
       {showIntro && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 backdrop-blur-xl">
           <div className="text-center">
@@ -254,7 +269,13 @@ function HomePage() {
         <div className="pointer-events-none absolute -bottom-28 left-1/3 size-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="relative grid gap-7 lg:grid-cols-[1fr_0.7fr] lg:items-center">
           <div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-start gap-3">
+              <Mascot expression="happy" size={56} className="mt-1 shrink-0" />
+              <div className="rounded-2xl rounded-tl-sm border border-border bg-background/60 px-4 py-2.5 text-sm">
+                Ready for today's quest, {firstName}?
+              </div>
+            </div>
+            <div className="mt-4 flex flex-wrap items-center gap-2">
               <Badge className="rounded-full bg-primary/15 text-primary hover:bg-primary/15"><Gamepad2 className="mr-1 size-3.5" /> HEALTH RPG</Badge>
               <span className="text-xs text-muted-foreground">Welcome back, {firstName}</span>
             </div>
