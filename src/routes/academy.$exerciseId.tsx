@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { AlertTriangle, ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
 
@@ -5,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { AppShell, SafetyNote } from "@/components/veyra/AppShell";
 import { ExercisePose } from "@/components/veyra/ExercisePose";
 import { getExerciseById } from "@/lib/exercise-data";
+import { markAcademyVisited } from "@/lib/achievements";
 
 export const Route = createFileRoute("/academy/$exerciseId")({
   loader: ({ params }) => {
@@ -50,6 +52,10 @@ const DIFFICULTY_COLOR: Record<string, string> = {
 function ExerciseDetailPage() {
   const exercise = Route.useLoaderData();
   const poses = STEP_POSES[exercise.id] ?? ["stand", "stand", "stand", "stand"];
+
+  useEffect(() => {
+    markAcademyVisited(exercise.id);
+  }, [exercise.id]);
 
   return (
     <AppShell>

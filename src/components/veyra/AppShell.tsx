@@ -29,6 +29,7 @@ const NAV = [
   { to: "/game", label: "Game", icon: Gamepad2 },
   { to: "/workout", label: "Workout", icon: Dumbbell },
   { to: "/academy", label: "Academy", icon: GraduationCap },
+  { to: "/achievements", label: "Achievements", icon: Trophy },
   { to: "/grooming", label: "Grooming", icon: ScissorsLineDashed },
   { to: "/presentation", label: "Presentation", icon: ScanFace },
   { to: "/habits", label: "Habits", icon: SquareCheckBig },
@@ -44,6 +45,7 @@ const PRIMARY_NAV = [
 ] as const;
 const MORE_NAV = [
   { to: "/academy", label: "Academy", icon: GraduationCap },
+  { to: "/achievements", label: "Achievements", icon: Trophy },
   { to: "/grooming", label: "Grooming", icon: ScissorsLineDashed },
   { to: "/presentation", label: "Presentation", icon: ScanFace },
   { to: "/progress", label: "Progress", icon: LineChart },
