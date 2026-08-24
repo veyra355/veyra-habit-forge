@@ -156,7 +156,7 @@ type Ctx = {
   update: (patch: Partial<VeyraState>) => void;
   signUpWithPassword: (name: string, email: string, password: string) => Promise<AuthResult>;
   signInWithPassword: (email: string, password: string) => Promise<AuthResult>;
-  signInWithGoogle: () => Promise<AuthResult>;
+  signInWithFacebook: () => Promise<AuthResult>;
   signOut: () => Promise<void>;
   awardXp: (amount: number, source: string, sourceKey: string) => Promise<XpResult | null>;
   toggleHabit: (id: string, date?: string) => void;
@@ -394,9 +394,9 @@ export function VeyraProvider({ children }: { children: ReactNode }) {
     },
     [],
   );
-  const signInWithGoogle = useCallback(async (): Promise<AuthResult> => {
+  const signInWithFacebook = useCallback(async (): Promise<AuthResult> => {
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
+      provider: "facebook",
       options: { redirectTo: `${window.location.origin}/home` },
     });
     return { error: error ? authError(error) : null };
@@ -528,7 +528,7 @@ export function VeyraProvider({ children }: { children: ReactNode }) {
       update,
       signUpWithPassword,
       signInWithPassword,
-      signInWithGoogle,
+      signInWithFacebook,
       signOut,
       awardXp,
       toggleHabit,
@@ -544,7 +544,7 @@ export function VeyraProvider({ children }: { children: ReactNode }) {
       update,
       signUpWithPassword,
       signInWithPassword,
-      signInWithGoogle,
+      signInWithFacebook,
       signOut,
       awardXp,
       toggleHabit,

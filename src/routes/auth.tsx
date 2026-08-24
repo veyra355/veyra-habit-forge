@@ -21,10 +21,13 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
-function GoogleMark() {
+function FacebookMark() {
   return (
     <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
-      <path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1A6.2 6.2 0 1 1 16.1 7.3l2.7-2.6A9.9 9.9 0 0 0 12 2a10 10 0 1 0 0 20c5.8 0 9.6-4 9.6-9.7 0-.7-.08-1.3-.2-2.1H12Z" />
+      <path
+        fill="#1877F2"
+        d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.25h3.34l-.53 3.49h-2.81V24C19.61 23.1 24 18.1 24 12.07Z"
+      />
     </svg>
   );
 }
@@ -37,7 +40,7 @@ function friendlyAuthError(message: string) {
   if (m.includes("password should be at least")) return "Password must be at least 6 characters.";
   if (m.includes("rate limit")) return "Too many attempts. Please wait a moment and try again.";
   if (m.includes("provider is not enabled") || m.includes("unsupported provider")) {
-    return "Google sign-in isn't set up yet — please use email instead for now.";
+    return "Facebook sign-in isn't set up yet — please use email instead for now.";
   }
   return message;
 }
@@ -49,7 +52,7 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
+  const [facebookLoading, setFacebookLoading] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
   const [isRecovery, setIsRecovery] = useState(false);
   const [newPassword, setNewPassword] = useState("");
@@ -97,7 +100,7 @@ function AuthPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (submitting || googleLoading || resetLoading) return;
+    if (submitting || facebookLoading || resetLoading) return;
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanEmail || !password) return void toast.error("Enter your email and password");
     setSubmitting(true);
@@ -112,7 +115,7 @@ function AuthPage() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (submitting || googleLoading || resetLoading) return;
+    if (submitting || facebookLoading || resetLoading) return;
     const cleanName = name.trim();
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanName || !cleanEmail || password.length < 6) {
@@ -149,23 +152,23 @@ function AuthPage() {
     }
   }, [oauthReturning, hydrated, authLoading, state.user]);
 
-  const handleGoogle = async () => {
-    if (submitting || googleLoading || resetLoading) return;
-    setGoogleLoading(true);
+  const handleFacebook = async () => {
+    if (submitting || facebookLoading || resetLoading) return;
+    setFacebookLoading(true);
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
+        provider: "facebook",
         options: {
           redirectTo: `${window.location.origin}/auth?oauth=1`,
         },
       });
       if (error) {
         toast.error(friendlyAuthError(error.message));
-        setGoogleLoading(false);
+        setFacebookLoading(false);
       }
     } catch (error) {
       toast.error(friendlyAuthError(error instanceof Error ? error.message : "Google sign-in failed."));
-      setGoogleLoading(false);
+      setFacebookLoading(false);
     }
   };
 
@@ -184,7 +187,7 @@ function AuthPage() {
     }
   };
 
-  const busy = submitting || googleLoading || resetLoading;
+  const busy = submitting || facebookLoading || resetLoading;
 
   // Avoid flashing the login form for a split second while we're still
   // figuring out whether the user is already signed in (or mid Google
@@ -196,7 +199,7 @@ function AuthPage() {
       <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-background px-4 text-center">
         <Logo />
         <p className="text-sm text-muted-foreground">
-          {oauthReturning ? "Completing your Google sign-in…" : "Loading…"}
+          {oauthReturning ? "Completing your Facebook sign-in…" : "Loading…"}
         </p>
       </div>
     );
@@ -268,7 +271,7 @@ function AuthPage() {
               </TabsContent>
             </Tabs>
             <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground"><span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" /></div>
-            <Button variant="outline" className="w-full gap-2" onClick={handleGoogle} disabled={busy}><GoogleMark /> {googleLoading ? "Connecting to Google..." : "Continue with Google"}</Button>
+            <Button variant="outline" className="w-full gap-2" onClick={handleFacebook} disabled={busy}><FacebookMark /> {facebookLoading ? "Connecting to Facebook..." : "Continue with Facebook"}</Button>
             <p className="mt-5 text-center text-xs leading-relaxed text-muted-foreground">Your account, XP, habits and workout progress sync securely across devices.</p>
           </div>
         </div>
