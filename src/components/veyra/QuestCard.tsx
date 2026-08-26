@@ -22,17 +22,21 @@ export function QuestCard({ quest, onComplete, disabled = false }: QuestCardProp
       type="button"
       disabled={!canComplete}
       aria-label={quest.completed ? `${quest.title} completed` : `Complete ${quest.title}`}
-      className={`w-full text-left flex items-start gap-4 rounded-2xl border p-4 transition-all ${
+      className={`w-full text-left flex items-start gap-4 rounded-2xl border p-4 transition-all duration-200 active:scale-[0.97] ${
         quest.completed
-          ? "bg-emerald-500/10 border-emerald-500/30"
+          ? "bg-emerald-500/10 border-emerald-500/30 animate-in zoom-in-95 duration-300"
           : canComplete
-            ? "bg-card border-border hover:border-primary/50 hover:bg-primary/5 cursor-pointer"
+            ? "bg-card border-border hover:border-primary/50 hover:bg-primary/5 hover:-translate-y-0.5 hover:shadow-md cursor-pointer"
             : "bg-card border-border opacity-60 cursor-wait"
       }`}
       onClick={() => canComplete && onComplete(quest.id)}
     >
       <div className="flex-shrink-0 pt-1">
-        {quest.completed ? <CheckCircle2 className="size-6 text-emerald-500" /> : <Circle className="size-6 text-muted-foreground" />}
+        {quest.completed ? (
+          <CheckCircle2 className="size-6 text-emerald-500 animate-in zoom-in spin-in-90 duration-400" />
+        ) : (
+          <Circle className="size-6 text-muted-foreground" />
+        )}
       </div>
       <div className="min-w-0 flex-1">
         <div className="mb-1 flex items-center gap-2"><span className="text-lg">{categoryIcons[quest.category] ?? "⭐"}</span><h3 className={`font-semibold ${quest.completed ? "text-emerald-400 line-through" : "text-foreground"}`}>{quest.title}</h3></div>

@@ -170,7 +170,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Link>
         </div>
       </div>
-      <main className="mx-auto w-full max-w-6xl px-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] pt-5 sm:px-6 sm:pt-6 lg:pb-16">
+      <main
+        key={pathname}
+        className="mx-auto w-full max-w-6xl animate-in fade-in slide-in-from-bottom-2 px-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] pt-5 duration-300 ease-out sm:px-6 sm:pt-6 lg:pb-16"
+      >
         {children}
       </main>
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/95 backdrop-blur-xl lg:hidden">

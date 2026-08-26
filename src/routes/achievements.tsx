@@ -75,7 +75,7 @@ function AchievementsPage() {
           return (
             <div
               key={a.id}
-              className={`panel flex items-start gap-3.5 p-4 transition-opacity ${
+              className={`panel flex items-start gap-3.5 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98] ${
                 unlocked ? "" : "opacity-50"
               }`}
             >
