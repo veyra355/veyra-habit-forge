@@ -48,8 +48,17 @@ function AcademyIndexPage() {
             params={{ exerciseId: ex.id }}
             className="group panel flex flex-col p-5 transition-transform hover:-translate-y-1"
           >
-            <div className="flex items-center justify-center rounded-2xl border border-border bg-muted/30 py-6">
-              <ExercisePose pose={COVER_POSE[ex.id as keyof typeof COVER_POSE]} className="h-24 w-24" />
+            <div className="flex items-center justify-center overflow-hidden rounded-2xl border border-border bg-muted/30 py-6">
+              {ex.imageUrl ? (
+                <img
+                  src={ex.imageUrl}
+                  alt={`Demonstration of ${ex.name}`}
+                  className="h-40 w-full object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <ExercisePose pose={COVER_POSE[ex.id as keyof typeof COVER_POSE]} className="h-24 w-24" />
+              )}
             </div>
             <h3 className="mt-4 font-display text-lg font-bold">{ex.name}</h3>
             <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{ex.summary}</p>

@@ -64,8 +64,17 @@ function ExerciseDetailPage() {
       </Link>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
-        <div className="flex flex-col items-center justify-center rounded-[26px] border border-border bg-muted/30 p-8">
-          <ExercisePose pose={poses[1] ?? "stand"} className="h-48 w-48" />
+        <div className="flex flex-col items-center justify-center overflow-hidden rounded-[26px] border border-border bg-muted/30 p-8">
+          {exercise.imageUrl ? (
+            <img
+              src={exercise.imageUrl}
+              alt={`Demonstration of ${exercise.name}`}
+              className="h-64 w-full rounded-2xl object-cover"
+              loading="lazy"
+            />
+          ) : (
+            <ExercisePose pose={poses[1] ?? "stand"} className="h-48 w-48" />
+          )}
         </div>
 
         <div>

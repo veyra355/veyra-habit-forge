@@ -19,6 +19,9 @@ export type Exercise = {
   safetyNote: string;
   easierVariation: string;
   harderVariation: string;
+  /** Optional real photo path (e.g. "/exercises/bodyweight-squat.jpg").
+   * Falls back to the illustrated ExercisePose when not set. */
+  imageUrl?: string;
 };
 
 export const EXERCISES: Exercise[] = [
