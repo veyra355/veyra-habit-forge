@@ -12,11 +12,10 @@ export type MascotExpression =
   | "concerned";
 
 /**
- * Original Veyra mascot — a small baby dragon character (an original
- * design, not based on any existing branded mascot). Ties into the app's
- * "Health RPG" framing — the idea being this companion grows alongside the
- * user's level. Faces are built from simple eye + mouth paths per
- * expression.
+ * Original Veyra mascot — a small baby dragon, drawn with organic
+ * hand-shaped paths rather than stacked geometric primitives, so it reads
+ * as an illustrated character rather than a generated icon. An original
+ * design, not based on any existing branded mascot.
  */
 export function Mascot({
   expression = "happy",
@@ -51,32 +50,74 @@ export function Mascot({
     <svg
       width={size}
       height={size}
-      viewBox="0 0 120 120"
+      viewBox="0 0 120 132"
       className={className}
       role="img"
       aria-label={`Veyra mascot baby dragon, ${expression}`}
       style={{ transform: `translateY(${bob}px)`, transition: animate ? "none" : "transform 0.2s" }}
     >
-      {/* Wings (small, folded, behind the head) */}
-      <path d="M22 58 Q10 48 14 32 Q26 40 30 54 Z" fill="var(--primary)" opacity="0.55" />
-      <path d="M98 58 Q110 48 106 32 Q94 40 90 54 Z" fill="var(--primary)" opacity="0.55" />
+      {/* Tail, curling from behind the body */}
+      <path
+        d="M78 108 Q100 106 102 122 Q94 118 88 122"
+        fill="none"
+        stroke="var(--primary)"
+        strokeWidth="9"
+        strokeLinecap="round"
+      />
 
-      {/* Spiky back ridge */}
-      <path d="M50 30 L54 20 L58 30 M60 28 L64 17 L68 28 M70 30 L74 20 L78 30" stroke="var(--primary)" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Body, slightly rounded/asymmetric rather than a perfect circle */}
+      <path
+        d="M38 116 Q28 96 34 78 Q40 62 58 58 Q80 54 92 72 Q100 84 92 100 Q84 116 62 118 Q46 119 38 116 Z"
+        fill="var(--primary)"
+      />
 
-      {/* Head */}
-      <ellipse cx="60" cy="62" rx="29" ry="27" fill="var(--primary)" />
+      {/* Belly plate */}
+      <path
+        d="M52 100 Q60 94 70 98 Q76 101 74 110 Q64 114 56 109 Q51 105 52 100 Z"
+        fill="var(--background)"
+        opacity="0.22"
+      />
 
-      {/* Horns */}
-      <path d="M42 40 Q38 28 44 22" stroke="var(--primary)" strokeWidth="7" fill="none" strokeLinecap="round" />
-      <path d="M78 40 Q82 28 76 22" stroke="var(--primary)" strokeWidth="7" fill="none" strokeLinecap="round" />
+      {/* Wings, asymmetric folded shapes */}
+      <path
+        d="M30 76 Q14 70 12 52 Q26 54 34 68 Q36 74 30 76 Z"
+        fill="var(--primary)"
+        opacity="0.6"
+      />
+      <path
+        d="M96 66 Q112 58 112 40 Q98 44 92 58 Q90 64 96 66 Z"
+        fill="var(--primary)"
+        opacity="0.6"
+      />
 
-      {/* Snout */}
-      <ellipse cx="60" cy="78" rx="15" ry="11" fill="var(--background)" opacity="0.28" />
+      {/* Back spikes, irregular sizes for a hand-drawn feel */}
+      <path
+        d="M52 58 L56 44 L62 57 M64 55 L69 40 L75 54 M76 58 L80 47 L85 59"
+        stroke="var(--primary)"
+        strokeWidth="5"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
 
-      {/* Nostrils */}
-      <circle cx="54" cy="78" r="2" fill="#0a0a0a" opacity="0.7" />
-      <circle cx="66" cy="78" r="2" fill="#0a0a0a" opacity="0.7" />
+      {/* Head, an organic rounded-triangle rather than a perfect oval */}
+      <path
+        d="M34 46 Q30 28 48 20 Q66 12 80 24 Q92 34 88 50 Q84 66 64 68 Q42 69 34 46 Z"
+        fill="var(--primary)"
+      />
+
+      {/* Horns, uneven lengths */}
+      <path d="M46 22 Q40 10 46 2" stroke="var(--primary)" strokeWidth="6.5" fill="none" strokeLinecap="round" />
+      <path d="M68 18 Q76 8 74 3" stroke="var(--primary)" strokeWidth="6.5" fill="none" strokeLinecap="round" />
+
+      {/* Snout, offset rather than perfectly centered */}
+      <path
+        d="M46 52 Q58 44 72 50 Q76 56 70 62 Q58 68 48 60 Q44 56 46 52 Z"
+        fill="var(--background)"
+        opacity="0.26"
+      />
+      <circle cx="54" cy="55" r="1.8" fill="#0a0a0a" opacity="0.7" />
+      <circle cx="65" cy="53" r="1.8" fill="#0a0a0a" opacity="0.7" />
 
       {/* Face */}
       <g>{face}</g>
@@ -87,70 +128,70 @@ export function Mascot({
 const FACES: Record<MascotExpression, ReactElement> = {
   happy: (
     <>
-      <circle cx="48" cy="58" r="4.5" fill="#0a0a0a" />
-      <circle cx="72" cy="58" r="4.5" fill="#0a0a0a" />
-      <path d="M52 82 Q60 88 68 82" stroke="#0a0a0a" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+      <circle cx="46" cy="36" r="4.2" fill="#0a0a0a" />
+      <circle cx="68" cy="33" r="4.2" fill="#0a0a0a" />
+      <path d="M48 44 Q57 50 66 43" stroke="#0a0a0a" strokeWidth="3.2" fill="none" strokeLinecap="round" />
     </>
   ),
   excited: (
     <>
-      <path d="M43 54 L51 58 L43 62" stroke="#0a0a0a" strokeWidth="3.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M77 54 L69 58 L77 62" stroke="#0a0a0a" strokeWidth="3.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M50 80 Q60 92 70 80" stroke="#0a0a0a" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+      <path d="M41 32 L49 36 L41 40" stroke="#0a0a0a" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M73 29 L65 33 L73 37" stroke="#0a0a0a" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M46 43 Q57 54 68 42" stroke="#0a0a0a" strokeWidth="3.2" fill="none" strokeLinecap="round" />
     </>
   ),
   thinking: (
     <>
-      <circle cx="48" cy="58" r="4" fill="#0a0a0a" />
-      <circle cx="72" cy="56" r="4" fill="#0a0a0a" />
-      <path d="M53 84 Q60 80 68 84" stroke="#0a0a0a" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-      <circle cx="92" cy="38" r="3" fill="#0a0a0a" opacity="0.5" />
-      <circle cx="98" cy="30" r="2" fill="#0a0a0a" opacity="0.35" />
+      <circle cx="46" cy="36" r="3.8" fill="#0a0a0a" />
+      <circle cx="68" cy="32" r="3.8" fill="#0a0a0a" />
+      <path d="M49 45 Q57 42 64 46" stroke="#0a0a0a" strokeWidth="3.2" fill="none" strokeLinecap="round" />
+      <circle cx="96" cy="16" r="2.8" fill="#0a0a0a" opacity="0.5" />
+      <circle cx="102" cy="8" r="2" fill="#0a0a0a" opacity="0.35" />
     </>
   ),
   confused: (
     <>
-      <circle cx="48" cy="60" r="4.5" fill="#0a0a0a" />
-      <circle cx="72" cy="56" r="4.5" fill="#0a0a0a" />
-      <path d="M52 84 Q60 88 68 82" stroke="#0a0a0a" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-      <path d="M40 46 Q46 42 52 46" stroke="#0a0a0a" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <circle cx="46" cy="38" r="4.2" fill="#0a0a0a" />
+      <circle cx="68" cy="32" r="4.2" fill="#0a0a0a" />
+      <path d="M48 45 Q57 49 66 43" stroke="#0a0a0a" strokeWidth="3.2" fill="none" strokeLinecap="round" />
+      <path d="M38 24 Q44 20 50 24" stroke="#0a0a0a" strokeWidth="2.8" fill="none" strokeLinecap="round" />
     </>
   ),
   celebrating: (
     <>
-      <path d="M43 56 Q48 50 53 56" stroke="#0a0a0a" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-      <path d="M67 56 Q72 50 77 56" stroke="#0a0a0a" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-      <path d="M48 80 Q60 96 72 80" stroke="#0a0a0a" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+      <path d="M41 34 Q46 28 51 34" stroke="#0a0a0a" strokeWidth="3.2" fill="none" strokeLinecap="round" />
+      <path d="M63 31 Q68 25 73 31" stroke="#0a0a0a" strokeWidth="3.2" fill="none" strokeLinecap="round" />
+      <path d="M44 43 Q57 58 70 42" stroke="#0a0a0a" strokeWidth="3.2" fill="none" strokeLinecap="round" />
     </>
   ),
   encouraging: (
     <>
-      <circle cx="48" cy="58" r="4.5" fill="#0a0a0a" />
-      <circle cx="72" cy="58" r="4.5" fill="#0a0a0a" />
-      <path d="M50 82 Q60 90 70 82" stroke="#0a0a0a" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+      <circle cx="46" cy="36" r="4.2" fill="#0a0a0a" />
+      <circle cx="68" cy="33" r="4.2" fill="#0a0a0a" />
+      <path d="M47 44 Q57 51 67 43" stroke="#0a0a0a" strokeWidth="3.2" fill="none" strokeLinecap="round" />
     </>
   ),
   explaining: (
     <>
-      <ellipse cx="48" cy="58" rx="4" ry="5" fill="#0a0a0a" />
-      <ellipse cx="72" cy="58" rx="4" ry="5" fill="#0a0a0a" />
-      <ellipse cx="60" cy="86" rx="7" ry="6" fill="#0a0a0a" />
+      <ellipse cx="46" cy="36" rx="3.8" ry="4.8" fill="#0a0a0a" />
+      <ellipse cx="68" cy="33" rx="3.8" ry="4.8" fill="#0a0a0a" />
+      <ellipse cx="58" cy="47" rx="6.5" ry="5.5" fill="#0a0a0a" />
     </>
   ),
   surprised: (
     <>
-      <circle cx="48" cy="58" r="5.5" fill="#0a0a0a" />
-      <circle cx="72" cy="58" r="5.5" fill="#0a0a0a" />
-      <ellipse cx="60" cy="86" rx="6" ry="8" fill="#0a0a0a" />
+      <circle cx="46" cy="36" r="5.2" fill="#0a0a0a" />
+      <circle cx="68" cy="33" r="5.2" fill="#0a0a0a" />
+      <ellipse cx="58" cy="47" rx="5.5" ry="7.5" fill="#0a0a0a" />
     </>
   ),
   concerned: (
     <>
-      <circle cx="48" cy="60" r="4" fill="#0a0a0a" />
-      <circle cx="72" cy="60" r="4" fill="#0a0a0a" />
-      <path d="M50 88 Q60 82 70 88" stroke="#0a0a0a" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-      <path d="M40 46 L52 44" stroke="#0a0a0a" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M80 46 L68 44" stroke="#0a0a0a" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <circle cx="46" cy="38" r="3.8" fill="#0a0a0a" />
+      <circle cx="68" cy="35" r="3.8" fill="#0a0a0a" />
+      <path d="M47 47 Q57 42 66 47" stroke="#0a0a0a" strokeWidth="3.2" fill="none" strokeLinecap="round" />
+      <path d="M38 26 L49 24" stroke="#0a0a0a" strokeWidth="2.8" fill="none" strokeLinecap="round" />
+      <path d="M76 22 L66 25" stroke="#0a0a0a" strokeWidth="2.8" fill="none" strokeLinecap="round" />
     </>
   ),
 };
