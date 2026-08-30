@@ -1,38 +1,20 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  Activity,
-  ArrowRight,
-  Check,
-  Dumbbell,
-  Flame,
-  Gamepad2,
-  HeartPulse,
-  Sparkles,
-  Target,
-  Trophy,
-  X,
-  Zap,
-} from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { AlertTriangle, Flame, RotateCcw, ScrollText, Shield, Swords, Zap } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
-import { Mascot } from "@/components/veyra/Mascot";
-import { TutorialModal, TUTORIAL_SEEN_KEY } from "@/components/veyra/TutorialModal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { AppShell, SafetyNote } from "@/components/veyra/AppShell";
-import { StatCard } from "@/components/veyra/StatCard";
-import { todaysWorkout } from "@/lib/sample-data";
-import { weekStats } from "@/lib/stats";
-import { todayKey, useVeyra, xpForLevel } from "@/lib/veyra-store";
+import { AppShell } from "@/components/veyra/AppShell";
+import { useVeyra } from "@/lib/veyra-store";
 
 export const Route = createFileRoute("/home")({
   head: () => ({
     meta: [
-      { title: "Veyra — Your Daily Quest" },
+      { title: "ShadowBreaker — Break the Chain" },
       {
         name: "description",
-        content: "A game-like health dashboard for goals, quests, exercise and progress.",
+        content:
+          "A cinematic warrior journey for quitting porn and masturbation addiction with streaks, daily rules, transformation cards, and strict mentor guidance.",
       },
     ],
   }),
@@ -43,286 +25,231 @@ export const Route = createFileRoute("/home")({
   ),
 });
 
-type Quest = {
-  id: string;
+type TransformationDay = {
+  day: number;
   title: string;
-  detail: string;
-  reward: number;
-  duration: string;
-  exerciseIndex?: number;
+  body: string;
+  mind: string;
+  difficulty: string;
+  command: string;
 };
 
-type WeeklyPlanDay = {
-  day: string;
-  title: string;
-  focus: string;
-  duration: string;
-  tasks: string[];
-  reward: number;
-};
+const STORAGE_KEY = "shadowbreaker-streak";
 
-const DEFAULT_QUESTS: Quest[] = [
+const transformationTimeline: TransformationDay[] = [
   {
-    id: "warmup",
-    title: "Activate your body",
-    detail: "Easy warm-up and mobility before the main mission.",
-    reward: 60,
-    duration: "5 min",
-    exerciseIndex: 5,
+    day: 1,
+    title: "The Gate Opens",
+    body: "Your nervous system expects the old reward loop. Energy may swing and urges can arrive in sharp waves.",
+    mind: "The enemy tests your identity immediately: boredom, loneliness, stress, and late-night scrolling.",
+    difficulty: "High because the pattern is fresh and familiar.",
+    command: "Do not negotiate. Leave the room, breathe, hydrate, and move your body for five minutes.",
   },
   {
-    id: "squat",
-    title: "Power stance",
-    detail: "Controlled bodyweight squats with clean form.",
-    reward: 120,
-    duration: "3 × 12",
-    exerciseIndex: 0,
+    day: 2,
+    title: "Withdrawal Fog",
+    body: "Sleep, focus, and mood may feel uneven as your brain begins adjusting to less artificial stimulation.",
+    mind: "Your thoughts may exaggerate discomfort and tell you one reset will not matter. That is bait.",
+    difficulty: "Heavy mental noise, especially when alone with a phone.",
+    command: "Lock your devices down, keep doors open, and win the next hour like a soldier.",
   },
   {
-    id: "pushup",
-    title: "Push the limit",
-    detail: "Push-ups with a beginner knee option when needed.",
-    reward: 140,
-    duration: "3 × 8–12",
-    exerciseIndex: 1,
+    day: 3,
+    title: "First Fire Trial",
+    body: "Urges may spike. Your body is learning that tension does not need to end in the old behavior.",
+    mind: "You may feel irritated, restless, or tempted to peek. Peeking is the ambush before defeat.",
+    difficulty: "Very high. Day 3 often feels like a direct duel.",
+    command: "Stand up instantly. Cold water on your face. Ten push-ups or a hard walk. Break the trance.",
   },
   {
-    id: "recovery",
-    title: "Lock in recovery",
-    detail: "Finish with gentle mobility and a short walk.",
-    reward: 80,
-    duration: "15 min",
-    exerciseIndex: 5,
+    day: 4,
+    title: "Discipline Forms",
+    body: "Your baseline energy may start stabilizing in small windows. Cravings still attack in cycles.",
+    mind: "You are building proof that an urge can rise and fall without controlling you.",
+    difficulty: "Medium-high; overconfidence is dangerous.",
+    command: "Keep the rule wall intact. No triggers, no secret browsing, no excuses after sunset.",
   },
   {
-    id: "reset",
-    title: "Daily reset",
-    detail: "Quick skin + grooming pass — cleanse, moisturise, sunscreen.",
-    reward: 40,
-    duration: "5 min",
+    day: 5,
+    title: "The Shadow Bargains",
+    body: "Restlessness can turn into physical tension. Training, walking, and sleep protect the streak.",
+    mind: "The mind may bargain: just images, just a minute, just once. Every bargain is a chain.",
+    difficulty: "High because temptation becomes clever instead of loud.",
+    command: "Name the urge out loud, then execute your emergency ritual before thinking further.",
+  },
+  {
+    day: 6,
+    title: "Clearer Eyes",
+    body: "Some users notice better morning energy and less drained feeling, though waves can still hit hard.",
+    mind: "Confidence grows when you keep promises. Shame loses power when discipline is repeated.",
+    difficulty: "Medium; danger comes from relaxing your guard.",
+    command: "Review why you started. Write one sentence: I am not returning to the cage.",
+  },
+  {
+    day: 7,
+    title: "First Seal Broken",
+    body: "A full week clean is a real nervous-system victory. Your body has endured discomfort without obeying it.",
+    mind: "You now possess evidence. You are not powerless; you are trained by repeated choices.",
+    difficulty: "Medium-high; celebration can become permission if you are careless.",
+    command: "Honor the week with sleep, training, and clean surroundings. The war continues tomorrow.",
+  },
+  {
+    day: 14,
+    title: "Second Gate",
+    body: "Focus and drive may improve as your reward system gets more room to respond to real life.",
+    mind: "Old memories and fantasies may resurface. Treat them as passing weather, not commands.",
+    difficulty: "Uneven; some days feel easy, then a sudden storm hits.",
+    command: "Stay humble. Double down on blockers, accountability, and evening structure.",
+  },
+  {
+    day: 30,
+    title: "The Black Banner Falls",
+    body: "Many people report stronger self-control, steadier mood, and more energy for training, work, and relationships.",
+    mind: "Your identity is shifting from resisting temptation to living as someone who does not serve it.",
+    difficulty: "Strategic; the enemy now waits for stress, secrecy, and pride.",
+    command: "Build a life too strong for the old habit to fit inside it.",
   },
 ];
 
-function buildWeeklyPlan(goal: string): WeeklyPlanDay[] {
-  const text = goal.toLowerCase();
-  const strength = text.includes("strength") || text.includes("muscle") || text.includes("strong");
-  const fitness = text.includes("fitness") || text.includes("fit") || text.includes("endurance");
-  const habits = text.includes("habit") || text.includes("consistency") || text.includes("routine");
-  const mobility = text.includes("mobility") || text.includes("flexibility") || text.includes("move");
-  const focus = strength ? "strength" : fitness ? "fitness" : mobility ? "mobility" : habits ? "habits" : "balanced";
+const dailyRules = [
+  "No porn, no edging, no masturbation, no peeking. The line must be bright red.",
+  "Phone never enters the bathroom or bed. Darkness plus privacy is the old battlefield.",
+  "When an urge hits, move within ten seconds: walk, push-ups, cold water, or call an ally.",
+  "Train your body daily, even briefly. A warrior burns pressure through action.",
+  "Sleep before the weak hours. Late-night fatigue turns discipline into dust.",
+  "If you fall, report honestly, reset immediately, and rebuild without self-pity.",
+];
 
-  const plans: Record<string, WeeklyPlanDay[]> = {
-    strength: [
-      { day: "Day 1", title: "Foundation", focus: "Full-body strength", duration: "25 min", tasks: ["5 min warm-up", "Bodyweight squats 3 × 10", "Incline or knee push-ups 3 × 8", "5 min easy mobility"], reward: 120 },
-      { day: "Day 2", title: "Recovery XP", focus: "Mobility + walking", duration: "20 min", tasks: ["10–15 min comfortable walk", "5 min gentle mobility", "Hydrate and recover"], reward: 80 },
-      { day: "Day 3", title: "Upper Power", focus: "Upper-body strength", duration: "25 min", tasks: ["5 min warm-up", "Push-ups 3 × 8–12", "Backpack or band rows 3 × 10", "Easy cooldown"], reward: 140 },
-      { day: "Day 4", title: "Reset", focus: "Recovery + consistency", duration: "15 min", tasks: ["10 min easy movement", "5 min mobility", "Keep your routine alive"], reward: 70 },
-      { day: "Day 5", title: "Lower Power", focus: "Lower-body strength", duration: "25 min", tasks: ["Warm-up", "Squats 3 × 12", "Glute bridge 3 × 12", "Calf raises 2 × 15"], reward: 140 },
-      { day: "Day 6", title: "Challenge", focus: "Full-body circuit", duration: "25–30 min", tasks: ["Warm-up", "3 controlled rounds: squat, push-up, movement", "Rest between rounds", "Cooldown"], reward: 160 },
-      { day: "Day 7", title: "Victory + Review", focus: "Recovery and reflection", duration: "20 min", tasks: ["Easy walk", "Gentle mobility", "Review your week", "Choose next week's target"], reward: 100 },
-    ],
-    fitness: [
-      { day: "Day 1", title: "Start Moving", focus: "Full-body fitness", duration: "20 min", tasks: ["5 min warm-up", "10 min easy circuit", "5 min cooldown"], reward: 100 },
-      { day: "Day 2", title: "Cardio Quest", focus: "Easy endurance", duration: "20–25 min", tasks: ["Brisk but comfortable walk", "2–3 short faster intervals", "Cool down"], reward: 110 },
-      { day: "Day 3", title: "Strength Base", focus: "Basic strength", duration: "25 min", tasks: ["Squats 3 × 10", "Push-ups 3 × 8", "Glute bridge 3 × 12", "Mobility"], reward: 130 },
-      { day: "Day 4", title: "Recovery Run", focus: "Mobility + light movement", duration: "15–20 min", tasks: ["Easy walk", "Gentle mobility", "Relax and recover"], reward: 70 },
-      { day: "Day 5", title: "Endurance XP", focus: "Steady movement", duration: "25–30 min", tasks: ["Warm-up", "20 min comfortable cardio", "Cooldown"], reward: 140 },
-      { day: "Day 6", title: "Hero Circuit", focus: "Full-body fitness", duration: "25 min", tasks: ["Warm-up", "3 rounds of controlled exercises", "Rest as needed", "Cooldown"], reward: 160 },
-      { day: "Day 7", title: "Victory Lap", focus: "Recovery + review", duration: "20 min", tasks: ["Easy walk", "Mobility", "Review progress", "Set next goal"], reward: 100 },
-    ],
-    mobility: [
-      { day: "Day 1", title: "Move Freely", focus: "Full-body mobility", duration: "15 min", tasks: ["Gentle warm-up", "Controlled joint movements", "Easy stretching"], reward: 90 },
-      { day: "Day 2", title: "Hips + Legs", focus: "Lower-body mobility", duration: "15 min", tasks: ["Hip mobility", "Ankle mobility", "Gentle leg stretches"], reward: 90 },
-      { day: "Day 3", title: "Spine + Shoulders", focus: "Upper-body mobility", duration: "15 min", tasks: ["Shoulder circles", "Thoracic mobility", "Gentle upper-body stretches"], reward: 90 },
-      { day: "Day 4", title: "Recovery Flow", focus: "Easy movement", duration: "15 min", tasks: ["Comfortable walk", "Gentle mobility", "Relaxed breathing"], reward: 70 },
-      { day: "Day 5", title: "Control", focus: "Balance + mobility", duration: "20 min", tasks: ["Warm-up", "Controlled single-leg balance", "Mobility flow"], reward: 100 },
-      { day: "Day 6", title: "Full Flow", focus: "Full-body mobility", duration: "20 min", tasks: ["Warm-up", "Full-body mobility sequence", "Easy cooldown"], reward: 120 },
-      { day: "Day 7", title: "Review", focus: "Recovery + consistency", duration: "15 min", tasks: ["Easy movement", "Favorite mobility drills", "Review how you feel"], reward: 90 },
-    ],
-    habits: [
-      { day: "Day 1", title: "Start Small", focus: "Build your routine", duration: "15 min", tasks: ["Complete one movement quest", "Drink water regularly", "Set tomorrow's workout time"], reward: 80 },
-      { day: "Day 2", title: "Keep the Chain", focus: "Consistency", duration: "15 min", tasks: ["Complete today's movement", "Protect your sleep routine", "Check off your habits"], reward: 80 },
-      { day: "Day 3", title: "No Zero Day", focus: "Minimum viable workout", duration: "15 min", tasks: ["Do a short workout", "Take a walk", "Complete one habit"], reward: 90 },
-      { day: "Day 4", title: "Reset", focus: "Recovery habits", duration: "15 min", tasks: ["Easy movement", "Prepare tomorrow", "Review your streak"], reward: 70 },
-      { day: "Day 5", title: "Level Up", focus: "Routine strength", duration: "20 min", tasks: ["Complete workout", "Complete 3 priority habits", "Avoid skipping the basics"], reward: 110 },
-      { day: "Day 6", title: "Momentum", focus: "Consistency under pressure", duration: "20 min", tasks: ["Complete movement quest", "Keep your routine", "Plan next week"], reward: 110 },
-      { day: "Day 7", title: "Victory", focus: "Review + reward", duration: "15 min", tasks: ["Easy movement", "Review completed habits", "Pick one improvement for next week"], reward: 100 },
-    ],
-    balanced: [
-      { day: "Day 1", title: "Foundation", focus: "Full-body fitness", duration: "20 min", tasks: ["Warm-up", "Squats 3 × 10", "Push-ups 3 × 8", "Cooldown"], reward: 110 },
-      { day: "Day 2", title: "Move More", focus: "Walking + mobility", duration: "20 min", tasks: ["Comfortable walk", "Gentle mobility", "Hydrate and recover"], reward: 80 },
-      { day: "Day 3", title: "Build", focus: "Strength basics", duration: "25 min", tasks: ["Warm-up", "Squats 3 × 12", "Push-ups 3 × 8–12", "Glute bridge 3 × 12"], reward: 130 },
-      { day: "Day 4", title: "Reset", focus: "Recovery", duration: "15 min", tasks: ["Easy movement", "Mobility", "Prepare for tomorrow"], reward: 70 },
-      { day: "Day 5", title: "Level Up", focus: "Fitness circuit", duration: "25 min", tasks: ["Warm-up", "3 controlled rounds", "Rest as needed", "Cooldown"], reward: 140 },
-      { day: "Day 6", title: "Adventure", focus: "Enjoyable movement", duration: "30 min", tasks: ["Choose a safe activity you enjoy", "Keep a comfortable pace", "Finish with mobility"], reward: 120 },
-      { day: "Day 7", title: "Victory + Review", focus: "Recovery", duration: "20 min", tasks: ["Easy walk", "Gentle mobility", "Review your week", "Set next week's goal"], reward: 100 },
-    ],
-  };
-
-  return plans[focus];
-}
+const scoldings = [
+  "You dropped your blade. Do not dress defeat up as stress. Stand up, reset the count, and earn your honor back today.",
+  "The shadow did not overpower you; you opened the gate. Close it. Clean your environment. Return to discipline now.",
+  "No excuses. A warrior studies the failure, seals the weakness, and starts again before shame becomes another chain.",
+];
 
 function HomePage() {
   const { state } = useVeyra();
-  const week = weekStats(state);
-  const firstName = state.user?.name.split(" ")[0] ?? "Player";
-  const goals = state.onboarding?.goals ?? [];
+  const firstName = state.user?.name.split(" ")[0] ?? "Warrior";
+  const [streak, setStreak] = useState(0);
   const [showIntro, setShowIntro] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(false);
-
-  useEffect(() => {
-    try {
-      if (!window.localStorage.getItem(TUTORIAL_SEEN_KEY)) {
-        setShowTutorial(true);
-      }
-    } catch {
-      // ignore storage errors
-    }
-  }, []);
-  const [goalOpen, setGoalOpen] = useState(false);
-  const [weeklyPlanOpen, setWeeklyPlanOpen] = useState(false);
-  const [goal, setGoal] = useState("");
-  const [activeGoal, setActiveGoal] = useState(
-    goals.length ? goals.slice(0, 2).join(" + ") : "Build a stronger daily routine",
+  const [mentorMessage, setMentorMessage] = useState(
+    "Eyes forward. Today you do not bargain with the shadow. You obey the code and protect the streak.",
   );
-  const [weeklyPlan, setWeeklyPlan] = useState<WeeklyPlanDay[]>(() => buildWeeklyPlan(activeGoal));
-  const [quests, setQuests] = useState<Quest[]>(DEFAULT_QUESTS);
-  const [completed, setCompleted] = useState<string[]>([]);
-  const [selectedExercise, setSelectedExercise] = useState(0);
 
   useEffect(() => {
-    try {
-      const seen = window.sessionStorage.getItem("veyra-intro-seen");
-      if (!seen) {
-        setShowIntro(true);
-        const timer = window.setTimeout(() => {
-          setShowIntro(false);
-          window.sessionStorage.setItem("veyra-intro-seen", "1");
-        }, 1800);
-        return () => window.clearTimeout(timer);
-      }
-    } catch {
-      // Storage can be unavailable in privacy-restricted browsers; the app still works.
+    const saved = Number(window.localStorage.getItem(STORAGE_KEY) ?? "0");
+    setStreak(Number.isFinite(saved) ? saved : 0);
+    if (!window.sessionStorage.getItem("shadowbreaker-intro-seen")) {
+      setShowIntro(true);
+      const timer = window.setTimeout(() => {
+        setShowIntro(false);
+        window.sessionStorage.setItem("shadowbreaker-intro-seen", "1");
+      }, 5200);
+      return () => window.clearTimeout(timer);
     }
   }, []);
 
-  const nextLevelXp = xpForLevel(state.currentLevel);
-  const previousLevelXp = xpForLevel(Math.max(0, state.currentLevel - 1));
-  const levelRange = Math.max(1, nextLevelXp - previousLevelXp);
-  const levelProgress = Math.max(
-    0,
-    Math.min(100, ((state.totalXp - previousLevelXp) / levelRange) * 100),
+  const unlockedDays = useMemo(
+    () => transformationTimeline.filter((item) => item.day <= Math.max(1, streak || 1)),
+    [streak],
   );
-  const exercise = todaysWorkout.exercises[selectedExercise] ?? todaysWorkout.exercises[0];
-  const earnedQuestXp = completed.reduce((sum, id) => {
-    const quest = quests.find((item) => item.id === id);
-    return sum + (quest?.reward ?? 0);
-  }, 0);
-  const generatedForGoal = useMemo(() => {
-    const text = activeGoal.toLowerCase();
-    const focus = text.includes("strength") || text.includes("muscle") ? "strength" : "fitness";
-    return focus === "strength"
-      ? [
-          { ...DEFAULT_QUESTS[0], title: "Prime your strength" },
-          { ...DEFAULT_QUESTS[1], title: "Build lower-body power" },
-          { ...DEFAULT_QUESTS[2], title: "Build upper-body power" },
-          { ...DEFAULT_QUESTS[3], title: "Recover like a pro" },
-        ]
-      : DEFAULT_QUESTS.map((quest) => ({ ...quest }));
-  }, [activeGoal]);
 
-  function createGoal() {
-    const cleanGoal = goal.trim();
-    if (!cleanGoal) return;
-    const plan = buildWeeklyPlan(cleanGoal);
-    setActiveGoal(cleanGoal);
-    setWeeklyPlan(plan);
-    setQuests(generatedForGoal);
-    setCompleted([]);
-    setGoal("");
-    setGoalOpen(false);
-    setWeeklyPlanOpen(true);
+  function addCleanDay() {
+    setStreak((current) => {
+      const next = current + 1;
+      window.localStorage.setItem(STORAGE_KEY, String(next));
+      setMentorMessage(`Good. Day ${next} is claimed. Do not celebrate by lowering your guard.`);
+      return next;
+    });
   }
 
-  function completeQuest(id: string) {
-    setCompleted((current) => (current.includes(id) ? current : [...current, id]));
+  function relapse() {
+    const message = scoldings[Math.floor(Math.random() * scoldings.length)];
+    setStreak(0);
+    window.localStorage.setItem(STORAGE_KEY, "0");
+    setMentorMessage(message);
   }
 
   return (
-    <div className="relative pb-10">
-      {showTutorial && <TutorialModal onClose={() => setShowTutorial(false)} />}
+    <div className="relative overflow-hidden pb-10 text-slate-100">
+      {showIntro && <OpeningCinematic />}
 
-      {showIntro && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 backdrop-blur-xl">
-          <div className="text-center">
-            <div className="mx-auto flex size-20 items-center justify-center rounded-[28px] border border-primary/30 bg-primary/10 shadow-[0_0_80px_hsl(var(--primary)/0.25)] animate-pulse">
-              <Gamepad2 className="size-9 text-primary" />
-            </div>
-            <p className="mt-6 text-4xl font-black tracking-[0.25em]">VEYRA</p>
-            <p className="mt-2 text-xs uppercase tracking-[0.3em] text-muted-foreground">Enter your next level</p>
-          </div>
-        </div>
-      )}
-
-      <section className="relative overflow-hidden rounded-[30px] border border-primary/20 bg-gradient-to-br from-primary/10 via-card to-background p-5 shadow-2xl sm:p-7">
-        <div className="pointer-events-none absolute -right-20 -top-20 size-72 rounded-full bg-primary/15 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-28 left-1/3 size-72 rounded-full bg-primary/10 blur-3xl" />
-        <div className="relative grid gap-7 lg:grid-cols-[1fr_0.7fr] lg:items-center">
+      <section className="relative overflow-hidden rounded-[2rem] border border-red-900/70 bg-black p-5 shadow-[0_0_60px_rgba(127,29,29,0.35)] sm:p-7">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_10%,rgba(220,38,38,0.28),transparent_35%),linear-gradient(135deg,rgba(0,0,0,0.2),rgba(69,10,10,0.55))]" />
+        <div className="absolute -right-16 top-6 h-64 w-64 rounded-full bg-red-700/20 blur-3xl" />
+        <div className="relative grid gap-6 lg:grid-cols-[1fr_0.9fr] lg:items-center">
           <div>
-            <div className="flex items-start gap-3">
-              <Mascot expression="happy" size={56} className="mt-1 shrink-0" />
-              <div className="rounded-2xl rounded-tl-sm border border-border bg-background/60 px-4 py-2.5 text-sm">
-                Ready for today's quest, {firstName}?
+            <Badge className="border border-red-500/40 bg-red-950/80 text-red-100 hover:bg-red-950/80">
+              SHADOWBREAKER PROTOCOL
+            </Badge>
+            <h1 className="mt-4 text-4xl font-black uppercase tracking-tight sm:text-6xl">
+              Break the chain. <span className="text-red-500">Claim the streak.</span>
+            </h1>
+            <p className="mt-4 max-w-xl text-sm leading-6 text-red-100/75 sm:text-base">
+              {firstName}, this is not a clinic dashboard. This is a warrior&apos;s ascent out of porn
+              and masturbation addiction—one clean day, one hard choice, one locked gate at a time.
+            </p>
+            <div className="mt-6 grid max-w-xl grid-cols-2 gap-3">
+              <RulePanel icon={Flame} label="Days Clean" value={`${streak}`} oversized />
+              <RulePanel icon={Shield} label="Current Rank" value={streak >= 30 ? "Iron Will" : streak >= 7 ? "Gate Guard" : "Initiate"} />
+            </div>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Button onClick={addCleanDay} className="h-12 rounded-xl bg-red-700 px-6 font-black hover:bg-red-600">
+                <Swords className="mr-2 size-5" /> Mark Clean Day
+              </Button>
+              <Button onClick={relapse} variant="outline" className="h-12 rounded-xl border-red-800 bg-black/60 font-black text-red-100 hover:bg-red-950">
+                <RotateCcw className="mr-2 size-5" /> Relapse Reset
+              </Button>
+            </div>
+          </div>
+          <MentorCard message={mentorMessage} />
+        </div>
+      </section>
+
+      <section className="mt-6 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="rounded-[2rem] border border-red-900/70 bg-zinc-950 p-5 shadow-2xl">
+          <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.22em] text-red-500">
+            <ScrollText className="size-4" /> Daily Rules
+          </div>
+          <h2 className="mt-2 text-2xl font-black uppercase">The Code of No Return</h2>
+          <div className="mt-5 space-y-3">
+            {dailyRules.map((rule, index) => (
+              <div key={rule} className="rounded-2xl border border-red-950 bg-black/70 p-4">
+                <p className="text-sm font-black leading-6"><span className="mr-3 text-xl text-red-500">{index + 1}.</span>{rule}</p>
               </div>
-            </div>
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              <Badge className="rounded-full bg-primary/15 text-primary hover:bg-primary/15"><Gamepad2 className="mr-1 size-3.5" /> HEALTH RPG</Badge>
-              <span className="text-xs text-muted-foreground">Welcome back, {firstName}</span>
-            </div>
-            <h1 className="mt-4 max-w-2xl text-3xl font-black tracking-tight sm:text-5xl">Your body. Your goal. <span className="text-primary">Your next level.</span></h1>
-            <p className="mt-3 max-w-xl text-sm leading-6 text-muted-foreground sm:text-base">Turn one real-world goal into a simple daily quest. Complete missions, learn the movement, earn XP and keep your streak alive.</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button size="lg" onClick={() => setGoalOpen(true)} className="h-12 rounded-2xl px-6 text-base font-bold shadow-lg shadow-primary/20"><Target className="mr-2 size-5" /> SET GOAL</Button>
-              <Button asChild size="lg" variant="outline" className="h-12 rounded-2xl"><Link to="/workout">Enter workout <ArrowRight className="ml-2 size-4" /></Link></Button>
-            </div>
+            ))}
           </div>
+        </div>
 
-          <div className="rounded-[26px] border border-border/70 bg-background/55 p-5 backdrop-blur-xl">
-            <div className="flex items-center justify-between"><div><p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Player HUD</p><p className="mt-1 text-xl font-black">LVL {state.currentLevel}</p></div><div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10"><Trophy className="size-6 text-primary" /></div></div>
-            <div className="mt-5 flex items-center justify-between text-xs"><span className="font-semibold">{state.totalXp + earnedQuestXp} XP</span><span className="text-muted-foreground">{nextLevelXp} XP</span></div>
-            <Progress value={Math.min(100, levelProgress + (earnedQuestXp / Math.max(1, levelRange)) * 100)} className="mt-2 h-3" />
-            <div className="mt-4 grid grid-cols-3 gap-2"><HudStat icon={Flame} value={`${state.currentStreak}d`} label="streak" /><HudStat icon={Zap} value={`+${earnedQuestXp}`} label="quest XP" /><HudStat icon={Trophy} value={`${completed.length}/${quests.length}`} label="cleared" /></div>
+        <div className="rounded-[2rem] border border-red-900/70 bg-zinc-950 p-5 shadow-2xl">
+          <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.22em] text-red-500">
+            <Zap className="size-4" /> Transformation Timeline
+          </div>
+          <h2 className="mt-2 text-2xl font-black uppercase">Unlocked Battle Cards</h2>
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            {unlockedDays.map((item) => <TransformationCard key={item.day} item={item} />)}
           </div>
         </div>
       </section>
 
-      <section className="mt-7 rounded-[26px] border border-primary/15 bg-card/70 p-5 shadow-lg sm:p-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-primary"><Sparkles className="size-4" /> Active mission</div><h2 className="mt-2 text-xl font-black">{activeGoal}</h2><p className="mt-1 text-sm text-muted-foreground">Veyra converted your goal into today's quest path.</p></div><Button variant="ghost" className="rounded-xl" onClick={() => setGoalOpen(true)}>Change goal</Button></div>
-        <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          {quests.map((quest, index) => { const done = completed.includes(quest.id); return <button key={quest.id} onClick={() => { setSelectedExercise(quest.exerciseIndex ?? 0); completeQuest(quest.id); }} className={`group rounded-2xl border p-4 text-left transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg ${done ? "border-primary/50 bg-primary/5" : "border-border bg-background/40"}`}><div className="flex items-start justify-between gap-3"><span className={`flex size-10 items-center justify-center rounded-xl ${done ? "bg-primary text-primary-foreground" : "bg-secondary text-primary"}`}>{done ? <Check className="size-5" /> : <span className="text-sm font-black">0{index + 1}</span>}</span><Badge variant="outline" className="text-[10px]">+{quest.reward} XP</Badge></div><h3 className="mt-4 font-bold">{quest.title}</h3><p className="mt-1 min-h-10 text-xs leading-5 text-muted-foreground">{quest.detail}</p><div className="mt-3 flex items-center justify-between text-[11px] font-semibold"><span>{quest.duration}</span><span className={done ? "text-primary" : "text-muted-foreground"}>{done ? "CLEARED" : "START QUEST"}</span></div></button>; })}
-        </div>
-        <Button variant="outline" className="mt-5 w-full rounded-xl" onClick={() => setWeeklyPlanOpen(true)}><Trophy className="mr-2 size-4" /> View 7-day plan</Button>
-      </section>
-
-      <section className="mt-7 grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="overflow-hidden rounded-[28px] border border-border bg-card shadow-xl">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-5"><div><div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-primary"><Dumbbell className="size-4" /> Movement lab</div><h2 className="mt-1 text-xl font-black">{exercise.name}</h2></div><Badge variant="secondary">{exercise.sets} · {exercise.reps}</Badge></div>
-          <div className="grid gap-0 md:grid-cols-[0.9fr_1.1fr]"><div className="relative min-h-[300px] overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/30 p-5"><div className="absolute left-1/2 top-1/2 size-52 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/20 bg-primary/5 shadow-[0_0_80px_hsl(var(--primary)/0.12)]" /><img src={exercise.poseImage} alt={`${exercise.name} movement demonstration`} className="relative z-10 mx-auto h-[300px] w-full object-contain drop-shadow-2xl" /><div className="absolute bottom-4 left-4 right-4 rounded-xl border border-border/70 bg-background/80 p-3 text-xs backdrop-blur"><span className="font-bold text-primary">FORM FIRST</span> · Move slowly enough to keep control.</div></div>
-            <div className="p-5"><div className="grid grid-cols-3 gap-2"><MiniInfo label="Sets" value={exercise.sets} /><MiniInfo label="Reps" value={exercise.reps} /><MiniInfo label="Rest" value={exercise.rest} /></div><div className="mt-5 rounded-2xl bg-secondary/50 p-4"><p className="text-xs font-bold uppercase tracking-wider text-primary">How to perform</p><p className="mt-2 text-sm leading-6 text-muted-foreground">{exercise.instructions}</p></div><div className="mt-4 flex items-start gap-3 rounded-2xl border border-border p-4"><HeartPulse className="mt-0.5 size-4 shrink-0 text-primary" /><p className="text-xs leading-5 text-muted-foreground">Stop if you feel pain, dizziness or unusual symptoms. Veyra is general wellness guidance, not medical care.</p></div><Button asChild className="mt-5 w-full rounded-xl"><Link to="/workout">Open full workout</Link></Button></div>
-          </div>
-        </div>
-
-        <div className="space-y-5"><div className="rounded-[28px] border border-border bg-card p-5 shadow-lg"><div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-primary"><Sparkles className="size-4" /> AI Coach</div><h2 className="mt-2 text-lg font-black">Your next move</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">Keep today simple: finish one quest, learn the movement, then decide whether you want to continue. Consistency beats an overloaded plan.</p><Button asChild variant="outline" className="mt-4 w-full rounded-xl"><Link to="/coach">Talk to AI Coach</Link></Button></div><div className="rounded-[28px] border border-border bg-card p-5 shadow-lg"><p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">This week</p><div className="mt-4 grid grid-cols-2 gap-3"><StatCard label="Workouts" value={`${week.workouts}/5`} progress={(week.workouts / 5) * 100} hint="Planned sessions" /><StatCard label="Habits" value={`${week.habitPct}%`} progress={week.habitPct} hint="Completed" /></div></div></div>
-      </section>
-
-      <SafetyNote>Veyra offers general wellness and fitness guidance only. It does not diagnose conditions or treat injuries. For symptoms, pain, medication or medical questions, consult a qualified healthcare professional.</SafetyNote>
-
-      {goalOpen && <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 p-4 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="goal-title"><div className="w-full max-w-xl rounded-[30px] border border-primary/20 bg-card p-6 shadow-2xl sm:p-8"><div className="flex items-start justify-between gap-4"><div><Badge className="rounded-full bg-primary/10 text-primary hover:bg-primary/10">MISSION BUILDER</Badge><h2 id="goal-title" className="mt-3 text-2xl font-black">What do you want to achieve?</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">Type it naturally. Veyra will build a personalized 7-day plan from your goal.</p></div><Button variant="ghost" size="icon" className="rounded-xl" onClick={() => setGoalOpen(false)} aria-label="Close goal builder"><X className="size-5" /></Button></div><textarea value={goal} onChange={(event) => setGoal(event.target.value)} onKeyDown={(event) => { if ((event.ctrlKey || event.metaKey) && event.key === "Enter") createGoal(); }} placeholder="Example: I want to build strength and stay consistent…" className="mt-6 min-h-32 w-full resize-none rounded-2xl border border-border bg-background p-4 text-sm outline-none ring-primary/30 transition focus:border-primary focus:ring-4" autoFocus /><div className="mt-4 flex flex-wrap gap-2">{["Build daily fitness", "Improve strength", "Build better habits", "Improve mobility"].map((suggestion) => <button key={suggestion} onClick={() => setGoal(suggestion)} className="rounded-full border border-border px-3 py-1.5 text-xs text-muted-foreground transition hover:border-primary/50 hover:text-foreground">{suggestion}</button>)}</div><Button onClick={createGoal} disabled={!goal.trim()} className="mt-6 h-12 w-full rounded-2xl font-bold">Generate 7-day plan <Sparkles className="ml-2 size-4" /></Button><p className="mt-3 text-center text-[11px] text-muted-foreground">Your plan is generated locally from the goal; no API secret is exposed.</p></div></div>}
-
-      {weeklyPlanOpen && <div className="fixed inset-0 z-[60] overflow-y-auto bg-background/90 p-4 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="weekly-plan-title"><div className="mx-auto my-6 w-full max-w-5xl rounded-[30px] border border-primary/20 bg-card p-5 shadow-2xl sm:p-8"><div className="flex items-start justify-between gap-4"><div><Badge className="rounded-full bg-primary/10 text-primary hover:bg-primary/10">7-DAY QUEST PLAN</Badge><h2 id="weekly-plan-title" className="mt-3 text-2xl font-black sm:text-3xl">{activeGoal}</h2><p className="mt-2 text-sm text-muted-foreground">A balanced week built around your goal. Start with Day 1 and unlock the next mission as you go.</p></div><Button variant="ghost" size="icon" className="rounded-xl" onClick={() => setWeeklyPlanOpen(false)} aria-label="Close weekly plan"><X className="size-5" /></Button></div><div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{weeklyPlan.map((item, index) => <div key={item.day} className={`rounded-2xl border p-4 ${index === 0 ? "border-primary/50 bg-primary/5" : "border-border bg-background/40"}`}><div className="flex items-center justify-between"><Badge variant={index === 0 ? "default" : "outline"}>{item.day}</Badge><span className="text-xs font-bold text-primary">+{item.reward} XP</span></div><h3 className="mt-4 font-black">{item.title}</h3><p className="mt-1 text-xs font-semibold text-primary">{item.focus} · {item.duration}</p><ul className="mt-3 space-y-2">{item.tasks.map((task) => <li key={task} className="flex gap-2 text-xs leading-5 text-muted-foreground"><Check className="mt-0.5 size-3.5 shrink-0 text-primary" />{task}</li>)}</ul></div>)}</div><div className="mt-6 flex flex-col gap-3 sm:flex-row"><Button className="flex-1 rounded-2xl" onClick={() => setWeeklyPlanOpen(false)}><Gamepad2 className="mr-2 size-4" /> Start Day 1</Button><Button variant="outline" className="rounded-2xl" onClick={() => { setWeeklyPlanOpen(false); setGoalOpen(true); }}>Change goal</Button></div></div></div>}
+      <div className="mt-6 rounded-2xl border border-amber-500/30 bg-amber-950/20 p-4 text-xs leading-5 text-amber-100/80">
+        <AlertTriangle className="mr-2 inline size-4" /> ShadowBreaker is motivational habit support, not medical care. If compulsive sexual behavior is harming your life or you feel unsafe, contact a qualified mental health professional or local emergency support.
+      </div>
     </div>
   );
 }
 
-function HudStat({ icon: Icon, value, label }: { icon: typeof Flame; value: string; label: string }) { return <div className="rounded-xl border border-border/70 bg-background/50 p-2.5"><Icon className="size-3.5 text-primary" /><p className="mt-1 text-sm font-black">{value}</p><p className="text-[9px] uppercase tracking-wide text-muted-foreground">{label}</p></div>; }
-function MiniInfo({ label, value }: { label: string; value: string }) { return <div className="rounded-xl border border-border bg-background p-3"><p className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</p><p className="mt-1 text-xs font-bold">{value}</p></div>; }
+function RulePanel({ icon: Icon, label, value, oversized = false }: { icon: typeof Flame; label: string; value: string; oversized?: boolean }) {
+  return <div className="rounded-2xl border border-red-900/70 bg-black/75 p-4"><Icon className="size-5 text-red-500" /><p className="mt-2 text-[10px] font-black uppercase tracking-[0.2em] text-red-200/60">{label}</p><p className={oversized ? "text-5xl font-black text-red-500" : "text-2xl font-black"}>{value}</p></div>;
+}
+
+function MentorCard({ message }: { message: string }) {
+  return <div className="relative min-h-[420px] overflow-hidden rounded-[1.75rem] border border-red-800 bg-gradient-to-b from-zinc-900 via-black to-red-950 p-5"><div className="absolute inset-0 opacity-60 [background-image:linear-gradient(115deg,transparent_0_42%,rgba(220,38,38,.25)_43%,transparent_44%),repeating-linear-gradient(100deg,rgba(255,255,255,.16)_0_1px,transparent_1px_14px)]" /><div className="relative mx-auto mt-4 h-64 w-44"><div className="absolute left-1/2 top-2 h-24 w-20 -translate-x-1/2 rounded-full bg-slate-100 shadow-[0_0_35px_rgba(255,255,255,.45)]" /><div className="absolute left-1/2 top-16 h-40 w-32 -translate-x-1/2 rounded-t-[4rem] border border-red-500/40 bg-zinc-800" /><div className="absolute left-9 top-24 h-28 w-5 rotate-12 rounded-full bg-zinc-700"><span className="absolute inset-x-1 top-5 h-14 rounded-full bg-red-700/70" /></div><div className="absolute right-9 top-24 h-28 w-5 -rotate-12 rounded-full bg-zinc-700"><span className="absolute inset-x-1 top-4 h-16 rounded-full bg-red-700/70" /></div><div className="absolute right-3 top-12 h-60 w-2 rotate-45 rounded-full bg-slate-300 shadow-[0_0_18px_rgba(255,255,255,.35)]" /><div className="absolute left-1/2 top-0 h-36 w-28 -translate-x-1/2 rounded-b-full bg-white/90 blur-[1px]" /></div><div className="relative rounded-2xl border border-red-800 bg-black/80 p-4"><p className="text-[10px] font-black uppercase tracking-[0.22em] text-red-500">Sensei Kage · Rain Mentor</p><p className="mt-2 text-sm font-bold leading-6 text-red-50">“{message}”</p></div></div>;
+}
+
+function TransformationCard({ item }: { item: TransformationDay }) {
+  return <article className="rounded-2xl border border-red-900 bg-black p-4 shadow-[inset_0_0_0_1px_rgba(239,68,68,.12)]"><div className="flex items-start justify-between gap-3"><Badge className="bg-red-700 text-white hover:bg-red-700">DAY {item.day}</Badge><span className="text-[10px] font-black uppercase tracking-widest text-red-300/60">Unlocked</span></div><h3 className="mt-3 text-lg font-black uppercase text-red-100">{item.title}</h3><div className="mt-3 space-y-2 text-xs leading-5 text-red-100/75"><p><b className="text-red-400">Body:</b> {item.body}</p><p><b className="text-red-400">Mind:</b> {item.mind}</p><p><b className="text-red-400">Difficulty:</b> {item.difficulty}</p><p className="rounded-xl border border-red-950 bg-red-950/35 p-3 font-black text-red-50">COMMAND: {item.command}</p></div></article>;
+}
+
+function OpeningCinematic() {
+  return <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-black text-white"><div className="absolute inset-0 animate-pulse bg-[radial-gradient(circle_at_center,rgba(127,29,29,.35),transparent_45%)]" /><div className="absolute bottom-0 h-2/3 w-full bg-[linear-gradient(to_top,rgba(127,29,29,.55),transparent),repeating-linear-gradient(90deg,rgba(255,255,255,.09)_0_1px,transparent_1px_90px)]" /><div className="relative flex flex-col items-center text-center"><div className="animate-in fade-in zoom-in duration-1000 rounded-3xl border border-red-700 bg-black/80 px-6 py-4 text-3xl font-black tracking-[0.28em] text-red-500 shadow-[0_0_80px_rgba(220,38,38,.45)]">SHADOWBREAKER</div><div className="mt-8 h-52 w-72 animate-in fade-in slide-in-from-bottom-8 duration-1000 rounded-t-full border-x-4 border-t-4 border-red-900 bg-gradient-to-b from-red-950 to-black"><div className="mx-auto mt-10 h-28 w-20 rounded-t-full bg-zinc-800 shadow-[0_-30px_70px_rgba(255,255,255,.2)]" /><div className="mx-auto mt-6 h-4 w-48 rounded bg-red-950" /><div className="mx-auto mt-4 h-4 w-60 rounded bg-red-950/80" /></div><p className="mt-8 max-w-sm animate-in fade-in duration-1000 text-2xl font-black uppercase tracking-wide">Are you ready to change your life?</p></div></div>;
+}
