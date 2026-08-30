@@ -68,7 +68,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     return (
       <div className="flex min-h-[100dvh] flex-col items-center justify-center gap-3 px-6 text-center">
         <span className="size-8 animate-spin rounded-full border-2 border-border border-t-primary" />
-        <p className="text-sm text-muted-foreground">Loading your Veyra profile…</p>
+        <p className="text-sm text-muted-foreground">Loading your ShadowBreaker profile…</p>
       </div>
     );
   if (!state.user) return null;
@@ -89,7 +89,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link
             to="/home"
             className="-mx-1 flex shrink-0 items-center px-1 py-2.5"
-            aria-label="Veyra home"
+            aria-label="ShadowBreaker home"
           >
             <Logo />
           </Link>
