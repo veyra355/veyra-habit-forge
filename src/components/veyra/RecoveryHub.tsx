@@ -1,8 +1,18 @@
-import { Shield, Zap, Lock, Trophy, SmartphoneOff, Moon, Users, Wind, ChevronRight, Sparkles } from "lucide-react";
+import { Shield, Zap, Lock, Trophy, Smartphone, Moon, Users, Wind, ChevronRight, Sparkles } from "lucide-react";
 
-export function RecoveryHub({ pornStreak, masturbationStreak }: { pornStreak: number; masturbationStreak: number }) {
+export function RecoveryHub({
+  pornStreak,
+  masturbationStreak,
+  bestStreak,
+  currentStreak,
+}: {
+  pornStreak: number;
+  masturbationStreak: number;
+  bestStreak?: number;
+  currentStreak?: number;
+}) {
   const milestones = [3, 7, 14, 30, 60, 90];
-  const longest = Math.max(pornStreak, masturbationStreak);
+  const longest = Math.max(pornStreak, masturbationStreak, currentStreak ?? 0, bestStreak ?? 0);
   const next = milestones.find((m) => m > longest) ?? 90;
   const progress = Math.min(100, (longest / next) * 100);
 
@@ -38,7 +48,7 @@ export function RecoveryHub({ pornStreak, masturbationStreak }: { pornStreak: nu
       </div>
 
       <div className="relative mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <RecoveryMethod icon={<SmartphoneOff />} title="Remove triggers" text="Use device controls and make distracting content harder to reach." />
+        <RecoveryMethod icon={<Smartphone />} title="Remove triggers" text="Use device controls and make distracting content harder to reach." />
         <RecoveryMethod icon={<Moon />} title="Protect your night" text="Keep the phone away from your bed and create a calm wind-down routine." />
         <RecoveryMethod icon={<Wind />} title="Ride the urge" text="Pause, breathe, change your environment and give yourself time to choose." />
         <RecoveryMethod icon={<Users />} title="Get support" text="If a habit feels difficult to control, talk to a trusted person or qualified counsellor." />

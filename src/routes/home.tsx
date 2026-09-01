@@ -159,7 +159,7 @@ function buildWeeklyPlan(goal: string): WeeklyPlanDay[] {
     ],
   };
 
-  return plans[focus];
+  return plans[focus] ?? plans.balanced;
 }
 
 function HomePage() {
@@ -204,6 +204,7 @@ function HomePage() {
     } catch {
       // Storage can be unavailable in privacy-restricted browsers; the app still works.
     }
+    return undefined;
   }, []);
 
   const nextLevelXp = xpForLevel(state.currentLevel);
@@ -213,7 +214,7 @@ function HomePage() {
     0,
     Math.min(100, ((state.totalXp - previousLevelXp) / levelRange) * 100),
   );
-  const exercise = todaysWorkout.exercises[selectedExercise] ?? todaysWorkout.exercises[0];
+  const exercise = todaysWorkout.exercises[selectedExercise] ?? todaysWorkout.exercises[0]!;
   const earnedQuestXp = completed.reduce((sum, id) => {
     const quest = quests.find((item) => item.id === id);
     return sum + (quest?.reward ?? 0);
@@ -222,12 +223,12 @@ function HomePage() {
     const text = activeGoal.toLowerCase();
     const focus = text.includes("strength") || text.includes("muscle") ? "strength" : "fitness";
     return focus === "strength"
-      ? [
-          { ...DEFAULT_QUESTS[0], title: "Prime your strength" },
-          { ...DEFAULT_QUESTS[1], title: "Build lower-body power" },
-          { ...DEFAULT_QUESTS[2], title: "Build upper-body power" },
-          { ...DEFAULT_QUESTS[3], title: "Recover like a pro" },
-        ]
+      ? DEFAULT_QUESTS.map((quest, index) => ({
+          ...quest,
+          title:
+            ["Prime your strength", "Build lower-body power", "Build upper-body power", "Recover like a pro"][index] ??
+            quest.title,
+        }))
       : DEFAULT_QUESTS.map((quest) => ({ ...quest }));
   }, [activeGoal]);
 
