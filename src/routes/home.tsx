@@ -159,7 +159,7 @@ function buildWeeklyPlan(goal: string): WeeklyPlanDay[] {
     ],
   };
 
-  return plans[focus] ?? plans.balanced;
+  return plans[focus] ?? plans['balanced']!;
 }
 
 function HomePage() {
