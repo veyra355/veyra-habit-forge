@@ -9,3 +9,4 @@ routeTree.gen.ts
 src/components/veyra/AppShell.tsx
 src/routes/habits.tsx
 src/components/veyra/RecoveryHub.tsx
+src/routes/recovery.tsx
