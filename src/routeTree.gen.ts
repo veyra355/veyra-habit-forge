@@ -26,6 +26,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProgressRouteImport } from './routes/progress'
+import { Route as RecoveryRouteImport } from './routes/recovery'
 import { Route as WorkoutRouteImport } from './routes/workout'
 import { Route as AcademyIndexRouteImport } from './routes/academy.index'
 import { Route as AcademyExerciseIdRouteImport } from './routes/academy.$exerciseId'
@@ -115,6 +116,11 @@ const ProgressRoute = ProgressRouteImport.update({
   path: '/progress',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecoveryRoute = RecoveryRouteImport.update({
+  id: '/recovery',
+  path: '/recovery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkoutRoute = WorkoutRouteImport.update({
   id: '/workout',
   path: '/workout',
@@ -149,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
+  '/recovery': typeof RecoveryRoute
   '/workout': typeof WorkoutRoute
   '/academy/$exerciseId': typeof AcademyExerciseIdRoute
   '/academy/': typeof AcademyIndexRoute
@@ -171,6 +178,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
+  '/recovery': typeof RecoveryRoute
   '/workout': typeof WorkoutRoute
   '/academy/$exerciseId': typeof AcademyExerciseIdRoute
   '/academy': typeof AcademyIndexRoute
@@ -194,6 +202,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
+  '/recovery': typeof RecoveryRoute
   '/workout': typeof WorkoutRoute
   '/academy/$exerciseId': typeof AcademyExerciseIdRoute
   '/academy/': typeof AcademyIndexRoute
@@ -218,6 +227,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/progress'
+    | '/recovery'
     | '/workout'
     | '/academy/$exerciseId'
     | '/academy/'
@@ -240,6 +250,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/progress'
+    | '/recovery'
     | '/workout'
     | '/academy/$exerciseId'
     | '/academy'
@@ -262,6 +273,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/progress'
+    | '/recovery'
     | '/workout'
     | '/academy/$exerciseId'
     | '/academy/'
@@ -285,6 +297,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   ProgressRoute: typeof ProgressRoute
+  RecoveryRoute: typeof RecoveryRoute
   WorkoutRoute: typeof WorkoutRoute
   AcademyExerciseIdRoute: typeof AcademyExerciseIdRoute
   AcademyIndexRoute: typeof AcademyIndexRoute
@@ -411,6 +424,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgressRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/recovery': {
+      id: '/recovery'
+      path: '/recovery'
+      fullPath: '/recovery'
+      preLoaderRoute: typeof RecoveryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/workout': {
       id: '/workout'
       path: '/workout'
@@ -453,6 +473,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   ProgressRoute: ProgressRoute,
+  RecoveryRoute: RecoveryRoute,
   WorkoutRoute: WorkoutRoute,
   AcademyExerciseIdRoute: AcademyExerciseIdRoute,
   AcademyIndexRoute: AcademyIndexRoute,
