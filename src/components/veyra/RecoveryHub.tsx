@@ -1,4 +1,4 @@
-import { Shield, Zap, Lock, Trophy, Smartphone, Moon, Users, Wind, ChevronRight, Sparkles } from "lucide-react";
+import { Footprints, Shield, Zap, Lock, Trophy, Smartphone, Moon, Users, Wind, ChevronRight, Sparkles } from "lucide-react";
 
 export function RecoveryHub({
   pornStreak,
@@ -47,9 +47,10 @@ export function RecoveryHub({
         </div>
       </div>
 
-      <div className="relative mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="relative mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <RecoveryMethod icon={<Smartphone />} title="Remove triggers" text="Use device controls and make distracting content harder to reach." />
         <RecoveryMethod icon={<Moon />} title="Protect your night" text="Keep the phone away from your bed and create a calm wind-down routine." />
+        <RecoveryMethod icon={<Footprints />} title="Move or change rooms" text="Step outside for a walk, train, or simply switch environment for ten minutes." />
         <RecoveryMethod icon={<Wind />} title="Ride the urge" text="Pause, breathe, change your environment and give yourself time to choose." />
         <RecoveryMethod icon={<Users />} title="Get support" text="If a habit feels difficult to control, talk to a trusted person or qualified counsellor." />
       </div>
