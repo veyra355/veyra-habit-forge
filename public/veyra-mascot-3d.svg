@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 520" role="img" aria-label="Veyra warrior mascot">
+<defs>
+ <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0b38a"/><stop offset=".5" stop-color="#a95736"/><stop offset="1" stop-color="#51261e"/></linearGradient>
+ <linearGradient id="hair" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".45" stop-color="#bfc8d2"/><stop offset="1" stop-color="#65717d"/></linearGradient>
+ <linearGradient id="cloth" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#30343b"/><stop offset=".45" stop-color="#090b0f"/><stop offset="1" stop-color="#4b1115"/></linearGradient>
+ <linearGradient id="red" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff454f"/><stop offset=".5" stop-color="#b30f1b"/><stop offset="1" stop-color="#45070c"/></linearGradient>
+ <filter id="shadow"><feGaussianBlur stdDeviation="9"/></filter>
+ <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<ellipse cx="218" cy="486" rx="145" ry="22" fill="#000" opacity=".55" filter="url(#shadow)"/>
+<!-- cloak -->
+<path d="M104 266 Q78 350 67 472 Q151 505 282 482 L342 446 Q311 339 275 267Z" fill="url(#cloth)" stroke="#6e171e" stroke-width="4"/>
+<path d="M112 315 Q184 365 300 318 L319 438 Q211 469 84 440Z" fill="#08090c" opacity=".85"/>
+<!-- torso -->
+<path d="M151 171 Q205 145 263 178 L285 288 Q220 323 143 284Z" fill="url(#skin)" stroke="#38150f" stroke-width="4"/>
+<!-- shoulder armor -->
+<path d="M145 181 Q103 182 91 224 Q113 246 147 230Z" fill="url(#cloth)" stroke="#8e2027" stroke-width="4"/>
+<path d="M263 180 Q310 185 322 228 Q299 245 272 230Z" fill="url(#cloth)" stroke="#8e2027" stroke-width="4"/>
+<!-- neck --> <path d="M187 143 L184 184 Q210 203 235 179 L231 139Z" fill="url(#skin)"/>
+<!-- head -->
+<path d="M166 73 Q198 39 238 61 Q270 81 258 131 Q245 166 211 168 Q177 162 163 130Z" fill="url(#skin)" stroke="#3b1812" stroke-width="4"/>
+<!-- hair -->
+<path d="M158 111 Q132 72 168 37 Q213 0 263 37 Q293 61 273 112 Q264 92 246 78 Q238 126 205 143 Q191 109 184 83 Q174 104 158 111Z" fill="url(#hair)" stroke="#55616c" stroke-width="4"/>
+<path d="M165 72 Q202 23 258 48" fill="none" stroke="#fff" stroke-opacity=".65" stroke-width="7"/>
+<!-- face shadow / eye -->
+<path d="M229 100 Q244 94 252 103 Q243 112 229 109Z" fill="#160c0d"/><circle cx="243" cy="103" r="3" fill="#ff303b" filter="url(#glow)"/>
+<!-- sash -->
+<path d="M137 251 Q208 272 282 245 L291 276 Q211 310 132 280Z" fill="#101216" stroke="#7b1a21" stroke-width="4"/>
+<path d="M169 278 L158 353 L188 339 L204 287Z" fill="#20242a"/><path d="M224 287 L239 354 L265 337 L252 276Z" fill="#20242a"/>
+<!-- arm -->
+<path d="M104 219 Q73 250 82 335 Q91 361 111 350 L137 259Z" fill="url(#skin)" stroke="#40180f" stroke-width="4"/>
+<path d="M299 220 Q331 253 324 337 Q316 361 296 349 L273 258Z" fill="url(#skin)" stroke="#40180f" stroke-width="4"/>
+<!-- gloves -->
+<path d="M78 329 Q96 341 115 331 L122 369 Q96 383 75 365Z" fill="#0b0d11"/><path d="M291 330 Q312 341 326 329 L333 366 Q307 383 286 365Z" fill="#0b0d11"/>
+<!-- sword -->
+<path d="M67 370 L92 369 L55 496 L38 496Z" fill="url(#red)" stroke="#24090c" stroke-width="4"/><path d="M42 369 L92 369" stroke="#bfc4cb" stroke-width="9"/><path d="M51 352 L84 381" stroke="#6d747c" stroke-width="8"/>
+<!-- red emblem -->
+<path d="M211 208 L229 242 L211 265 L193 242Z" fill="url(#red)" filter="url(#glow)"/><path d="M211 218 L211 253" stroke="#fff" stroke-opacity=".65" stroke-width="3"/>
+</svg>
