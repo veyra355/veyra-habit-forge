@@ -160,7 +160,53 @@
 @utility text-balance-tight { text-wrap: balance; }
 @utility hud-ring { border-radius: 9999px; border: 1px dashed rgba(239,29,47,.32); animation: hud-spin 48s linear infinite; }
 
-/* Mobile-app experience: touch-first spacing, safe areas and compact viewport rhythm. */
+/* Manga / battle-panel visual language */
+.veyrа-manga,
+[data-manga="true"] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.veyrа-manga::before,
+[data-manga="true"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: .22;
+  background-image: repeating-linear-gradient(115deg, transparent 0 12px, rgba(255,48,48,.22) 13px, transparent 14px 28px);
+  mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+}
+
+/* Give the existing dashboard surfaces a manga-card silhouette without changing their content. */
+.panel,
+.glass {
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::after,
+.glass::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 42px;
+  height: 42px;
+  pointer-events: none;
+  background: linear-gradient(135deg, transparent 48%, rgba(239,29,47,.7) 49% 53%, transparent 54%);
+  opacity: .35;
+}
+
+/* 3D-like mascot treatment: depth, glow and a comic energy aura. */
+svg[aria-label*="Veyra mascot"] {
+  filter: drop-shadow(0 18px 18px rgba(0,0,0,.7)) drop-shadow(0 0 22px rgba(239,29,47,.38));
+  transform-origin: 50% 70%;
+}
+
+/* Native mobile-app rhythm. */
 @media (max-width: 1023px) {
   html, body { width: 100%; min-width: 0; }
   body { padding: 0; }
@@ -173,9 +219,7 @@
   button, a, [role="button"] { -webkit-user-select: none; user-select: none; }
   input, select, textarea { font-size: 16px; }
   main { padding-top: .9rem; }
-  /* Make common cards breathe like native mobile surfaces. */
   .panel, .glass { border-radius: 1.15rem; }
-  /* Native-feeling scrollbars: hide them on touch devices. */
   * { scrollbar-width: none; }
   *::-webkit-scrollbar { display: none; }
 }
