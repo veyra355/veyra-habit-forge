@@ -110,20 +110,19 @@
   [id="lovable-badge"],
   a[href*="lovable.dev"][class*="badge"],
   a[href*="utm_source=lovable-badge"],
-  a[href*="lovable.dev/projects"] {
-    display: none !important;
-  }
-  * {
-    border-color: var(--color-border);
-  }
+  a[href*="lovable.dev/projects"] { display: none !important; }
+  * { border-color: var(--color-border); }
   html {
     color-scheme: dark;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     scroll-behavior: smooth;
     font-size: 17px;
+    background: #050505;
   }
   body {
+    margin: 0;
+    min-height: 100dvh;
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
@@ -134,20 +133,13 @@
     overscroll-behavior-y: none;
     -webkit-tap-highlight-color: transparent;
   }
-  h1,
-  h2,
-  h3,
-  h4,
-  .font-display {
-    font-family: var(--font-display);
-    letter-spacing: -0.025em;
-  }
+  h1,h2,h3,h4,.font-display { font-family: var(--font-display); letter-spacing: -0.025em; }
   h1 { font-size: clamp(2rem, 7vw, 2.8rem); line-height: 1.08; font-weight: 700; }
   h2 { font-size: clamp(1.45rem, 5vw, 2rem); line-height: 1.15; font-weight: 700; }
   h3 { font-size: clamp(1.15rem, 4vw, 1.45rem); line-height: 1.2; font-weight: 600; }
-  button, a, [role="button"], summary, label { touch-action: manipulation; }
-  @media (max-width: 640px) { input, select, textarea { font-size: 16px; } }
-  img, svg, video, canvas { max-width: 100%; }
+  button,a,[role="button"],summary,label { touch-action: manipulation; }
+  input,select,textarea { font: inherit; }
+  img,svg,video,canvas { max-width: 100%; }
 }
 
 @utility tap { min-height: 2.75rem; min-width: 2.75rem; }
@@ -155,19 +147,40 @@
 @utility safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
 @utility panel { background-color: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius-2xl); box-shadow: var(--shadow-soft); }
 @utility glass {
-  background: linear-gradient(145deg, rgba(239, 29, 47, 0.09), rgba(120, 0, 10, 0.035) 55%, rgba(0, 0, 0, 0.08));
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-2xl);
-  backdrop-filter: blur(18px) saturate(130%);
-  box-shadow: var(--shadow-soft);
+  background: linear-gradient(145deg, rgba(239,29,47,.09), rgba(120,0,10,.035) 55%, rgba(0,0,0,.08));
+  border: 1px solid var(--color-border); border-radius: var(--radius-2xl);
+  backdrop-filter: blur(18px) saturate(130%); box-shadow: var(--shadow-soft);
 }
-@utility display-italic { font-family: var(--font-display); font-style: italic; font-weight: 700; letter-spacing: -0.035em; line-height: 0.94; text-transform: uppercase; }
-@utility eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
-@utility glow-lime { box-shadow: 0 0 0 1px rgba(239, 29, 47, 0.28), 0 0 40px -10px rgba(239, 29, 47, 0.55); }
-@utility glow-cyan { box-shadow: 0 0 0 1px rgba(255, 74, 74, 0.24), 0 0 36px -12px rgba(255, 74, 74, 0.45); }
-@utility glow-purple { box-shadow: 0 0 0 1px rgba(185, 28, 28, 0.24), 0 0 36px -12px rgba(185, 28, 28, 0.45); }
-@utility gaming-gradient { background: linear-gradient(135deg, rgba(239, 29, 47, 0.16), rgba(120, 0, 10, 0.08) 50%, rgba(0, 0, 0, 0.12)); }
+@utility display-italic { font-family: var(--font-display); font-style: italic; font-weight: 700; letter-spacing: -.035em; line-height: .94; text-transform: uppercase; }
+@utility eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+@utility glow-lime { box-shadow: 0 0 0 1px rgba(239,29,47,.28),0 0 40px -10px rgba(239,29,47,.55); }
+@utility glow-cyan { box-shadow: 0 0 0 1px rgba(255,74,74,.24),0 0 36px -12px rgba(255,74,74,.45); }
+@utility glow-purple { box-shadow: 0 0 0 1px rgba(185,28,28,.24),0 0 36px -12px rgba(185,28,28,.45); }
+@utility gaming-gradient { background: linear-gradient(135deg,rgba(239,29,47,.16),rgba(120,0,10,.08) 50%,rgba(0,0,0,.12)); }
 @utility text-balance-tight { text-wrap: balance; }
-@utility hud-ring { border-radius: 9999px; border: 1px dashed rgba(239, 29, 47, 0.32); animation: hud-spin 48s linear infinite; }
+@utility hud-ring { border-radius: 9999px; border: 1px dashed rgba(239,29,47,.32); animation: hud-spin 48s linear infinite; }
+
+/* Mobile-app experience: touch-first spacing, safe areas and compact viewport rhythm. */
+@media (max-width: 1023px) {
+  html, body { width: 100%; min-width: 0; }
+  body { padding: 0; }
+  main { min-height: calc(100dvh - 8rem); }
+}
+
+@media (max-width: 640px) {
+  html { font-size: 16px; }
+  body { background: #050505; }
+  button, a, [role="button"] { -webkit-user-select: none; user-select: none; }
+  input, select, textarea { font-size: 16px; }
+  main { padding-top: .9rem; }
+  /* Make common cards breathe like native mobile surfaces. */
+  .panel, .glass { border-radius: 1.15rem; }
+  /* Native-feeling scrollbars: hide them on touch devices. */
+  * { scrollbar-width: none; }
+  *::-webkit-scrollbar { display: none; }
+}
+
 @keyframes hud-spin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; } }
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+}
