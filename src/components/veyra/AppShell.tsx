@@ -11,10 +11,10 @@ const NAV = [
   { to: "/home", label: "Home", icon: Home }, { to: "/game", label: "Game", icon: Gamepad2 }, { to: "/workout", label: "Workout", icon: Dumbbell },
   { to: "/academy", label: "Academy", icon: GraduationCap }, { to: "/nutrition", label: "Nutrition", icon: Apple }, { to: "/achievements", label: "Achievements", icon: Trophy },
   { to: "/grooming", label: "Grooming", icon: ScissorsLineDashed }, { to: "/presentation", label: "Presentation", icon: ScanFace }, { to: "/habits", label: "Habits", icon: SquareCheckBig },
-  { to: "/habits", label: "Recovery", icon: Shield }, { to: "/progress", label: "Progress", icon: LineChart }, { to: "/coach", label: "AI Coach", icon: Sparkles }, { to: "/profile", label: "Profile", icon: User },
+  { to: "/recovery", label: "Recovery", icon: Shield }, { to: "/progress", label: "Progress", icon: LineChart }, { to: "/coach", label: "AI Coach", icon: Sparkles }, { to: "/profile", label: "Profile", icon: User },
 ] as const;
 const PRIMARY_NAV = [
-  { to: "/home", label: "Home", icon: Home }, { to: "/game", label: "Game", icon: Gamepad2 }, { to: "/workout", label: "Workout", icon: Dumbbell }, { to: "/habits", label: "Recovery", icon: Shield },
+  { to: "/home", label: "Home", icon: Home }, { to: "/game", label: "Game", icon: Gamepad2 }, { to: "/workout", label: "Workout", icon: Dumbbell }, { to: "/recovery", label: "Recovery", icon: Shield },
 ] as const;
 const MORE_NAV = [
   { to: "/habits", label: "Habits", icon: SquareCheckBig }, { to: "/academy", label: "Academy", icon: GraduationCap }, { to: "/nutrition", label: "Nutrition", icon: Apple },
